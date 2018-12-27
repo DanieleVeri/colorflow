@@ -1,0 +1,56 @@
+{
+  com.badlogic.gdx.graphics.Color:{
+  white:{
+    r:1,
+    g:1,
+    b:1,
+    a:1
+  },
+  yellow:{
+    r:1,
+    g:1,
+    b:0,
+    a:1
+  }
+},
+  com.badlogic.gdx.graphics.g2d.BitmapFont:{
+  default-font:{
+    file:font.fnt
+  }
+},
+  com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle:{
+  Home:{
+    down:Shop.Home,
+    up:Shop.Home
+  },
+  Ring:{
+    down:Shop.Ring,
+    up:Shop.Ring
+  },
+  Bonus:{
+    down:Shop.Upgrade,
+    up:Shop.Upgrade
+  }
+},
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle:{
+  Title:{
+    font:default-font,
+    fontColor:white
+  },
+  ItemName:{
+    font:default-font,
+    fontColor:white
+  },
+  Coins:{
+    font:default-font,
+    fontColor:yellow
+  }
+},
+  com.badlogic.gdx.graphics.g2d.TextureRegion:{
+  CoinIcon:Shop.CoinIcon
+},
+
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle:{
+    Buy: {over: TextButton.Hover, up: TextButton.Normal, disabled:TextButton.Hover, font: default-font, fontColor: white}
+  }
+}

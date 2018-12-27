@@ -1,0 +1,23 @@
+{
+    com.badlogic.gdx.graphics.Color: {
+      white: {r: 1, g: 1, b: 1, a: 1 },
+    },
+
+    com.badlogic.gdx.graphics.g2d.BitmapFont:{
+      default-font:{
+        file:font.fnt
+      }
+    },
+
+    com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+      Play: { down: Menu.Play, up: Menu.Play },
+      Shop: { down: Menu.Shop, up: Menu.Shop },
+      Rate: { down: Menu.Rate, up: Menu.Rate },
+      Credits: { down: Menu.Contact, up: Menu.Contact },
+      Settings: { down: Menu.Settings, up: Menu.Settings }
+    },
+
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+      Title: { font: default-font, fontColor: white }
+    }
+}
