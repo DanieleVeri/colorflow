@@ -1,0 +1,5 @@
+# ninja log v5
+0	26	0	CMakeFiles/beatdetector-lib.dir/src/main.cpp.o	c29b64001f076a23
+26	108	0	/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/x86/libbeatdetector-lib.so	371f45f7e2e02a1f
+0	122	0	CMakeFiles/beatdetector-lib.dir/src/main.cpp.o	c29b64001f076a23
+122	248	0	/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/x86/libbeatdetector-lib.so	371f45f7e2e02a1f

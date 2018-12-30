@@ -59,10 +59,10 @@ class MainGame(storageInterface: StorageInterface, val musicManager: MusicManage
 
     private fun firstStart() {
         if (!Gdx.files.local("rings").exists()) {
-            Gdx.files.internal("rings").copyTo(Gdx.files.local("rings"))
+            Gdx.files.internal("rings").copyTo(Gdx.files.local("."))
         }
         if (!Gdx.files.local("music").exists()) {
-            Gdx.files.internal("music").copyTo(Gdx.files.local("music"))
+            Gdx.files.internal("music").copyTo(Gdx.files.local("."))
         }
     }
 }

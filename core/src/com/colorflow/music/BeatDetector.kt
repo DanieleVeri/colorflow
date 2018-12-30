@@ -21,10 +21,27 @@ class BeatDetector(private val musicManager: MusicManagerInterface) : Observer, 
     private var indexBpmHistory = 0
     private val renderer: ShapeRenderer
 
+    companion object {
+        /* TUNING */
+        const val BUFFER_SIZE_SEC = 3.0
+        private const val ENERGY_THRESHOLD = 100.0
+        private const val PEAK_THRESHOLD = 2.0
+        private const val BAND_SIZE = 2
+        private const val BPM_HISTORY_SIZE = 5
+        private const val PLAUSIBLE_SIZE = 3
+        private const val VAR_STABILITY_THRESHOLD = 5.0
+
+        init {
+            System.loadLibrary("beatdetector-lib")
+        }
+    }
+
     init {
         this.musicManager.addObserver(this)
         this.renderer = ShapeRenderer()
     }
+
+    external fun add(a:Int, b:Int): Int
 
     override fun update(o: Observable, arg: Any) {
         val capture = arg as CaptureInterface
@@ -178,18 +195,6 @@ class BeatDetector(private val musicManager: MusicManagerInterface) : Observer, 
         renderer.color = Color.RED
         renderer.line(0f, Position.center.y - lastBpm.toFloat(), Position.widthScreen, Position.center.y - lastBpm.toFloat())
         renderer.end()
-    }
-
-    companion object {
-
-        /* TUNING */
-        const val BUFFER_SIZE_SEC = 3.0
-        private const val ENERGY_THRESHOLD = 100.0
-        private const val PEAK_THRESHOLD = 2.0
-        private const val BAND_SIZE = 2
-        private const val BPM_HISTORY_SIZE = 5
-        private const val PLAUSIBLE_SIZE = 3
-        private const val VAR_STABILITY_THRESHOLD = 5.0
     }
 
 }

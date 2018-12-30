@@ -22,6 +22,13 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                version "3.7.1"
+                cppFlags "-std=c++11"
+            }
+        }
     }
     buildTypes {
         release {
@@ -29,6 +36,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    externalNativeBuild {
+        cmake {
+            path "src/com/colorflow/beatdetector/CMakeLists.txt"
+        }
+    }
+
 }
 
 
