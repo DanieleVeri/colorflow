@@ -1,5 +1,3 @@
 # ninja log v5
-0	52	0	CMakeFiles/beatdetector-lib.dir/src/main.cpp.o	169f776a933163d6
-52	127	0	/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/armeabi-v7a/libbeatdetector-lib.so	ca6f810d3b8dbd8b
-0	86	0	CMakeFiles/beatdetector-lib.dir/src/main.cpp.o	169f776a933163d6
-86	233	0	/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/armeabi-v7a/libbeatdetector-lib.so	ca6f810d3b8dbd8b
+1	66	0	CMakeFiles/beatdetector-lib.dir/src/main.cpp.o	bf83b920dd7d74f0
+75	373	0	/media/dan/Windows/Users/danie/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/armeabi-v7a/libbeatdetector-lib.so	8139a7daf22ac4ef

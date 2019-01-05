@@ -9,6 +9,8 @@ import com.colorflow.entity.bonus.BonusPool
 import com.colorflow.entity.dot.Dot
 import com.colorflow.entity.dot.DotPool
 import com.colorflow.entity.trigger.Trigger
+import com.colorflow.music.BeatDetector
+import com.colorflow.music.IBeatDetector
 import com.colorflow.ring.Ring
 import com.colorflow.screen.PlayScreen
 import com.colorflow.utility.effect.Explosion
@@ -22,6 +24,9 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
             addActor(ring)
         }
     private val spawner: Spawner = Spawner(this)
+    private val beatDetector: IBeatDetector = BeatDetector(playScreen.game.musicManager)
+    private val bgManager: BGManager = BGManager(this)
+
     private var isPlaying = true
     private var timer = 0f
 
@@ -55,6 +60,12 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
         detectCollision()
         spawn(delta)
         super.act(delta)
+    }
+
+    override fun draw() {
+        bgManager.render()
+        super.draw()
+        beatDetector.render() // TODO: Remove
     }
 
     override fun dispose() {

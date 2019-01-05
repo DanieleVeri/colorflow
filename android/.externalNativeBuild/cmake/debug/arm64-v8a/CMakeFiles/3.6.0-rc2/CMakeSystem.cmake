@@ -1,6 +1,6 @@
-set(CMAKE_HOST_SYSTEM "Linux-4.15.0-43-generic")
+set(CMAKE_HOST_SYSTEM "Linux-4.18.0-13-generic")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "4.15.0-43-generic")
+set(CMAKE_HOST_SYSTEM_VERSION "4.18.0-13-generic")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
 include("/home/dan/Android/Sdk/ndk-bundle/build/cmake/android.toolchain.cmake")

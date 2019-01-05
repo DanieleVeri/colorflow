@@ -49,11 +49,11 @@ class Spawner(private val playStage: PlayStage) {
             throw IndexOutOfBoundsException()
         }
         for (i in 0 until num) {
-            pickedColors.add(Color.Companion.getRandomExcept(pickedColors))
+            pickedColors.add(Color.getRandomExcept(pickedColors))
             if (i == 0) {
                 start.setAngle(ang)
             } else {
-                start.setAngle(Position.Radial.regulateAngle(ang + Color.Companion.getAngleBetween(
+                start.setAngle(Position.Radial.regulateAngle(ang + Color.getAngleBetween(
                         pickedColors[pickedColors.size - 1],
                         pickedColors[0])))
             }
@@ -69,11 +69,11 @@ class Spawner(private val playStage: PlayStage) {
             throw IndexOutOfBoundsException()
         }
         for (i in 0 until num) {
-            pickedColors.add(Color.Companion.getRandomExcept(pickedColors))
+            pickedColors.add(Color.getRandomExcept(pickedColors))
             if (i == 0) {
                 start.setAngle(ang)
             } else {
-                start.setAngle(Position.Radial.regulateAngle(ang + Color.Companion.getAngleBetween(
+                start.setAngle(Position.Radial.regulateAngle(ang + Color.getAngleBetween(
                         pickedColors[pickedColors.size - 1],
                         pickedColors[0])))
             }
@@ -82,7 +82,7 @@ class Spawner(private val playStage: PlayStage) {
                         dotPath!!, start, dotSpeed))
             } else {
                 playStage.addActor(DotPool.instance.get(Dot.Type.REVERSE,
-                        Color.Companion.getRandomExcept(pickedColors.subList(pickedColors.size - 1, pickedColors.size)),
+                        Color.getRandomExcept(pickedColors.subList(pickedColors.size - 1, pickedColors.size)),
                         dotPath!!, start, dotSpeed))
             }
         }

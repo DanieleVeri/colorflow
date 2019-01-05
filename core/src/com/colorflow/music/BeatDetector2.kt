@@ -1,9 +1,10 @@
-//TODO: Implement in C/C++
-
 package com.colorflow.music
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.colorflow.utility.Position
 import java.util.Arrays
 import java.util.Observable
 import java.util.Observer
@@ -12,6 +13,7 @@ class BeatDetector2(private val musicManager: MusicManagerInterface) : Observer,
     private var captureRate: Double = 0.toDouble()
     private var lastSample: DoubleArray? = null
     private var derivative: CircularBuffer? = null
+    private val renderer: ShapeRenderer = ShapeRenderer()
 
     init {
         Gdx.app.logLevel = Application.LOG_DEBUG
@@ -106,6 +108,27 @@ class BeatDetector2(private val musicManager: MusicManagerInterface) : Observer,
             }
         }
         return captureRate / (sum / indexSum) * 60.0
+    }
+
+    override fun render() {
+        if (lastSample == null) {
+            return
+        }
+        renderer.begin(ShapeRenderer.ShapeType.Filled)
+        for (band in lastSample!!.indices) {
+            renderer.color = Color.GREEN
+            renderer.rect(band * Position.widthScreen / lastSample!!.size, Position.center.y,
+                    Position.widthScreen / lastSample!!.size - 1, lastSample!![band].toFloat() * 5)
+            renderer.color = Color.BLUE
+                    }
+        renderer.color = Color.WHITE
+        val bpm = 174f
+        renderer.line(0f, Position.center.y, Position.widthScreen, Position.center.y)
+        renderer.line(Position.widthScreen - 100, Position.center.y - bpm * 2.0f / 1.0f, Position.widthScreen, Position.center.y - bpm * 2.0f / 1.0f)
+        renderer.line(Position.widthScreen - 100, Position.center.y - bpm * 3.0f / 2.0f, Position.widthScreen, Position.center.y - bpm * 3.0f / 2.0f)
+        renderer.line(Position.widthScreen - 100, Position.center.y - bpm * 1.0f / 1.0f, Position.widthScreen, Position.center.y - bpm * 1.0f / 1.0f)
+        renderer.line(Position.widthScreen - 100, Position.center.y - bpm * 1.0f / 2.0f, Position.widthScreen, Position.center.y - bpm * 1.0f / 2.0f)
+        renderer.end()
     }
 
     companion object {

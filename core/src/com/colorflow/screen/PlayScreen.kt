@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.colorflow.MainGame
-import com.colorflow.music.BeatDetector
-import com.colorflow.music.IBeatDetector
 import com.colorflow.play.HUDStage
 import com.colorflow.play.PlayStage
 import com.colorflow.play.Score
@@ -20,7 +18,6 @@ class PlayScreen(val game: MainGame) : Screen {
     val score: Score
     private val playStage: PlayStage
     private val hudStage: HUDStage
-    private val beatDetector: IBeatDetector
     var state: State? = null
         set(state) {
             when (state) {
@@ -63,7 +60,6 @@ class PlayScreen(val game: MainGame) : Screen {
         this.hudStage = HUDStage(ScreenViewport(this.camera), this)
         this.score = Score()
         this.score.addObserver(hudStage)
-        this.beatDetector = BeatDetector(game.musicManager)
         this.multiplexer = InputMultiplexer()
     }
 
@@ -73,8 +69,6 @@ class PlayScreen(val game: MainGame) : Screen {
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         playStage.act(delta)
         hudStage.act(delta)
         playStage.draw()

@@ -172,7 +172,7 @@ class BeatDetector(private val musicManager: MusicManagerInterface) : Observer, 
         return captureRate / (sum / indexSum) * 60.0
     }
 
-    fun render() {
+    override fun render() {
         if (lastSample == null) {
             return
         }

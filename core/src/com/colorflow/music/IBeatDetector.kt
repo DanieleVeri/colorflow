@@ -1,3 +1,5 @@
 package com.colorflow.music
 
-interface IBeatDetector
+interface IBeatDetector {
+    fun render()
+}
