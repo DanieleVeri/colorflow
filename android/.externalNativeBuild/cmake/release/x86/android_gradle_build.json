@@ -2,31 +2,31 @@
 {
 	"buildFiles" : 
 	[
-		"/media/dan/Windows/Users/danie/Desktop/colorflow/android/src/com/colorflow/beatdetector/CMakeLists.txt"
+		"/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector/CMakeLists.txt"
 	],
 	"cleanCommands" : 
 	[
-		"/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86 --target clean"
+		"/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86 --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
 	{
-		"beatdetector-lib-Release-x86" : 
+		"beatdetector-Release-x86" : 
 		{
 			"abi" : "x86",
-			"artifactName" : "beatdetector-lib",
-			"buildCommand" : "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86 --target beatdetector-lib",
+			"artifactName" : "beatdetector",
+			"buildCommand" : "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86 --target beatdetector",
 			"buildType" : "release",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=i686-none-linux-android16 --gcc-toolchain=/home/dan/Android/Sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/linux-x86_64 --sysroot=/home/dan/Android/Sdk/ndk-bundle/sysroot  -Dbeatdetector_lib_EXPORTS -I/media/dan/Windows/Users/danie/Desktop/colorflow/android/src/com/colorflow/beatdetector/src -isystem /home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/include -isystem /home/dan/Android/Sdk/ndk-bundle/sources/android/support/include -isystem /home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/llvm-libc++abi/include  -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/i686-linux-android -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -Wa,--noexecstack -Wformat -Werror=format-security -std=c++11 -std=c++11 -O2 -DNDEBUG  -fPIC    -c ",
-					"src" : "/media/dan/Windows/Users/danie/Desktop/colorflow/android/src/com/colorflow/beatdetector/src/main.cpp",
-					"workingDirectory" : "/media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86"
+					"flags" : "  --target=i686-none-linux-android16 --gcc-toolchain=/home/dan/Android/Sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/linux-x86_64 --sysroot=/home/dan/Android/Sdk/ndk-bundle/sysroot  -Dbeatdetector_EXPORTS -I/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector -I/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector/aubio/include/aubio -isystem /home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/include -isystem /home/dan/Android/Sdk/ndk-bundle/sources/android/support/include -isystem /home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/llvm-libc++abi/include  -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/i686-linux-android -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -Wa,--noexecstack -Wformat -Werror=format-security -std=c++11  -O2 -DNDEBUG  -fPIC    -c ",
+					"src" : "/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector/main.cpp",
+					"workingDirectory" : "/home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/release/x86"
 				}
 			],
-			"output" : "/media/dan/Windows/Users/danie/Desktop/colorflow/android/build/intermediates/cmake/release/obj/x86/libbeatdetector-lib.so",
+			"output" : "/home/dan/Desktop/colorflow/android/build/intermediates/cmake/release/obj/x86/libbeatdetector.so",
 			"toolchain" : "5540526903968522087"
 		}
 	},

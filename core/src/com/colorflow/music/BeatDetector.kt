@@ -32,16 +32,18 @@ class BeatDetector(private val musicManager: MusicManagerInterface) : Observer, 
         private const val VAR_STABILITY_THRESHOLD = 5.0
 
         init {
-            System.loadLibrary("beatdetector-lib")
+            System.loadLibrary("beatdetector")
         }
     }
 
     init {
         this.musicManager.addObserver(this)
         this.renderer = ShapeRenderer()
+        detect();
     }
 
     external fun add(a:Int, b:Int): Int
+    external fun detect(): Int
 
     override fun update(o: Observable, arg: Any) {
         val capture = arg as CaptureInterface

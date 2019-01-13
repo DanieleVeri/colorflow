@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__beatdetector-lib
+rule CXX_COMPILER__beatdetector
   depfile = $DEP_FILE
   deps = gcc
   command = /home/dan/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++  --target=aarch64-none-linux-android21 --gcc-toolchain=/home/dan/Android/Sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64 --sysroot=/home/dan/Android/Sdk/ndk-bundle/sysroot  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $IN_ABS
@@ -32,7 +32,7 @@ rule CXX_COMPILER__beatdetector-lib
 #############################################
 # Rule for linking CXX shared library.
 
-rule CXX_SHARED_LIBRARY_LINKER__beatdetector-lib
+rule CXX_SHARED_LIBRARY_LINKER__beatdetector
   command = $PRE_LINK && /home/dan/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++  --target=aarch64-none-linux-android21 --gcc-toolchain=/home/dan/Android/Sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64 --sysroot=/home/dan/Android/Sdk/ndk-bundle/sysroot -fPIC $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS $LINK_FLAGS -shared $SONAME_FLAG$SONAME -o $TARGET_FILE $in $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX shared library $TARGET_FILE
   restat = $RESTAT
@@ -42,7 +42,7 @@ rule CXX_SHARED_LIBRARY_LINKER__beatdetector-lib
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake -H/media/dan/Windows/Users/danie/Desktop/colorflow/android/src/com/colorflow/beatdetector -B/media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/release/arm64-v8a
+  command = /home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake -H/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector -B/home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/release/arm64-v8a
   description = Re-running CMake...
   generator = 1
 

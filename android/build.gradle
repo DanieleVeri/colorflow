@@ -15,20 +15,21 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
+/*
+        pickFirst 'lib/x86_64/libaubio.so'
+        pickFirst 'lib/armeabi/libaubio.so'
+        pickFirst 'lib/x86/libaubio.so'
+        pickFirst 'lib/armeabi-v7a/libaubio.so'
+        pickFirst 'lib/arm64-v8a/libaubio.so'
+        */
     }
     defaultConfig {
         applicationId "com.colorflow"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
-        externalNativeBuild {
-            cmake {
-                version "3.7.1"
-                cppFlags "-std=c++11"
-            }
-        }
     }
     buildTypes {
         release {
@@ -37,8 +38,14 @@ android {
         }
     }
     externalNativeBuild {
-        cmake {
-            path "src/com/colorflow/beatdetector/CMakeLists.txt"
+   /*     cmake {
+            path "jni/CMakeLists.txt"
+        }
+    */
+        ndkBuild {
+
+            // Provides a relative path to your ndkBuild Android.mk file.
+            path "jni/Android.mk"
         }
     }
 

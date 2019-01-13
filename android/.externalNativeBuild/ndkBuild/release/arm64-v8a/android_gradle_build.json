@@ -1,0 +1,32 @@
+{
+  "buildFiles": [
+    "/home/dan/Desktop/colorflow/android/jni/Android.mk"
+  ],
+  "cleanCommands": [
+    "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib clean"
+  ],
+  "libraries": {
+    "beatdetector-release-arm64-v8a": {
+      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/arm64-v8a/libbeatdetector.so",
+      "toolchain": "toolchain-arm64-v8a",
+      "abi": "arm64-v8a",
+      "artifactName": "beatdetector",
+      "files": [
+        {
+          "src": "/home/dan/Desktop/colorflow/android/jni/beatdetector/main.cpp",
+          "flags": "-target aarch64-none-linux-android21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-exceptions -fno-rtti -gcc-toolchain /home/dan/Android/Sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64 -fpic -O2 -DNDEBUG -I/home/dan/Desktop/colorflow/android/jni/beatdetector/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include -I/home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/system/include -I/home/dan/Desktop/colorflow/android/jni -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /home/dan/Android/Sdk/ndk-bundle/sysroot -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android"
+        }
+      ],
+      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/arm64-v8a/libbeatdetector.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-arm64-v8a": {
+      "cppCompilerExecutable": "/home/dan/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

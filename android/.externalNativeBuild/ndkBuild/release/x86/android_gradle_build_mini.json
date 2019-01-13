@@ -1,0 +1,16 @@
+{
+  "buildFiles": [
+    "/home/dan/Desktop/colorflow/android/jni/Android.mk"
+  ],
+  "cleanCommands": [
+    "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib clean"
+  ],
+  "libraries": {
+    "beatdetector-release-x86": {
+      "artifactName": "beatdetector",
+      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/x86/libbeatdetector.so",
+      "abi": "x86",
+      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/x86/libbeatdetector.so"
+    }
+  }
+}

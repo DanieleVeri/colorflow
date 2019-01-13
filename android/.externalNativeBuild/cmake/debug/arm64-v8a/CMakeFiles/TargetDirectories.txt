@@ -1,3 +1,3 @@
-/media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
-/media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
-/media/dan/Windows/Users/danie/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/beatdetector-lib.dir
+/home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/beatdetector.dir
