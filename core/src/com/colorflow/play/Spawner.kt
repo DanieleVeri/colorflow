@@ -1,11 +1,11 @@
 package com.colorflow.play
 
-import com.colorflow.entity.Path
-import com.colorflow.entity.bonus.Bonus
-import com.colorflow.entity.bonus.BonusPool
-import com.colorflow.entity.dot.Color
-import com.colorflow.entity.dot.Dot
-import com.colorflow.entity.dot.DotPool
+import com.colorflow.play.entity.Path
+import com.colorflow.play.entity.bonus.Bonus
+import com.colorflow.play.entity.bonus.BonusPool
+import com.colorflow.play.entity.dot.Color
+import com.colorflow.play.entity.dot.Dot
+import com.colorflow.play.entity.dot.DotPool
 import com.colorflow.utility.Position
 
 import java.util.ArrayList

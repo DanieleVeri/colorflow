@@ -4,97 +4,133 @@ import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.Equalizer
-import android.media.audiofx.Visualizer
 import android.net.Uri
 import android.util.Log
+import com.colorflow.play.IMusicManager
+
+import kotlinx.coroutines.*
 
 import java.io.File
 import java.io.IOException
-import java.util.Observable
+import java.util.*
 
-class MusicManager(private val context: Context) : Observable(), MusicManagerInterface, Visualizer.OnDataCaptureListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
-    private var visualizer: Visualizer? = null
-    private var mediaPlayer: MediaPlayer? = null
-    private var statePlayer: State? = null
+class MusicManager(private val context: Context) :
+        IMusicManager,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnErrorListener {
+
+    companion object {
+        init {
+            System.loadLibrary("beatdetector")
+        }
+    }
+
+    external fun detect(): IntArray
+    private var peaks: IntArray? = null
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var statePlayer: State
     private var pendingStart: Boolean = false
     private var current: Int = 0
-    private var pcm: Capture? = null
-    private var fft: Capture? = null
+
+    private var startTime: Long = 0
+    private var pauseTime: Long = 0
+    private var pauseElapsed: Long = 0
+    val playElapsed: Long
+        get() {
+            if (startTime == 0L) return 0
+            return Calendar.getInstance().timeInMillis - startTime - pauseElapsed
+        }
 
     private val currentFile: File
         get() = File(context.applicationInfo.dataDir +
                 "/files/music/" + current.toString() + ".mp3")
 
+    private var beat_cb: List<(()->Unit)> = ArrayList()
+    override fun add_beat_cb(cb: ()->Unit) {
+        beat_cb+= cb
+    }
+    override fun rem_beat_cb(cb: ()->Unit) {
+        beat_cb-= cb
+    }
+
+    init {
+        GlobalScope.launch {
+            peaks = detect()
+            var counter = 0
+            while(counter < peaks!!.size) {
+                if (playElapsed >= peaks!![counter]) {
+                    beat_cb.map { it() }
+                    counter++
+                }
+                delay(100)
+            }
+        }
+    }
+
     override fun init() {
         mediaPlayer = MediaPlayer()
-        mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer!!.setOnCompletionListener(this)
-        mediaPlayer!!.setOnPreparedListener(this)
-        mediaPlayer!!.setOnErrorListener(this)
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer.setOnCompletionListener(this)
+        mediaPlayer.setOnPreparedListener(this)
+        mediaPlayer.setOnErrorListener(this)
         statePlayer = State.IDLE
-        //TODO: audio should be 48000 Hz (detect sampling rate device)
-        //AudioManager myAudioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        //String nativeSampleRate = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-        //TODO: Visualizer affected by system volume
-        val mEqualizer = Equalizer(0, mediaPlayer!!.audioSessionId)
-        visualizer = Visualizer(mediaPlayer!!.audioSessionId)
+        val mEqualizer = Equalizer(0, mediaPlayer.audioSessionId)
         mEqualizer.enabled = true
-        visualizer!!.scalingMode = Visualizer.SCALING_MODE_NORMALIZED
-        visualizer!!.captureSize = Visualizer.getCaptureSizeRange()[1]
-        val captureRate = Visualizer.getMaxCaptureRate()
-        visualizer!!.setDataCaptureListener(this, captureRate, false, true)
-        pcm = Capture(CaptureInterface.Type.PCM, visualizer!!.captureSize, captureRate)
-        fft = Capture(CaptureInterface.Type.FFT, visualizer!!.captureSize, captureRate)
         reset()
     }
 
     override fun reset() {
-        if (statePlayer!!.`is`(State.PREPARED)) {
+        if (statePlayer.`is`(State.PREPARED)) {
             return
         }
         pendingStart = false
         current = 0
-        mediaPlayer!!.reset()
+        startTime = 0
+        pauseTime = 0
+        pauseElapsed = 0
+        mediaPlayer.reset()
         statePlayer = State.IDLE
-        loadAndPrepare(mediaPlayer!!)
-        disableVisualizer()
+        loadAndPrepare(mediaPlayer)
     }
 
     override fun play() {
-        if (statePlayer!!.`is`(State.PAUSED, State.PREPARED)) {
-            mediaPlayer!!.start()
+        if (statePlayer.`is`(State.PAUSED, State.PREPARED)) {
+            mediaPlayer.start()
+            if (statePlayer == State.PAUSED)
+                pauseElapsed += Calendar.getInstance().timeInMillis - pauseTime
+            else
+                startTime = Calendar.getInstance().timeInMillis
             statePlayer = State.STARTED
-            enableVisualizer()
-        } else if (statePlayer!!.`is`(State.PREPARING)) {
+
+        } else if (statePlayer.`is`(State.PREPARING)) {
             pendingStart = true
         }
     }
 
     override fun pause() {
-        if (statePlayer!!.`is`(State.STARTED, State.COMPLETED)) {
-            mediaPlayer!!.pause()
+        if (statePlayer.`is`(State.STARTED, State.COMPLETED)) {
+            mediaPlayer.pause()
             statePlayer = State.PAUSED
+            pauseTime = Calendar.getInstance().timeInMillis
         }
-        disableVisualizer()
     }
 
     override fun stop() {
-        if (statePlayer!!.`is`(State.PREPARED, State.STARTED, State.STOPPED, State.PAUSED, State.COMPLETED)) {
-            mediaPlayer!!.stop()
+        if (statePlayer.`is`(State.PREPARED, State.STARTED, State.STOPPED, State.PAUSED, State.COMPLETED)) {
+            mediaPlayer.stop()
             statePlayer = State.STOPPED
         }
-        disableVisualizer()
     }
 
     fun release() {
         stop()
-        mediaPlayer!!.release()
+        mediaPlayer.release()
         statePlayer = State.RELEASED
-        visualizer!!.release()
     }
 
     override fun onCompletion(mp: MediaPlayer) {
-        disableVisualizer()
         statePlayer = State.COMPLETED
         mp.reset()
         statePlayer = State.IDLE
@@ -108,7 +144,7 @@ class MusicManager(private val context: Context) : Observable(), MusicManagerInt
             pendingStart = false
             mp.start()
             statePlayer = State.STARTED
-            enableVisualizer()
+            startTime = Calendar.getInstance().timeInMillis
         }
     }
 
@@ -119,20 +155,8 @@ class MusicManager(private val context: Context) : Observable(), MusicManagerInt
         return false
     }
 
-    override fun onWaveFormDataCapture(visualizer: Visualizer, waveform: ByteArray, samplingRate: Int) {
-        this.pcm!!.update(waveform, samplingRate)
-        setChanged()
-        notifyObservers(this.pcm)
-    }
-
-    override fun onFftDataCapture(visualizer: Visualizer, fft: ByteArray, samplingRate: Int) {
-        this.fft!!.update(fft, samplingRate)
-        setChanged()
-        notifyObservers(this.fft)
-    }
-
     private fun loadAndPrepare(mp: MediaPlayer) {
-        if (!statePlayer!!.`is`(State.IDLE)) {
+        if (!statePlayer.`is`(State.IDLE)) {
             throw IllegalStateException("setDataSource() in a not IDLE state.")
         }
         try {
@@ -144,22 +168,12 @@ class MusicManager(private val context: Context) : Observable(), MusicManagerInt
             return
         }
 
-        if (!statePlayer!!.`is`(State.INIT, State.STOPPED)) {
+        if (!statePlayer.`is`(State.INIT, State.STOPPED)) {
             throw IllegalStateException("prepareAsync() in a not INIT/STOPPED state.")
         }
         mp.prepareAsync()
         statePlayer = State.PREPARING
         current++
-    }
-
-    private fun disableVisualizer() {
-        visualizer!!.enabled = false
-        fft!!.pause()
-    }
-
-    private fun enableVisualizer() {
-        visualizer!!.enabled = true
-        fft!!.resume()
     }
 
     private enum class State {

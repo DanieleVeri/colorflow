@@ -1,20 +1,18 @@
 package com.colorflow.play
 
 import com.badlogic.gdx.math.Intersector
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.entity.bonus.Bonus
-import com.colorflow.entity.bonus.BonusPool
-import com.colorflow.entity.dot.Dot
-import com.colorflow.entity.dot.DotPool
-import com.colorflow.entity.trigger.Trigger
-import com.colorflow.music.BeatDetector
-import com.colorflow.music.IBeatDetector
-import com.colorflow.ring.Ring
+import com.colorflow.play.entity.bonus.Bonus
+import com.colorflow.play.entity.bonus.BonusPool
+import com.colorflow.play.entity.dot.Color
+import com.colorflow.play.entity.dot.Dot
+import com.colorflow.play.entity.dot.DotPool
+import com.colorflow.play.entity.trigger.Trigger
+import com.colorflow.play.ring.Ring
 import com.colorflow.screen.PlayScreen
-import com.colorflow.utility.effect.Explosion
-import com.colorflow.utility.effect.ExplosionPool
+import com.colorflow.utility.effects.Explosion
+import com.colorflow.utility.effects.ExplosionPool
 
 
 class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport) {
@@ -24,7 +22,6 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
             addActor(ring)
         }
     private val spawner: Spawner = Spawner(this)
-    private val beatDetector: IBeatDetector = BeatDetector(playScreen.game.musicManager)
     private val bgManager: BGManager = BGManager(this)
 
     private var isPlaying = true
@@ -49,6 +46,9 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
         if (this.ring != null) this.ring!!.dispose()
         clear()
         ring = Ring(playScreen.game.dataManager.usedRing)
+        playScreen.game.musicManager.add_beat_cb {
+            bgManager.bgColor = Color.getRandomExcept(emptyList()).rgb
+        }
         spawner.reset()
         isPlaying = true
     }
@@ -65,7 +65,6 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
     override fun draw() {
         bgManager.render()
         super.draw()
-        beatDetector.render() // TODO: Remove
     }
 
     override fun dispose() {

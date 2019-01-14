@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.colorflow.MainGame
-import com.colorflow.ring.Ring
+import com.colorflow.play.ring.Ring
 import com.colorflow.utility.Position
 import com.colorflow.utility.ButtonListener
 

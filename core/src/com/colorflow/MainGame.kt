@@ -3,16 +3,16 @@ package com.colorflow
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.colorflow.data.DataManager
-import com.colorflow.music.MusicManagerInterface
+import com.colorflow.persistence.DataManager
+import com.colorflow.play.IMusicManager
 import com.colorflow.screen.LoadingScreen
 import com.colorflow.screen.MenuScreen
 import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.ShopScreen
-import com.colorflow.data.StorageInterface
+import com.colorflow.persistence.StorageInterface
 import com.colorflow.utility.AssetProvider
 
-class MainGame(storageInterface: StorageInterface, val musicManager: MusicManagerInterface) : Game() {
+class MainGame(storageInterface: StorageInterface, val musicManager: IMusicManager) : Game() {
 
     var menu: Screen? = null
         private set

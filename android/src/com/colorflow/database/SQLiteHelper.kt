@@ -2,12 +2,10 @@ package com.colorflow.database
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.colorflow.data.StorageInterface
+import com.colorflow.persistence.StorageInterface
 import java.util.ArrayList
-import java.util.HashMap
 
 /**
  * Created by daniele on 28/07/17.
