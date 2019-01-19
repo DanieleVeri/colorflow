@@ -5,20 +5,24 @@ import com.badlogic.gdx.InputAdapter
 import com.colorflow.utility.Position
 
 internal class SideTapListener(private val ring: Ring) : InputAdapter(), RingListener {
-    private var rot: Float = 0.toFloat()
+    private var rot: Float = 0f
+    private var last_x: Int = -1
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        calcRot()
+        rot = if (last_x == -1) 0f else (screenX - last_x) / 7f
+        last_x = screenX
         return false
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        calcRot()
+        rot = if (last_x == -1) 0f else (screenX - last_x) / 7f
+        last_x = screenX
         return false
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        calcRot()
+        rot = 0f
+        last_x = -1
         return false
     }
 
@@ -26,17 +30,4 @@ internal class SideTapListener(private val ring: Ring) : InputAdapter(), RingLis
         ring.rotateBy(rot)
     }
 
-    private fun calcRot() {
-        var clock = 0
-        for (i in 0..9) {
-            if (Gdx.input.isTouched(i)) {
-                if (Gdx.input.getX(i) > Position.center.x) {
-                    clock++
-                } else {
-                    clock--
-                }
-            }
-        }
-        rot = clock * ring.sensibility
-    }
 }

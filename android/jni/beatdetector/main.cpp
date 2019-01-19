@@ -22,7 +22,7 @@ Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance) {
     uint_t hop_size = win_size / 4;
     uint_t n_frames = 0, read = 0;
 
-    char_t *source_path = "/data/data/com.colorflow/files/music/ncs.wav";
+    char_t *source_path = "/data/data/com.colorflow/files/music/0.wav";
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
     if (!source) {
         __android_log_print(ANDROID_LOG_ERROR, APPNAME, "error loading music file");
@@ -45,7 +45,8 @@ Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance) {
                                 aubio_tempo_get_last(o), aubio_tempo_get_bpm(o),
                                 aubio_tempo_get_confidence(o));
             */
-            fill[counter++] = aubio_tempo_get_last_ms(o);
+            if (aubio_tempo_get_confidence(o) > .1f)
+                fill[counter++] = aubio_tempo_get_last_ms(o);
         }
         n_frames += read;
     } while (read == hop_size);

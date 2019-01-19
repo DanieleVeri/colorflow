@@ -54,18 +54,23 @@ class MusicManager(private val context: Context) :
     override fun rem_beat_cb(cb: ()->Unit) {
         beat_cb-= cb
     }
+    private var beatloaders: Deferred<Unit>
 
     init {
-        GlobalScope.launch {
+        beatloaders = GlobalScope.async {
             peaks = detect()
-            var counter = 0
-            while(counter < peaks!!.size) {
-                if (playElapsed >= peaks!![counter]) {
-                    beat_cb.map { it() }
-                    counter++
-                }
-                delay(100)
+        }
+    }
+
+    private suspend fun check_for_beat() {
+        beatloaders.await()
+        var counter = 0
+        while(counter <= peaks!!.size) {
+            if (statePlayer.`is`(State.STARTED) && playElapsed >= peaks!![counter]) {
+                beat_cb.map { it() }
+                counter++
             }
+            delay(100)
         }
     }
 
@@ -92,6 +97,7 @@ class MusicManager(private val context: Context) :
         pauseElapsed = 0
         mediaPlayer.reset()
         statePlayer = State.IDLE
+        GlobalScope.launch { check_for_beat() }
         loadAndPrepare(mediaPlayer)
     }
 

@@ -11,4 +11,8 @@ class BGManager(private val playStage: PlayStage) {
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
     }
+
+    fun reset() {
+        bgColor = Color(.2f, .2f, .2f, 1f)
+    }
 }

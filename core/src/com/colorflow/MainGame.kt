@@ -32,10 +32,10 @@ class MainGame(storageInterface: StorageInterface, val musicManager: IMusicManag
 
     override fun dispose() {
         super.dispose()
-        if (menu != null) menu!!.dispose()
-        if (play != null) play!!.dispose()
-        if (shop != null) shop!!.dispose()
-        if (assetProvider != null) assetProvider.dispose()
+        menu?.dispose()
+        play?.dispose()
+        shop?.dispose()
+        assetProvider?.dispose()
     }
 
     internal inner class Boot : Thread() {

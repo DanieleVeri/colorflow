@@ -72,7 +72,7 @@ class MenuScreen(private val game: MainGame) : Screen {
         record = Label("R3C0RD: " + game.dataManager.record, game.assetProvider.getSkin("Menu"), "Title")
         ring = Ring(game.dataManager.usedRing)
         stage.addActor(this.ring)
-        val title = Label("COLOR FLOW", game.assetProvider.getSkin("Menu"), "Title")
+        val title = Label("COLORFLOW", game.assetProvider.getSkin("Menu"), "Title")
         val playButton: ImageButton
         val shopButton: ImageButton
         playButton = ImageButton(game.assetProvider.getSkin("Menu"), "Play")

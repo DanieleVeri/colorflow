@@ -11,17 +11,14 @@ import com.badlogic.gdx.utils.Disposable
 
 import java.util.HashMap
 
-//TODO: Issue on backButton pressed (invoke dispose)
-
 class AssetProvider : Disposable {
 
     private val manager: AssetManager = AssetManager()
     private val skinMap: MutableMap<String, String>
     private val soundMap: MutableMap<String, String>
 
-    private//TODO: Mock to  implement
-    val resolution: String
-        get() = "2560x1440"
+    private val resolution: String
+        get() = Position.heightScreen.toInt().toString()+"x"+Position.widthScreen.toInt().toString()
 
     init {
         this.skinMap = HashMap()

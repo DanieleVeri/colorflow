@@ -201,6 +201,7 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
         this.tab = tab
     }
 
+
     internal enum class Tab {
         RINGS, BONUS
     }

@@ -13,7 +13,7 @@ import com.colorflow.play.ring.Ring
 import com.colorflow.screen.PlayScreen
 import com.colorflow.utility.effects.Explosion
 import com.colorflow.utility.effects.ExplosionPool
-
+import kotlin.concurrent.thread
 
 class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport) {
     var ring: Ring? = null
@@ -48,8 +48,11 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
         ring = Ring(playScreen.game.dataManager.usedRing)
         playScreen.game.musicManager.add_beat_cb {
             bgManager.bgColor = Color.getRandomExcept(emptyList()).rgb
+            ring!!.setScale(1.1f)
+            thread { Thread.sleep(100); ring!!.setScale(1f) }
         }
         spawner.reset()
+        bgManager.reset()
         isPlaying = true
     }
 
@@ -69,7 +72,7 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
 
     override fun dispose() {
         super.dispose()
-        this.ring!!.dispose()
+        this.ring?.dispose()
         DotPool.instance.clear()
         BonusPool.instance.clear()
         ExplosionPool.getInstance().clear()
