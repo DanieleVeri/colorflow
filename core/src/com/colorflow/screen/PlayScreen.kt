@@ -3,7 +3,6 @@ package com.colorflow.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.colorflow.MainGame
@@ -22,22 +21,22 @@ class PlayScreen(val game: MainGame) : Screen {
         set(state) {
             when (state) {
                 PlayScreen.State.PLAY -> {
-                    game.musicManager.play()
+                    game.music_manager.play()
                     multiplexer.clear()
                     multiplexer.addProcessor(playStage)
                     multiplexer.addProcessor(playStage.ring!!.getListener())
                     multiplexer.addProcessor(hudStage)
                 }
                 PlayScreen.State.PAUSE -> {
-                    game.musicManager.pause()
+                    game.music_manager.pause()
                     multiplexer.clear()
                     multiplexer.addProcessor(hudStage)
                 }
                 PlayScreen.State.OVER -> {
-                    game.musicManager.stop()
-                    game.dataManager.incCoins(score.coins)
-                    if (game.dataManager.record < score.points) {
-                        game.dataManager.record = score.points
+                    game.music_manager.stop()
+                    game.persistence.incCoins(score.coins)
+                    if (game.persistence.record < score.points) {
+                        game.persistence.record = score.points
                     }
                     multiplexer.clear()
                     multiplexer.addProcessor(hudStage)
@@ -93,7 +92,7 @@ class PlayScreen(val game: MainGame) : Screen {
     }
 
     fun reset() {
-        game.musicManager.reset()
+        game.music_manager.reset()
         score.reset()
         playStage.reset()
         state = State.PLAY

@@ -10,9 +10,8 @@
 
 ### functional
 - [ ] Remove shop -> random purchase like bbtan
-- [ ] Buy only _rings_ and _musics_
 - [x] Flashing background
-- [ ] Refactor menu & hud
+- [x] Refactor menu & hud
 - [x] Swipe listener
 
 

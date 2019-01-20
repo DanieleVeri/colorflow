@@ -12,7 +12,7 @@
 
 extern "C"
 JNIEXPORT jintArray JNICALL
-Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance) {
+Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance, jstring path) {
     jintArray result;
     jint fill[800];   // 4min song at 180bpm
     int counter = 0;
@@ -22,7 +22,7 @@ Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance) {
     uint_t hop_size = win_size / 4;
     uint_t n_frames = 0, read = 0;
 
-    char_t *source_path = "/data/data/com.colorflow/files/music/0.wav";
+    const char_t *source_path = env->GetStringUTFChars(path, 0);
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
     if (!source) {
         __android_log_print(ANDROID_LOG_ERROR, APPNAME, "error loading music file");
@@ -62,6 +62,7 @@ Java_com_colorflow_music_MusicManager_detect(JNIEnv *env, jobject instance) {
     del_fvec(out);
     del_aubio_source(source);
     aubio_cleanup();
+    env->ReleaseStringUTFChars(path, source_path);
 
     result = env->NewIntArray(counter);
     env->SetIntArrayRegion(result, 0, counter, fill);

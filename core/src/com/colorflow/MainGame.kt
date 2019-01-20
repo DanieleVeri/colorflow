@@ -11,8 +11,10 @@ import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.ShopScreen
 import com.colorflow.persistence.StorageInterface
 import com.colorflow.utility.AssetProvider
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class MainGame(storageInterface: StorageInterface, val musicManager: IMusicManager) : Game() {
+class MainGame(storage_interface: StorageInterface, val music_manager: IMusicManager) : Game() {
 
     var menu: Screen? = null
         private set
@@ -21,33 +23,17 @@ class MainGame(storageInterface: StorageInterface, val musicManager: IMusicManag
     var shop: Screen? = null
         private set
 
-    val dataManager: DataManager = DataManager(storageInterface)
-    lateinit var assetProvider: AssetProvider
+    val persistence: DataManager = DataManager(storage_interface)
+    lateinit var assets: AssetProvider
         private set
 
     override fun create() {
-        Boot().start()
         setScreen(LoadingScreen())
-    }
-
-    override fun dispose() {
-        super.dispose()
-        menu?.dispose()
-        play?.dispose()
-        shop?.dispose()
-        assetProvider?.dispose()
-    }
-
-    internal inner class Boot : Thread() {
-        override fun run() {
+        GlobalScope.launch {
             firstStart()
-            musicManager.init()
-            assetProvider = AssetProvider()
-            try {
-                Thread.sleep(1000)
-            } catch (e: InterruptedException) {
-            }
-
+            assets = AssetProvider()
+            music_manager.init()
+            music_manager.analyze()
             Gdx.app.postRunnable {
                 menu = MenuScreen(this@MainGame)
                 play = PlayScreen(this@MainGame)
@@ -56,6 +42,15 @@ class MainGame(storageInterface: StorageInterface, val musicManager: IMusicManag
             }
         }
     }
+
+    override fun dispose() {
+        super.dispose()
+        menu?.dispose()
+        play?.dispose()
+        shop?.dispose()
+        assets?.dispose()
+    }
+
 
     private fun firstStart() {
         if (!Gdx.files.local("rings").exists()) {

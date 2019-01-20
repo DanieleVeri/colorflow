@@ -6,6 +6,8 @@ interface IMusicManager {
     fun play()
     fun pause()
     fun stop()
+
+    fun analyze()
     fun add_beat_cb(cb: ()->Unit)
     fun rem_beat_cb(cb: ()->Unit)
 

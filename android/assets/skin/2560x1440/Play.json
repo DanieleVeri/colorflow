@@ -15,7 +15,7 @@
 },
   com.badlogic.gdx.graphics.g2d.BitmapFont:{
   default-font:{
-    file:font.fnt
+    file:font_100.fnt
   }
 },
   com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle:{

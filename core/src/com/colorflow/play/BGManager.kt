@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 
 class BGManager(private val playStage: PlayStage) {
-    var bgColor: Color = Color(.2f, .2f, .2f, 1f)
+    var bgColor: Color = Color.BLACK
 
     fun render() {
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)
@@ -13,6 +13,6 @@ class BGManager(private val playStage: PlayStage) {
     }
 
     fun reset() {
-        bgColor = Color(.2f, .2f, .2f, 1f)
+        bgColor = Color.BLACK
     }
 }

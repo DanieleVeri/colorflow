@@ -45,8 +45,8 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
         }
         if (this.ring != null) this.ring!!.dispose()
         clear()
-        ring = Ring(playScreen.game.dataManager.usedRing)
-        playScreen.game.musicManager.add_beat_cb {
+        ring = Ring(playScreen.game.persistence.usedRing)
+        playScreen.game.music_manager.add_beat_cb {
             bgManager.bgColor = Color.getRandomExcept(emptyList()).rgb
             ring!!.setScale(1.1f)
             thread { Thread.sleep(100); ring!!.setScale(1f) }

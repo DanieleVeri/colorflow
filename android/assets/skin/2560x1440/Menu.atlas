@@ -3,45 +3,17 @@ Menu.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Menu.Contact
+Menu.slot-machine
   rotate: false
-  xy: 1, 517
+  xy: 1, 3
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-Menu.Play
+Menu.play
   rotate: false
-  xy: 1, 259
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-Menu.Record
-  rotate: false
-  xy: 259, 517
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-Menu.Settings
-  rotate: false
-  xy: 1, 1
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-Menu.Shop
-  rotate: false
-  xy: 259, 259
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-Menu.Rate
-  rotate: false
-  xy: 517, 517
-  size: 256, 256
-  orig: 256, 256
+  xy: 259, 1
+  size: 226, 258
+  orig: 226, 258
   offset: 0, 0
   index: -1

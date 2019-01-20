@@ -37,21 +37,21 @@ class HUDStage(viewport: Viewport, private val playScreen: PlayScreen) : Stage(v
 
     override fun update(o: Observable, arg: Any?) {
         scorePlay!!.setText(playScreen.score.points.toString())
-        builder.append(playScreen.score.coins).append("Z")
+        builder.append(playScreen.score.coins)
         coinsPlay!!.setText(builder)
         scorePause!!.setText(playScreen.score.points.toString())
         coinsPause!!.setText(builder)
         builder.delete(0, builder.length)
-        if (playScreen.score.points <= playScreen.game.dataManager.record) {
+        if (playScreen.score.points <= playScreen.game.persistence.record) {
             builder.append("SCORE: ").append(playScreen.score.points).append("\nRECORD: ")
-                    .append(playScreen.game.dataManager.record)
+                    .append(playScreen.game.persistence.record)
 
         } else {
             builder.append("NEW R3C0RD!\n").append(playScreen.score.points)
         }
         scoreOver!!.setText(builder)
         builder.delete(0, builder.length)
-        builder.append("COINS: ").append(playScreen.score.coins).append("Z")
+        builder.append("COINS: ").append(playScreen.score.coins)
         coinsOver!!.setText(builder)
         builder.delete(0, builder.length)
     }
@@ -95,47 +95,47 @@ class HUDStage(viewport: Viewport, private val playScreen: PlayScreen) : Stage(v
 
     private fun initUI() {
         val tablePad = Position.heightScreen / 48f
-        scorePlay = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        coinsPlay = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        scorePause = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        coinsPause = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        scoreOver = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        coinsOver = Label("", playScreen.game.assetProvider.getSkin("Play"), "Score")
-        val gameOver = Label("GAME OVER", playScreen.game.assetProvider.getSkin("Play"), "GameOver")
-        val restartButton = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Redo")
-        val adsButton = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Ads")
-        val pauseButton = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Pause")
-        val playButton = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Play")
-        val homeButtonPause = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Home")
-        val homeButtonOver = ImageButton(playScreen.game.assetProvider.getSkin("Play"), "Home")
-        restartButton.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        scorePlay = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        coinsPlay = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        scorePause = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        coinsPause = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        scoreOver = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        coinsOver = Label("", playScreen.game.assets.getSkin("Play"), "Score")
+        val gameOver = Label("GAME OVER", playScreen.game.assets.getSkin("Play"), "GameOver")
+        val restartButton = ImageButton(playScreen.game.assets.getSkin("Play"), "Redo")
+        val adsButton = ImageButton(playScreen.game.assets.getSkin("Play"), "Ads")
+        val pauseButton = ImageButton(playScreen.game.assets.getSkin("Play"), "Pause")
+        val playButton = ImageButton(playScreen.game.assets.getSkin("Play"), "Play")
+        val homeButtonPause = ImageButton(playScreen.game.assets.getSkin("Play"), "Home")
+        val homeButtonOver = ImageButton(playScreen.game.assets.getSkin("Play"), "Home")
+        restartButton.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 playScreen.reset()
             }
         })
-        adsButton.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        adsButton.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 //TODO: Implement
             }
         })
-        pauseButton.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        pauseButton.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 if (playScreen.state == State.PLAY) {
                     playScreen.state = State.PAUSE
                 }
             }
         })
-        playButton.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        playButton.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 playScreen.state = State.PLAY
             }
         })
-        homeButtonPause.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        homeButtonPause.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 playScreen.game.screen = playScreen.game.menu
             }
         })
-        homeButtonOver.addListener(object : ButtonListener(playScreen.game.assetProvider) {
+        homeButtonOver.addListener(object : ButtonListener(playScreen.game.assets) {
             override fun onTap() {
                 playScreen.game.screen = playScreen.game.menu
             }

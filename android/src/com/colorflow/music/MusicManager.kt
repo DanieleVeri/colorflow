@@ -20,15 +20,6 @@ class MusicManager(private val context: Context) :
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnErrorListener {
 
-    companion object {
-        init {
-            System.loadLibrary("beatdetector")
-        }
-    }
-
-    external fun detect(): IntArray
-    private var peaks: IntArray? = null
-
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var statePlayer: State
     private var pendingStart: Boolean = false
@@ -45,8 +36,15 @@ class MusicManager(private val context: Context) :
 
     private val currentFile: File
         get() = File(context.applicationInfo.dataDir +
-                "/files/music/" + current.toString() + ".mp3")
+                "/files/music/" + current.toString() + ".wav")
 
+    companion object {
+        init {
+            System.loadLibrary("beatdetector")
+        }
+    }
+    external fun detect(path: String): IntArray
+    private var peaks: IntArray? = null
     private var beat_cb: List<(()->Unit)> = ArrayList()
     override fun add_beat_cb(cb: ()->Unit) {
         beat_cb+= cb
@@ -54,15 +52,13 @@ class MusicManager(private val context: Context) :
     override fun rem_beat_cb(cb: ()->Unit) {
         beat_cb-= cb
     }
-    private var beatloaders: Deferred<Unit>
-
-    init {
+    private lateinit var beatloaders: Deferred<Unit>
+    override fun analyze() {
         beatloaders = GlobalScope.async {
-            peaks = detect()
+            peaks = detect(currentFile.absolutePath)
         }
     }
-
-    private suspend fun check_for_beat() {
+    private suspend fun check_for_peak() {
         beatloaders.await()
         var counter = 0
         while(counter <= peaks!!.size) {
@@ -97,17 +93,19 @@ class MusicManager(private val context: Context) :
         pauseElapsed = 0
         mediaPlayer.reset()
         statePlayer = State.IDLE
-        GlobalScope.launch { check_for_beat() }
         loadAndPrepare(mediaPlayer)
     }
 
     override fun play() {
         if (statePlayer.`is`(State.PAUSED, State.PREPARED)) {
             mediaPlayer.start()
-            if (statePlayer == State.PAUSED)
+            if (statePlayer == State.PAUSED) {
                 pauseElapsed += Calendar.getInstance().timeInMillis - pauseTime
-            else
+            }
+            else {
                 startTime = Calendar.getInstance().timeInMillis
+                GlobalScope.launch { check_for_peak() }
+            }
             statePlayer = State.STARTED
 
         } else if (statePlayer.`is`(State.PREPARING)) {
@@ -142,6 +140,7 @@ class MusicManager(private val context: Context) :
         statePlayer = State.IDLE
         loadAndPrepare(mp)
         pendingStart = true
+        current++
     }
 
     override fun onPrepared(mp: MediaPlayer) {
@@ -179,7 +178,6 @@ class MusicManager(private val context: Context) :
         }
         mp.prepareAsync()
         statePlayer = State.PREPARING
-        current++
     }
 
     private enum class State {
