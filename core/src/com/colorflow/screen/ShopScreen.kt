@@ -23,22 +23,16 @@ import java.util.Observable
 import java.util.Observer
 
 class ShopScreen(private val game: MainGame) : Screen, Observer {
-    private var tab: Tab? = null
     private val camera: OrthographicCamera = OrthographicCamera()
     private val stage: Stage
     private val multiplexer: InputMultiplexer
     /* UI */
     private var dataVersion = ""
-    private var table: Table? = null
+    private var table: Table = Table()
     private var homeBtn: ImageButton? = null
-    private var ringBtn: ImageButton? = null
-    private var bonusBtn: ImageButton? = null
-    private var title: Label? = null
-    private var coins: Label? = null
+    private var coins: Label = Label("", game.assets.getSkin("Shop"), "Coins")
     private var ringScroll: ScrollPane? = null
-    private var bonusScroll: ScrollPane? = null
-    private var ringTable: Table? = null
-    private var bonusTable: Table? = null
+    private var ringList: Table = Table()
 
     init {
         this.camera.setToOrtho(false, Position.widthScreen, Position.heightScreen)
@@ -48,7 +42,6 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
         this.multiplexer.addProcessor(stage)
         initUI()
         loadContent()
-        setTab(Tab.RINGS)
     }
 
     override fun show() {
@@ -59,7 +52,7 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
+        Gdx.gl.glClearColor(.1f, .1f, .1f, .1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         stage.act(delta)
         stage.draw()
@@ -84,45 +77,23 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
     }
 
     private fun initUI() {
-        table = Table()
-        table!!.setFillParent(true)
-        table!!.pad(30f)
+        table.setFillParent(true)
+        table.pad(30f)
         homeBtn = ImageButton(game.assets.getSkin("Shop"), "Home")
         homeBtn!!.addListener(object : ButtonListener(game.assets) {
             override fun onTap() {
                 game.screen = game.menu
             }
         })
-        ringBtn = ImageButton(game.assets.getSkin("Shop"), "Ring")
-        ringBtn!!.addListener(object : ButtonListener(game.assets) {
-            override fun onTap() {
-                if (tab != Tab.RINGS) {
-                    setTab(Tab.RINGS)
-                }
-            }
-        })
-        bonusBtn = ImageButton(game.assets.getSkin("Shop"), "Bonus")
-        bonusBtn!!.addListener(object : ButtonListener(game.assets) {
-            override fun onTap() {
-                if (tab != Tab.BONUS) {
-                    setTab(Tab.BONUS)
-                }
-            }
-        })
-        ringTable = Table()
-        bonusTable = Table()
-        ringScroll = ScrollPane(ringTable)
-        bonusScroll = ScrollPane(bonusTable)
-        title = Label("--title--", game.assets.getSkin("Shop"), "Title")
-        coins = Label("--coins--", game.assets.getSkin("Shop"), "Coins")
-        table!!.add<ImageButton>(homeBtn)
-        table!!.add<Label>(title)
-        table!!.row()
-        table!!.add<ImageButton>(ringBtn)
-        table!!.add<ScrollPane>(ringScroll).expand().fill().right()
-        table!!.row()
-        table!!.add<ImageButton>(bonusBtn)
-        table!!.add<Label>(coins)
+
+        ringScroll = ScrollPane(ringList)
+        val title = Label("Have a lucky day", game.assets.getSkin("Shop"), "Title")
+        table.add<ImageButton>(homeBtn).left()
+        table.add<Label>(title)
+        table.row()
+        table.add<ScrollPane>(ringScroll).expand().fill().colspan(2)
+        table.row()
+        table.add<Label>(coins).colspan(2)
         stage.addActor(table)
     }
 
@@ -133,13 +104,13 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
         dataVersion = game.persistence.version
         /* Rings */
         val files = Gdx.files.local("rings").list()
-        ringTable!!.clear()
+        ringList.clear()
         for (i in files.indices) {
             if (files[i].extension() == "xml") {
                 val ring = Ring(files[i].name())
                 ring.addAction(Actions.rotateBy(99999999f, 1999999f))
                 val name = Label(ring.name, game.assets.getSkin("Shop"), "ItemName")
-                val cost = TextButton(ring.cost.toString() + "Z", game.assets.getSkin("Shop"), "Buy")
+                val cost = TextButton(ring.cost.toString(), game.assets.getSkin("Shop"), "Buy")
                 cost.addListener(object : ButtonListener(game.assets) {
                     override fun onTap() {
                         game.persistence.purchaseRing(ring.cost, ring.id)
@@ -147,62 +118,32 @@ class ShopScreen(private val game: MainGame) : Screen, Observer {
                         cost.touchable = Touchable.disabled
                     }
                 })
-                ringTable!!.add(ring).expandX()
-                ringTable!!.add(name).expandX()
-                ringTable!!.add(cost).expandX()
-                ringTable!!.row().pad(20f)
+                ringList.add(ring).expandX()
+                ringList.add(name).expandX()
+                ringList.add(cost).expandX()
+                ringList.row().pad(20f)
             }
         }
-        /* Bonus */
     }
 
     private fun updateStatus() {
-        coins!!.setText(game.persistence.coins.toString() + "Z")
+        val coin = game.persistence.coins
+        coins.setText(coin.toString() + if (coin == 1) " coin" else " coins")
         /* Ring */
         var ring: Ring? = null
         var button: TextButton
-        for (c in ringTable!!.cells) {
+        for (c in ringList.cells) {
             if (c.actor is Ring) {
                 ring = c.actor as Ring
             }
             if (c.actor is TextButton) {
                 button = c.actor as TextButton
-                if (game.persistence.coins < ring!!.cost || game.persistence.unlockedRings.contains(ring!!.id)) {
+                if (game.persistence.coins < ring!!.cost || game.persistence.unlockedRings.contains(ring.id)) {
                     button.isDisabled = true
                     button.touchable = Touchable.disabled
                 }
             }
         }
-        /* Bonus */
     }
 
-    private fun setTab(tab: Tab) {
-        if (this.tab == null) {
-            render(Gdx.graphics.deltaTime)
-        }
-        title!!.setText(tab.toString())
-        when (tab) {
-            ShopScreen.Tab.RINGS -> {
-                table!!.cells.get(3).setActor<ScrollPane>(ringScroll)
-                ringBtn!!.addAction(Actions.moveBy(50f, 0f, 0.25f))
-            }
-            ShopScreen.Tab.BONUS -> {
-                table!!.cells.get(3).setActor<ScrollPane>(bonusScroll)
-                bonusBtn!!.addAction(Actions.moveBy(50f, 0f, 0.25f))
-            }
-        }
-        if (this.tab != null) {
-            when (this.tab) {
-                ShopScreen.Tab.RINGS -> ringBtn!!.addAction(Actions.moveBy(-20f, 0f, 0.25f))
-                ShopScreen.Tab.BONUS -> bonusBtn!!.addAction(Actions.moveBy(-20f, 0f, 0.25f))
-                else -> throw IllegalStateException()
-            }
-        }
-        this.tab = tab
-    }
-
-
-    internal enum class Tab {
-        RINGS, BONUS
-    }
 }

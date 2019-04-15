@@ -22,24 +22,18 @@ enum class Color {
             while (true) {
                 colorNum = (Math.random() * 6.0).toInt()
                 when (colorNum) {
-                    0 -> if (!colors.contains(Color.RED)) {
+                    0 -> if (!colors.contains(Color.RED))
                         return RED
-                    }
-                    1 -> if (!colors.contains(Color.YELLOW)) {
+                    1 -> if (!colors.contains(Color.YELLOW))
                         return YELLOW
-                    }
-                    2 -> if (!colors.contains(Color.GREEN)) {
+                    2 -> if (!colors.contains(Color.GREEN))
                         return GREEN
-                    }
-                    3 -> if (!colors.contains(Color.MAGENTA)) {
+                    3 -> if (!colors.contains(Color.MAGENTA))
                         return MAGENTA
-                    }
-                    4 -> if (!colors.contains(Color.BLUE)) {
+                    4 -> if (!colors.contains(Color.BLUE))
                         return BLUE
-                    }
-                    5 -> if (!colors.contains(Color.CYAN)) {
+                    5 -> if (!colors.contains(Color.CYAN))
                         return CYAN
-                    }
                     else -> throw IllegalStateException()
                 }
             }

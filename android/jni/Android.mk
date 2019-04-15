@@ -11,7 +11,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := beatdetector
 LOCAL_LDLIBS := -llog
-LOCAL_SRC_FILES := beatdetector/main.cpp
+LOCAL_SRC_FILES := beatdetector/BeatDetector.cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/beatdetector/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/beatdetector/aubio/include/
 LOCAL_STATIC_LIBRARIES := aubio

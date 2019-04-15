@@ -6,14 +6,29 @@
 #define COLORFLOW_BEATDETECTOR_H
 
 #include <jni.h>
+#include <BeatDetector.h>
+#include <aubio.h>
+#include <cstddef>
+#include <android/log.h>
+
+#define APPNAME "Colorflow"
+
+typedef struct _JNI_BeatSample {
+    jclass cls;
+    jmethodID ctorID;
+    jfieldID msID;
+    jfieldID confidenceID;
+    jfieldID bpmID;
+} JNI_BeatSample;
+
+typedef struct _BeatSample {
+    float confidence;
+    float ms;
+    float bpm;
+} BeatSample;
 
 extern "C"
-JNIEXPORT jint JNICALL
-Java_com_colorflow_music_BeatDetector_add(JNIEnv* pEnv,
-    jobject pThis,
-    jint a,
-    jint b) {
-    return a + b;
-}
+JNIEXPORT jobjectArray JNICALL
+Java_com_colorflow_music_MusicAnalyzer_detect(JNIEnv *env, jobject instance, jstring path);
 
 #endif //COLORFLOW_BEATDETECTOR_H

@@ -51,7 +51,6 @@ class MenuScreen(private val game: MainGame) : Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         renderer.begin(ShapeRenderer.ShapeType.Filled)
-        //renderer.rect(0f, 0f, Position.widthScreen, Position.heightScreen, Color.RED, Color.GREEN, Color.BLUE, Color.VIOLET)
         renderer.end()
 
         ring?.rotateBy(1f)

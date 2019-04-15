@@ -43,13 +43,13 @@ class MusicManager(private val context: Context) :
             System.loadLibrary("beatdetector")
         }
     }
-    external fun detect(path: String): IntArray
-    private var peaks: IntArray? = null
-    private var beat_cb: List<(()->Unit)> = ArrayList()
-    override fun add_beat_cb(cb: ()->Unit) {
+    external fun detect(path: String): Array<BeatSample>
+    private var peaks: Array<BeatSample>? = null
+    private var beat_cb: List<(() -> Unit)> = ArrayList()
+    override fun add_beat_cb(cb: () -> Unit) {
         beat_cb+= cb
     }
-    override fun rem_beat_cb(cb: ()->Unit) {
+    override fun rem_beat_cb(cb: () -> Unit) {
         beat_cb-= cb
     }
     private lateinit var beatloaders: Deferred<Unit>
@@ -62,8 +62,9 @@ class MusicManager(private val context: Context) :
         beatloaders.await()
         var counter = 0
         while(counter <= peaks!!.size) {
-            if (statePlayer.`is`(State.STARTED) && playElapsed >= peaks!![counter]) {
-                beat_cb.map { it() }
+            if (statePlayer.`is`(State.STARTED) && playElapsed >= peaks!![counter].ms) {
+                if(peaks!![counter].confidence > .1)
+                    beat_cb.map { it() }
                 counter++
             }
             delay(100)

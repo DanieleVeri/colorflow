@@ -13,7 +13,10 @@ import com.colorflow.play.ring.Ring
 import com.colorflow.screen.PlayScreen
 import com.colorflow.utility.effects.Explosion
 import com.colorflow.utility.effects.ExplosionPool
-import kotlin.concurrent.thread
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport) {
     var ring: Ring? = null
@@ -45,11 +48,12 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
         }
         if (this.ring != null) this.ring!!.dispose()
         clear()
+        playScreen.game.music_manager.reset()
         ring = Ring(playScreen.game.persistence.usedRing)
         playScreen.game.music_manager.add_beat_cb {
-            bgManager.bgColor = Color.getRandomExcept(emptyList()).rgb
-            ring!!.setScale(1.1f)
-            thread { Thread.sleep(100); ring!!.setScale(1f) }
+            //bgManager.bgColor = Color.getRandomExcept(emptyList()).rgb
+            this.ring!!.setScale(1.1f)
+            GlobalScope.launch { delay(100); ring!!.setScale(1f) }
         }
         spawner.reset()
         bgManager.reset()
@@ -92,20 +96,15 @@ class PlayStage(viewport: Viewport, val playScreen: PlayScreen) : Stage(viewport
     }
 
     private fun detectCollision() {
-        for (a in actors) {
-            if (a is Bonus) {
-                if (Intersector.overlaps(a.bounds, this.ring!!.circle)) {
+        for (a in actors)
+            if (a is Bonus)
+                if (Intersector.overlaps(a.bounds, this.ring!!.circle))
                     a.destroy(Trigger.getBonus(this))
-                }
-            }
-        }
-        for (a in actors) {
-            if (a is Dot) {
-                if (Intersector.overlaps(a.bounds, this.ring!!.circle)) {
+
+        for (a in actors)
+            if (a is Dot)
+                if (Intersector.overlaps(a.bounds, this.ring!!.circle))
                     a.destroy(Trigger.getDot(this))
-                }
-            }
-        }
     }
 
 }

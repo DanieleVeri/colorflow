@@ -13,7 +13,7 @@
       "artifactName": "beatdetector",
       "files": [
         {
-          "src": "/home/dan/Desktop/colorflow/android/jni/beatdetector/main.cpp",
+          "src": "/home/dan/Desktop/colorflow/android/jni/beatdetector/BeatDetector.cpp",
           "flags": "-target i686-none-linux-android21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-exceptions -fno-rtti -gcc-toolchain /home/dan/Android/Sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/linux-x86_64 -fPIC -O2 -DNDEBUG -I/home/dan/Desktop/colorflow/android/jni/beatdetector/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include -I/home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/system/include -I/home/dan/Desktop/colorflow/android/jni -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security -mstackrealign --sysroot /home/dan/Android/Sdk/ndk-bundle/sysroot -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/i686-linux-android"
         }
       ],
