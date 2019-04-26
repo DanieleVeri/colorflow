@@ -2,7 +2,7 @@ package com.colorflow.play.entity.bonus
 
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Path
-import com.colorflow.utility.Position
+import com.colorflow.utils.Position
 
 /**
  * Created by daniele on 08/05/17.
@@ -21,7 +21,6 @@ class BonusPool private constructor() : Pool<Bonus>() {
     }
 
     companion object {
-
         val instance = BonusPool()
     }
 }

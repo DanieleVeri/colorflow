@@ -6,192 +6,98 @@ import android.media.MediaPlayer
 import android.media.audiofx.Equalizer
 import android.net.Uri
 import android.util.Log
-import com.colorflow.play.IMusicManager
+import com.colorflow.music.MusicManager.State.*
 
-import kotlinx.coroutines.*
-
-import java.io.File
-import java.io.IOException
-import java.util.*
-
-class MusicManager(private val context: Context) :
+class MusicManager(private val context: Context):
         IMusicManager,
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnErrorListener {
 
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var statePlayer: State
-    private var pendingStart: Boolean = false
-    private var current: Int = 0
+    private enum class State {
+        IDLE, INIT, PREPARING, PREPARED, STARTED, PAUSED, STOPPED, COMPLETED, ERROR, RELEASED;
 
-    private var startTime: Long = 0
-    private var pauseTime: Long = 0
-    private var pauseElapsed: Long = 0
-    val playElapsed: Long
-        get() {
-            if (startTime == 0L) return 0
-            return Calendar.getInstance().timeInMillis - startTime - pauseElapsed
-        }
-
-    private val currentFile: File
-        get() = File(context.applicationInfo.dataDir +
-                "/files/music/" + current.toString() + ".wav")
-
-    companion object {
-        init {
-            System.loadLibrary("beatdetector")
-        }
-    }
-    external fun detect(path: String): Array<BeatSample>
-    private var peaks: Array<BeatSample>? = null
-    private var beat_cb: List<(() -> Unit)> = ArrayList()
-    override fun add_beat_cb(cb: () -> Unit) {
-        beat_cb+= cb
-    }
-    override fun rem_beat_cb(cb: () -> Unit) {
-        beat_cb-= cb
-    }
-    private lateinit var beatloaders: Deferred<Unit>
-    override fun analyze() {
-        beatloaders = GlobalScope.async {
-            peaks = detect(currentFile.absolutePath)
-        }
-    }
-    private suspend fun check_for_peak() {
-        beatloaders.await()
-        var counter = 0
-        while(counter <= peaks!!.size) {
-            if (statePlayer.`is`(State.STARTED) && playElapsed >= peaks!![counter].ms) {
-                if(peaks!![counter].confidence > .1)
-                    beat_cb.map { it() }
-                counter++
-            }
-            delay(100)
+        fun `is`(vararg states: State): Boolean {
+            for (state in states)
+                if (this == state)
+                    return true
+            return false
         }
     }
 
-    override fun init() {
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setOnCompletionListener(this)
-        mediaPlayer.setOnPreparedListener(this)
-        mediaPlayer.setOnErrorListener(this)
-        statePlayer = State.IDLE
-        val mEqualizer = Equalizer(0, mediaPlayer.audioSessionId)
-        mEqualizer.enabled = true
+    private var _media_player: MediaPlayer
+    private var _state: State
+
+    init {
+        _media_player = MediaPlayer()
+        _media_player.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        _media_player.setOnCompletionListener(this)
+        _media_player.setOnPreparedListener(this)
+        _media_player.setOnErrorListener(this)
+        _state = IDLE
+        val equalizer = Equalizer(0, _media_player.audioSessionId)
+        equalizer.enabled = true
         reset()
     }
 
     override fun reset() {
-        if (statePlayer.`is`(State.PREPARED)) {
+        if (_state.`is`(PREPARED))
             return
-        }
-        pendingStart = false
-        current = 0
-        startTime = 0
-        pauseTime = 0
-        pauseElapsed = 0
-        mediaPlayer.reset()
-        statePlayer = State.IDLE
-        loadAndPrepare(mediaPlayer)
+        _media_player.reset()
+        _state = IDLE
+    }
+
+    override fun load(music_id: String) {
+        if (!_state.`is`(IDLE))
+            return
+        _media_player.setDataSource(context, Uri.fromFile(get_music_file(context, music_id)))
+        _state = INIT
+        _media_player.prepareAsync()
+        _state = PREPARING
     }
 
     override fun play() {
-        if (statePlayer.`is`(State.PAUSED, State.PREPARED)) {
-            mediaPlayer.start()
-            if (statePlayer == State.PAUSED) {
-                pauseElapsed += Calendar.getInstance().timeInMillis - pauseTime
-            }
-            else {
-                startTime = Calendar.getInstance().timeInMillis
-                GlobalScope.launch { check_for_peak() }
-            }
-            statePlayer = State.STARTED
-
-        } else if (statePlayer.`is`(State.PREPARING)) {
-            pendingStart = true
-        }
+        if (!_state.`is`(PAUSED, PREPARED))
+            return
+        _media_player.start()
+        _state = STARTED
     }
 
     override fun pause() {
-        if (statePlayer.`is`(State.STARTED, State.COMPLETED)) {
-            mediaPlayer.pause()
-            statePlayer = State.PAUSED
-            pauseTime = Calendar.getInstance().timeInMillis
-        }
+        if (!_state.`is`(STARTED, COMPLETED))
+            return
+        _media_player.pause()
+        _state = PAUSED
     }
 
     override fun stop() {
-        if (statePlayer.`is`(State.PREPARED, State.STARTED, State.STOPPED, State.PAUSED, State.COMPLETED)) {
-            mediaPlayer.stop()
-            statePlayer = State.STOPPED
-        }
-    }
-
-    fun release() {
-        stop()
-        mediaPlayer.release()
-        statePlayer = State.RELEASED
+        if (!_state.`is`(PREPARED, STARTED, STOPPED, PAUSED, COMPLETED))
+            return
+        _media_player.stop()
+        _state = STOPPED
     }
 
     override fun onCompletion(mp: MediaPlayer) {
-        statePlayer = State.COMPLETED
+        _state = COMPLETED
         mp.reset()
-        statePlayer = State.IDLE
-        loadAndPrepare(mp)
-        pendingStart = true
-        current++
+        _state = IDLE
     }
 
     override fun onPrepared(mp: MediaPlayer) {
-        statePlayer = State.PREPARED
-        if (pendingStart) {
-            pendingStart = false
-            mp.start()
-            statePlayer = State.STARTED
-            startTime = Calendar.getInstance().timeInMillis
-        }
+        _state = PREPARED
     }
 
     override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
         Log.e("Error MediaPlayer",
                 "what: " + what.toString() + " extra: " + extra.toString())
-        statePlayer = State.ERROR
+        _state = ERROR
         return false
     }
 
-    private fun loadAndPrepare(mp: MediaPlayer) {
-        if (!statePlayer.`is`(State.IDLE)) {
-            throw IllegalStateException("setDataSource() in a not IDLE state.")
-        }
-        try {
-            mp.setDataSource(context, Uri.fromFile(currentFile))
-            statePlayer = State.INIT
-        } catch (e: IOException) {
-            e.printStackTrace()
-            //TODO: End music (???)
-            return
-        }
-
-        if (!statePlayer.`is`(State.INIT, State.STOPPED)) {
-            throw IllegalStateException("prepareAsync() in a not INIT/STOPPED state.")
-        }
-        mp.prepareAsync()
-        statePlayer = State.PREPARING
-    }
-
-    private enum class State {
-        IDLE, INIT, PREPARING, PREPARED, STARTED, PAUSED, STOPPED, COMPLETED, ERROR, RELEASED;
-
-        fun `is`(vararg states: State): Boolean {
-            for (state in states) {
-                if (this == state) {
-                    return true
-                }
-            }
-            return false
-        }
+    fun release() {
+        stop()
+        _media_player.release()
+        _state = RELEASED
     }
 
 }

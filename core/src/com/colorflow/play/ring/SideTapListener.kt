@@ -1,10 +1,10 @@
 package com.colorflow.play.ring
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputAdapter
-import com.colorflow.utility.Position
+import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 
-internal class SideTapListener(private val ring: Ring) : InputAdapter(), RingListener {
+internal class SideTapListener : InputAdapter(), RingListener {
     private var rot: Float = 0f
     private var last_x: Int = -1
 
@@ -26,8 +26,8 @@ internal class SideTapListener(private val ring: Ring) : InputAdapter(), RingLis
         return false
     }
 
-    override fun onRingAct() {
-        ring.rotateBy(rot)
+    override fun onRingAct(): Action {
+        return Actions.rotateBy(rot)
     }
 
 }

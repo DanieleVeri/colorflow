@@ -5,49 +5,59 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.colorflow.MainGame
-import com.colorflow.play.HUDStage
-import com.colorflow.play.PlayStage
+import com.colorflow.music.IMusicAnalyzer
+import com.colorflow.music.IMusicManager
+import com.colorflow.stage.HUDStage
+import com.colorflow.stage.PlayStage
 import com.colorflow.play.Score
-import com.colorflow.utility.Position
+import com.colorflow.persistence.AssetProvider
+import com.colorflow.persistence.IStorage
+import com.colorflow.utils.Position
 
-class PlayScreen(val game: MainGame) : Screen {
+class PlayScreen(
+                 private val persistence: IStorage,
+                 private val assets: AssetProvider,
+                 private val music_manager: IMusicManager,
+                 private val music_analyzer: IMusicAnalyzer) : Screen {
+
     private val camera: OrthographicCamera = OrthographicCamera()
     private val cameraFlipY: OrthographicCamera
-    val score: Score
+    private val multiplexer: InputMultiplexer
+
+    private val score: Score
     private val playStage: PlayStage
     private val hudStage: HUDStage
-    var state: State? = null
+
+    enum class State { PLAY, PAUSE, OVER }
+    var state: State = State.PLAY
         set(state) {
             when (state) {
                 PlayScreen.State.PLAY -> {
-                    game.music_manager.play()
+                    music_manager.play()
                     multiplexer.clear()
                     multiplexer.addProcessor(playStage)
-                    multiplexer.addProcessor(playStage.ring!!.getListener())
+                    multiplexer.addProcessor(playStage.get_ring_listener())
                     multiplexer.addProcessor(hudStage)
                 }
                 PlayScreen.State.PAUSE -> {
-                    game.music_manager.pause()
+                    music_manager.pause()
                     multiplexer.clear()
                     multiplexer.addProcessor(hudStage)
                 }
                 PlayScreen.State.OVER -> {
-                    game.music_manager.stop()
-                    game.persistence.incCoins(score.coins)
-                    if (game.persistence.record < score.points) {
-                        game.persistence.record = score.points
+                    music_manager.stop()
+                    persistence.transaction {
+                        persistence.coins += score.coins
                     }
+                    if (persistence.record < score.points)
+                        persistence.record = score.points
                     multiplexer.clear()
                     multiplexer.addProcessor(hudStage)
                 }
-                else -> throw IllegalStateException()
             }
-            playStage.setState(state)
             hudStage.setState(state)
             field = state
         }
-    private val multiplexer: InputMultiplexer
 
     init {
         this.camera.setToOrtho(false, Position.widthScreen, Position.heightScreen)
@@ -55,11 +65,12 @@ class PlayScreen(val game: MainGame) : Screen {
         this.cameraFlipY = OrthographicCamera()
         this.cameraFlipY.setToOrtho(true, Position.widthScreen, Position.heightScreen)
         this.cameraFlipY.update()
-        this.playStage = PlayStage(ScreenViewport(this.cameraFlipY), this)
-        this.hudStage = HUDStage(ScreenViewport(this.camera), this)
-        this.score = Score()
-        this.score.addObserver(hudStage)
         this.multiplexer = InputMultiplexer()
+
+        this.score = Score()
+        this.playStage = PlayStage(ScreenViewport(this.cameraFlipY), persistence, score,
+                this, music_manager, music_analyzer)
+        this.hudStage = HUDStage(ScreenViewport(this.camera), persistence, assets, score, this)
     }
 
     override fun show() {
@@ -77,9 +88,8 @@ class PlayScreen(val game: MainGame) : Screen {
     override fun resize(width: Int, height: Int) {}
 
     override fun pause() {
-        if (this.state == State.PLAY) {
+        if (this.state == State.PLAY)
             state = State.PAUSE
-        }
     }
 
     override fun resume() {}
@@ -92,14 +102,9 @@ class PlayScreen(val game: MainGame) : Screen {
     }
 
     fun reset() {
-        game.music_manager.reset()
+        music_manager.reset()
         score.reset()
         playStage.reset()
         state = State.PLAY
     }
-
-    enum class State {
-        PLAY, PAUSE, OVER
-    }
-
 }

@@ -2,7 +2,8 @@ package com.colorflow.play.entity.dot
 
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Path
-import com.colorflow.utility.Position
+import com.colorflow.utils.Color
+import com.colorflow.utils.Position
 
 /**
  * Created by daniele on 03/05/17.
@@ -21,7 +22,6 @@ class DotPool private constructor() : Pool<Dot>() {
     }
 
     companion object {
-
         val instance = DotPool()
     }
 }

@@ -1,9 +1,9 @@
-package com.colorflow.utility.effects
+package com.colorflow.utils.effects
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.utility.Position
+import com.colorflow.utils.Position
 
 /**
  * Created by daniele on 09/05/17.
@@ -22,15 +22,7 @@ class ExplosionPool private constructor() : Pool<Explosion>() {
     }
 
     companion object {
-
-        private var instance: ExplosionPool? = null
-
-        fun getInstance(): ExplosionPool {
-            if (instance == null) {
-                instance = ExplosionPool()
-            }
-            return instance!!
-        }
+        val instance = ExplosionPool()
     }
 
 }

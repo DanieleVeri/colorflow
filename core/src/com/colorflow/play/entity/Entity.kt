@@ -9,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.play.entity.trigger.Trigger
-import com.colorflow.utility.Position
+import com.colorflow.utils.Position
 
 abstract class Entity protected constructor() : Actor(), Pool.Poolable, Disposable {
 
@@ -65,9 +64,9 @@ abstract class Entity protected constructor() : Actor(), Pool.Poolable, Disposab
         }
     }
 
-    open fun destroy(trigger: Trigger?) {
+    open fun destroy(cb: (Entity)->Unit) {
         isVisible = false
-        trigger?.run(this)
+        cb(this)
         super.remove()
     }
 

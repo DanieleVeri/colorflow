@@ -24,7 +24,7 @@ jobject struct2jobject(JNIEnv *env, JNI_BeatSample* jniBeatSample, BeatSample sa
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_com_colorflow_music_MusicAnalyzer_detect(JNIEnv *env, jobject instance, jstring path) {
+Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance, jstring path) {
     JNI_BeatSample* jniBeatSample = loadJniBeatSample(env);
     const int sample_num_max = 800; // 4min song at 180bpm
     BeatSample fill[sample_num_max];

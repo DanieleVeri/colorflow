@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
-import com.colorflow.play.entity.trigger.Trigger
-import com.colorflow.utility.Position
-import com.colorflow.utility.effects.ExplosionPool
+import com.colorflow.utils.Position
+import com.colorflow.utils.effects.ExplosionPool
 
 class Bonus : Entity() {
     lateinit var type: Type
@@ -32,10 +31,10 @@ class Bonus : Entity() {
         super.act(delta)
     }
 
-    override fun destroy(trigger: Trigger?) {
-        ExplosionPool.getInstance().start(stage, Color.WHITE, position)
+    override fun destroy(cb: (Entity)->Unit) {
+        ExplosionPool.instance.start(stage, Color.WHITE, position)
         BonusPool.instance.free(this)
-        super.destroy(trigger)
+        super.destroy(cb)
     }
 
     override fun dispose() {

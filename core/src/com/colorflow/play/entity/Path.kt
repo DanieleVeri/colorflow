@@ -1,7 +1,7 @@
 package com.colorflow.play.entity
 
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.utility.Position
+import com.colorflow.utils.Position
 
 /**
  * Created by daniele on 09/05/17.
@@ -30,10 +30,10 @@ class Path(type: Type, pos: Position.Radial, speed: Float) : Pool.Poolable {
 
     fun nextPos(dt: Float): Position {
         when (type) {
-            Path.Type.RADIAL -> pos.setDist(pos.distRadial - speed)
+            Path.Type.RADIAL -> pos.set_dist(pos.distRadial - speed)
             Path.Type.SPIRAL -> {
-                pos.setAngle(pos.angleRadial - speed / 2)
-                pos.setDist(pos.distRadial - speed)
+                pos.set_angle(pos.angleRadial - speed / 2)
+                pos.set_dist(pos.distRadial - speed)
             }
             else -> throw IllegalStateException()
         }

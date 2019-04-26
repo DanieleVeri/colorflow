@@ -3,6 +3,7 @@ package com.colorflow.play
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.colorflow.stage.PlayStage
 
 class BGManager(private val playStage: PlayStage) {
     var bgColor: Color = Color.BLACK

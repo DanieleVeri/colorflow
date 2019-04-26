@@ -1,4 +1,4 @@
-package com.colorflow.utility.effects
+package com.colorflow.utils.effects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.utility.Position
+import com.colorflow.utils.Position
 
-/**
- * Created by daniele on 01/08/17.
- */
 class Explosion : Actor(), Disposable, Pool.Poolable {
 
     private val effect: ParticleEffect = ParticleEffect()
@@ -35,7 +32,7 @@ class Explosion : Actor(), Disposable, Pool.Poolable {
 
     override fun act(delta: Float) {
         if (effect.isComplete) {
-            ExplosionPool.getInstance().free(this)
+            ExplosionPool.instance.free(this)
             this.remove()
         }
         effect.update(delta)

@@ -1,4 +1,4 @@
-package com.colorflow.utility
+package com.colorflow.persistence
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
+import com.colorflow.utils.Position
 
 import java.util.HashMap
 
@@ -17,7 +18,7 @@ class AssetProvider : Disposable {
     private val soundMap: MutableMap<String, String>
 
     private val resolution: String
-        get() = Position.heightScreen.toInt().toString()+"x"+Position.widthScreen.toInt().toString()
+        get() = Position.heightScreen.toInt().toString()+"x"+ Position.widthScreen.toInt().toString()
 
     init {
         this.skinMap = HashMap()

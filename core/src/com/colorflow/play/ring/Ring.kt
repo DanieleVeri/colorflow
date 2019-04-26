@@ -2,73 +2,29 @@ package com.colorflow.play.ring
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
-import com.colorflow.play.entity.dot.Color
-import com.colorflow.utility.Position
+import com.colorflow.utils.Color
+import com.colorflow.utils.Position
 
-import org.w3c.dom.Document
-import org.w3c.dom.Node
-import javax.xml.parsers.DocumentBuilderFactory
+class Ring(img_name: String) : Actor(), Disposable {
 
-class Ring(ringId: String) : Actor(), Disposable {
-
-    val id: String
-    private var name: String? = null
-    var cost: Int = 0
-        private set
     private var texture: Texture? = null
     val circle: Circle
     private var radius: Float = 0.toFloat()
-    var sensibility: Float = 0.toFloat()
-        private set
     private var rotation = 0f
     private val listener: RingListener
 
     init {
-        val ring = Gdx.files.local("rings/$ringId")
-        this.id = ring.name()
-        loadFromXML(ring)
+        this.texture = Texture(Gdx.files.local("rings/$img_name"))
+        this.radius = 150f
         setBounds(Position.widthScreen / 2 - texture!!.width / 2, Position.heightScreen / 2 - texture!!.height / 2,
                 texture!!.width.toFloat(), texture!!.height.toFloat())
         this.circle = Circle(Position.center.x, Position.center.y, radius)
-        this.listener = SideTapListener(this)
-    }
-
-    private fun loadFromXML(file: FileHandle) {
-        val dbFactory = DocumentBuilderFactory.newInstance()
-        val doc: Document
-        if (!file.exists()) {
-            throw IllegalArgumentException()
-        }
-        try {
-            val dBuilder = dbFactory.newDocumentBuilder()
-            doc = dBuilder.parse(file.file())
-        } catch (e: Exception) {
-            throw RuntimeException()
-        }
-
-        doc.normalizeDocument()
-        var look: Node? = null
-        var collision: Node? = null
-        val nodeList = doc.firstChild.childNodes
-        for (i in 0 until nodeList.length) {
-            if (nodeList.item(i).nodeName == "look") {
-                look = nodeList.item(i)
-            }
-            if (nodeList.item(i).nodeName == "collision") {
-                collision = nodeList.item(i)
-            }
-        }
-        this.name = doc.firstChild.attributes.getNamedItem("name").nodeValue
-        this.cost = Integer.parseInt(doc.firstChild.attributes.getNamedItem("cost").nodeValue)
-        this.texture = Texture(Gdx.files.local("rings/" + look!!.attributes.getNamedItem("img").nodeValue))
-        this.radius = java.lang.Float.parseFloat(look.attributes.getNamedItem("radius").nodeValue)
-        this.sensibility = java.lang.Float.parseFloat(look.attributes.getNamedItem("sensibility").nodeValue)
+        this.listener = SideTapListener()
     }
 
     override fun draw(batch: Batch?, alpha: Float) {
@@ -77,7 +33,7 @@ class Ring(ringId: String) : Actor(), Disposable {
     }
 
     override fun act(delta: Float) {
-        listener.onRingAct()
+        addAction(listener.onRingAct())
         super.act(delta)
     }
 
@@ -86,7 +42,7 @@ class Ring(ringId: String) : Actor(), Disposable {
     }
 
     fun getColorFor(angle: Float): Color {
-        val range_angle = Position.Radial.regulateAngle(angle + getRotation())
+        val range_angle = Position.Radial.regulate_angle(angle + getRotation())
         if (range_angle in 0.0..60.0) {
             return Color.CYAN
         } else if (range_angle in 60.0..120.0) {
@@ -108,19 +64,11 @@ class Ring(ringId: String) : Actor(), Disposable {
     }
 
     override fun setRotation(rotation: Float) {
-        this.rotation = Position.Radial.regulateAngle(rotation)
+        this.rotation = Position.Radial.regulate_angle(rotation)
     }
 
     override fun rotateBy(amountInDegrees: Float) {
         setRotation(getRotation() + amountInDegrees)
-    }
-
-    override fun getName(): String? {
-        return name
-    }
-
-    override fun setName(name: String) {
-        this.name = name
     }
 
     override fun setScale(scaleXY: Float) {
