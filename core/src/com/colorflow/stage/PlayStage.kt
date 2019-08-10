@@ -3,6 +3,7 @@ package com.colorflow.stage
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -23,6 +24,7 @@ import com.colorflow.screen.PlayScreen
 import com.colorflow.utils.Position
 import com.colorflow.utils.effects.Explosion
 import com.colorflow.utils.effects.ExplosionPool
+import com.colorflow.utils.effects.ShockWave
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,7 +37,7 @@ class PlayStage(viewport: Viewport,
                 private val music_analyzer: IMusicAnalyzer) : Stage(viewport) {
 
     private val spawner: Spawner = Spawner(this)
-    private val background: BGManager = BGManager(this)
+    private val background: BGManager = BGManager()
     private var ring: Ring = Ring(persistence.used_ring.src)
 
     fun reset() {
@@ -50,8 +52,9 @@ class PlayStage(viewport: Viewport,
         this.ring.dispose()
         spawner.reset()
         background.reset()
-        clear()
-
+        clear()///////
+        super.addActor(ShockWave.getInstance())
+        addActor(background)
         ring = Ring(persistence.used_ring.src)
         addActor(ring)
         music_analyzer.add_beat_cb {
@@ -65,17 +68,16 @@ class PlayStage(viewport: Viewport,
         music_analyzer.start_beat_flow("0")
     }
 
+    override fun addActor(actor: Actor?) {
+        ShockWave.getInstance().addActor(actor)
+    }
+
     override fun act(delta: Float) {
         if (play_screen.state !== PlayScreen.State.PLAY)
             return
         _handle_collisions()
         spawner.act(delta)
         super.act(delta)
-    }
-
-    override fun draw() {
-        background.render()
-        super.draw()
     }
 
     override fun dispose() {
@@ -91,8 +93,10 @@ class PlayStage(viewport: Viewport,
     }
 
     private fun _handle_collisions() {
-        val collisions = actors.filter { it is Entity }.map { it as Entity }
+        val collisions = ShockWave.getInstance().children.filter { it is Entity }.map { it as Entity }
             .filter { Intersector.overlaps(it.bounds, this.ring.circle) }
+        if(collisions.isNotEmpty())
+            ShockWave.getInstance().start(Position.center.x, Position.center.y)
 
         // Bonus
         collisions.filter { it is Bonus }.map { it as Bonus }.map { bonus ->
@@ -121,11 +125,11 @@ class PlayStage(viewport: Viewport,
                         score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        play_screen.state = PlayScreen.State.OVER
+                        //play_screen.state = PlayScreen.State.OVER
                     }
                     Dot.Type.REVERSE -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
                         Gdx.input.vibrate(200)
-                        play_screen.state = PlayScreen.State.OVER
+                        //play_screen.state = PlayScreen.State.OVER
                     } else {
                         score.incPoints(10)
                     }
@@ -134,7 +138,7 @@ class PlayStage(viewport: Viewport,
                         score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        play_screen.state = PlayScreen.State.OVER
+                        //play_screen.state = PlayScreen.State.OVER
                     }
                 }
             }

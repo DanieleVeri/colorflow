@@ -1,5 +1,4 @@
 ## COLORFLOW: Todo list
----
 
 ### not-functional
 - [ ] Constraint ring speed
