@@ -6,11 +6,11 @@
     "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/lib clean"
   ],
   "libraries": {
-    "beatdetector-debug-arm64-v8a": {
-      "artifactName": "beatdetector",
-      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libbeatdetector.so",
+    "musalyzer-debug-arm64-v8a": {
+      "artifactName": "musalyzer",
+      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libmusalyzer.so",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libbeatdetector.so"
+      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libmusalyzer.so"
     }
   }
 }

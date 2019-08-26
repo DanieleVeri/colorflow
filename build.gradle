@@ -67,7 +67,6 @@ project(":android") {
 project(":core") {
     apply plugin: "kotlin"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

@@ -1,16 +1,56 @@
 {
   "buildFiles": [
-    "/home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector/CMakeLists.txt"
+    "/home/dan/Desktop/colorflow/android/jni/CMakeLists.txt"
   ],
   "cleanCommands": [
     "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a --target clean"
   ],
   "libraries": {
-    "beatdetector-Debug-arm64-v8a": {
-      "artifactName": "beatdetector",
-      "buildCommand": "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a --target beatdetector",
+    "libavformat-Debug-arm64-v8a": {
+      "artifactName": "libavformat",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/arm64-v8a/libbeatdetector.so"
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavformat.a"
+    },
+    "libavresample-Debug-arm64-v8a": {
+      "artifactName": "libavresample",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavresample.a"
+    },
+    "musalyzer-Debug-arm64-v8a": {
+      "artifactName": "musalyzer",
+      "buildCommand": "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/debug/arm64-v8a --target musalyzer",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/arm64-v8a/libmusalyzer.so"
+    },
+    "libavfilter-Debug-arm64-v8a": {
+      "artifactName": "libavfilter",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavfilter.a"
+    },
+    "libavdevice-Debug-arm64-v8a": {
+      "artifactName": "libavdevice",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavdevice.a"
+    },
+    "libavcodec-Debug-arm64-v8a": {
+      "artifactName": "libavcodec",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavcodec.a"
+    },
+    "libswscale-Debug-arm64-v8a": {
+      "artifactName": "libswscale",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libswscale.a"
+    },
+    "libaubio-Debug-arm64-v8a": {
+      "artifactName": "libaubio",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/musalyzer/aubio/prebuilt/arm64-v8a/libaubio.a"
+    },
+    "libavutil-Debug-arm64-v8a": {
+      "artifactName": "libavutil",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavutil.a"
     }
   }
 }

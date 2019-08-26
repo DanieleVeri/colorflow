@@ -1,40 +1,38 @@
-# Sets the minimum version of CMake required to build your native library.
-# This ensures that a certain set of CMake features is available to
-# your build.
+cmake_minimum_required(VERSION 3.0.0)
 
-cmake_minimum_required(VERSION 3.4.1)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/include/)
 
-# Specifies a library name, specifies whether the library is STATIC or
-# SHARED, and provides relative paths to the source code. You can
-# define multiple libraries by adding multiple add_library() commands,
-# and CMake builds them for you. When you build your app, Gradle
-# automatically packages shared libraries with your APK.
+find_library(log-lib log)
 
-add_library( # Specifies the name of the library.
-             beatdetector
+add_library(libaubio STATIC IMPORTED )
+set_target_properties(libaubio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/prebuilt/${ANDROID_ABI}/libaubio.a)
 
-             # Sets the library as a shared library.
-             SHARED
+add_library(libavcodec STATIC IMPORTED )
+set_target_properties(libavcodec PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavcodec.a)
+add_library(libavformat STATIC IMPORTED )
+set_target_properties(libavformat PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavformat.a)
+add_library(libavresample STATIC IMPORTED )
+set_target_properties(libavresample PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavresample.a)
+add_library(libavutil STATIC IMPORTED )
+set_target_properties(libavutil PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavutil.a)
+add_library(libavdevice STATIC IMPORTED )
+set_target_properties(libavdevice PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavdevice.a)
+add_library(libavfilter STATIC IMPORTED )
+set_target_properties(libavfilter PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libavfilter.a)
+add_library(libswscale STATIC IMPORTED )
+set_target_properties(libswscale PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libav/out/${ANDROID_ABI}/lib/libswscale.a)
 
-             # Provides a relative path to your source file(s).
-             main.cpp)
+add_library(musalyzer SHARED 
+    ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/BeatDetector.cpp)
 
-# Specifies a path to native header files.
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(aubio/include/aubio/)
-
-find_library( # Defines the name of the path variable that stores the
-              # location of the NDK library.
-              log-lib
-              # Specifies the name of the NDK library that
-              # CMake needs to locate.
-              log )
-
-# Links your native library against one or more other native libraries.
-target_link_libraries( # Specifies the target library.
-       beatdetector
-
-       ${CMAKE_CURRENT_SOURCE_DIR}/aubio/lib/libaubio.a
-       # Links the log library to the target library.
-       ${log-lib}
+target_link_libraries(musalyzer
+    ${log-lib}
+    libaubio
+    libavformat
+    libavcodec
+    libavresample
+    libswscale
+    libavfilter
+    libavutil
 )

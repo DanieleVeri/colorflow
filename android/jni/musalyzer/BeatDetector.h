@@ -5,6 +5,8 @@
 #ifndef COLORFLOW_BEATDETECTOR_H
 #define COLORFLOW_BEATDETECTOR_H
 
+extern "C" {
+
 #include <jni.h>
 #include <BeatDetector.h>
 #include <aubio.h>
@@ -27,8 +29,9 @@ typedef struct _BeatSample {
     float bpm;
 } BeatSample;
 
-extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance, jstring path);
+
+}
 
 #endif //COLORFLOW_BEATDETECTOR_H

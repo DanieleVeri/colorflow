@@ -31,6 +31,11 @@ www-test/
 /android/out/
 com_crashlytics_export_strings.xml
 
+## Build native modules
+/android/jni/toolchains/
+/android/jni/aubio/
+/android/jni/libav/
+/android/.externalNativeBuild/
 ## Eclipse
 
 .classpath
@@ -123,3 +128,5 @@ Thumbs.db
 !/ios-moe/xcode/*.xcodeproj/xcshareddata
 !/ios-moe/xcode/*.xcodeproj/project.pbxproj
 /ios-moe/xcode/native/
+
+.vscode

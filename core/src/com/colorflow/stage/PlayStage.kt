@@ -52,7 +52,7 @@ class PlayStage(viewport: Viewport,
         this.ring.dispose()
         spawner.reset()
         background.reset()
-        clear()///////
+        clear()
         super.addActor(ShockWave.getInstance())
         addActor(background)
         ring = Ring(persistence.used_ring.src)

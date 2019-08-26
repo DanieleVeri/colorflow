@@ -12,6 +12,3 @@
 - [ ] Shockwave shader
 - [ ] Remove shop -> random purchase like bbtan
 - [ ] Refactor shop atlas
-
-### music
-- [ ] deadmau5 - My Pet Coelacanth

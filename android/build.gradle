@@ -15,13 +15,6 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
-/*
-        pickFirst 'lib/x86_64/libaubio.so'
-        pickFirst 'lib/armeabi/libaubio.so'
-        pickFirst 'lib/x86/libaubio.so'
-        pickFirst 'lib/armeabi-v7a/libaubio.so'
-        pickFirst 'lib/arm64-v8a/libaubio.so'
-        */
     }
     defaultConfig {
         applicationId "com.colorflow"
@@ -30,6 +23,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
     }
     buildTypes {
         release {
@@ -38,17 +34,18 @@ android {
         }
     }
     externalNativeBuild {
-     /*     cmake {
+    /*
+        cmake {
             path "jni/CMakeLists.txt"
         }
     */
+
         ndkBuild {
             path "jni/Android.mk"
         }
+
     }
-
 }
-
 
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
@@ -116,17 +113,14 @@ eclipse {
             java.srcDirs "src", 'gen'
         }
     }
-
     jdt {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-
     classpath {
         plusConfigurations += [ project.configurations.compile ]        
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
     }
-
     project {
         name = appName + "-android"
         natures 'com.android.ide.eclipse.adt.AndroidNature'

@@ -1,4 +1,4 @@
-# Install script for directory: /home/dan/Desktop/colorflow/android/src/com/colorflow/beatdetector
+# Install script for directory: /home/dan/Desktop/colorflow/android/jni
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

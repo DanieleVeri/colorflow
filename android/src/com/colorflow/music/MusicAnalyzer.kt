@@ -11,7 +11,7 @@ class MusicAnalyzer(private val context: Context):
 
     companion object {
         init {
-            System.loadLibrary("beatdetector")
+            System.loadLibrary("musalyzer")
         }
     }
 

@@ -6,18 +6,18 @@
     "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib clean"
   ],
   "libraries": {
-    "beatdetector-release-armeabi-v7a": {
-      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libbeatdetector.so",
+    "musalyzer-release-armeabi-v7a": {
+      "buildCommand": "/home/dan/Android/Sdk/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/dan/Desktop/colorflow/android/jni/Android.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/lib /home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libmusalyzer.so",
       "toolchain": "toolchain-armeabi-v7a",
       "abi": "armeabi-v7a",
-      "artifactName": "beatdetector",
+      "artifactName": "musalyzer",
       "files": [
         {
-          "src": "/home/dan/Desktop/colorflow/android/jni/beatdetector/BeatDetector.cpp",
-          "flags": "-target armv7-none-linux-androideabi21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-exceptions -fno-rtti -gcc-toolchain /home/dan/Android/Sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 -fpic -march\u003darmv7-a -mfloat-abi\u003dsoftfp -mfpu\u003dvfpv3-d16 -mthumb -Oz -DNDEBUG -I/home/dan/Desktop/colorflow/android/jni/beatdetector/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include/ -I/home/dan/Desktop/colorflow/android/jni/beatdetector/aubio/include -I/home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/system/include -I/home/dan/Desktop/colorflow/android/jni -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /home/dan/Android/Sdk/ndk-bundle/sysroot -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi"
+          "src": "/home/dan/Desktop/colorflow/android/jni/musalyzer/BeatDetector.cpp",
+          "flags": "-target armv7-none-linux-androideabi21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-exceptions -fno-rtti -gcc-toolchain /home/dan/Android/Sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 -fpic -march\u003darmv7-a -mfloat-abi\u003dsoftfp -mfpu\u003dvfpv3-d16 -mthumb -Oz -DNDEBUG -I/home/dan/Desktop/colorflow/android/jni/musalyzer/ -I/home/dan/Desktop/colorflow/android/jni/musalyzer/aubio/include/ -I/home/dan/Desktop/colorflow/android/jni/musalyzer/aubio/include -I/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/include/libavformat -I/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/include/libavcodec -I/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/include/libavresample -I/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/include/libavutil -I/home/dan/Android/Sdk/ndk-bundle/sources/cxx-stl/system/include -I/home/dan/Desktop/colorflow/android/jni -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /home/dan/Android/Sdk/ndk-bundle/sysroot -isystem /home/dan/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi"
         }
       ],
-      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libbeatdetector.so"
+      "output": "/home/dan/Desktop/colorflow/android/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libmusalyzer.so"
     }
   },
   "toolchains": {
