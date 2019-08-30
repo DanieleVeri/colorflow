@@ -21,23 +21,7 @@
 			"abi" : "armeabi-v7a",
 			"artifactName" : "libavcodec",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavcodec.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavdevice-Release-armeabi-v7a" : 
-		{
-			"abi" : "armeabi-v7a",
-			"artifactName" : "libavdevice",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavdevice.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavfilter-Release-armeabi-v7a" : 
-		{
-			"abi" : "armeabi-v7a",
-			"artifactName" : "libavfilter",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavfilter.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/armeabi-v7a/lib/libavcodec.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"libavformat-Release-armeabi-v7a" : 
@@ -45,15 +29,7 @@
 			"abi" : "armeabi-v7a",
 			"artifactName" : "libavformat",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavformat.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavresample-Release-armeabi-v7a" : 
-		{
-			"abi" : "armeabi-v7a",
-			"artifactName" : "libavresample",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavresample.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/armeabi-v7a/lib/libavformat.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"libavutil-Release-armeabi-v7a" : 
@@ -61,15 +37,15 @@
 			"abi" : "armeabi-v7a",
 			"artifactName" : "libavutil",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libavutil.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/armeabi-v7a/lib/libavutil.a",
 			"toolchain" : "5540526903968522087"
 		},
-		"libswscale-Release-armeabi-v7a" : 
+		"libswresample-Release-armeabi-v7a" : 
 		{
 			"abi" : "armeabi-v7a",
-			"artifactName" : "libswscale",
+			"artifactName" : "libswresample",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/armeabi-v7a/lib/libswscale.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/armeabi-v7a/lib/libswresample.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"musalyzer-Release-armeabi-v7a" : 

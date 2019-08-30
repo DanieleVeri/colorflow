@@ -9,12 +9,7 @@
     "libavformat-Debug-arm64-v8a": {
       "artifactName": "libavformat",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavformat.a"
-    },
-    "libavresample-Debug-arm64-v8a": {
-      "artifactName": "libavresample",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavresample.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavformat.a"
     },
     "musalyzer-Debug-arm64-v8a": {
       "artifactName": "musalyzer",
@@ -22,25 +17,15 @@
       "abi": "arm64-v8a",
       "output": "/home/dan/Desktop/colorflow/android/build/intermediates/cmake/debug/obj/arm64-v8a/libmusalyzer.so"
     },
-    "libavfilter-Debug-arm64-v8a": {
-      "artifactName": "libavfilter",
+    "libswresample-Debug-arm64-v8a": {
+      "artifactName": "libswresample",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavfilter.a"
-    },
-    "libavdevice-Debug-arm64-v8a": {
-      "artifactName": "libavdevice",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavdevice.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libswresample.a"
     },
     "libavcodec-Debug-arm64-v8a": {
       "artifactName": "libavcodec",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavcodec.a"
-    },
-    "libswscale-Debug-arm64-v8a": {
-      "artifactName": "libswscale",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libswscale.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavcodec.a"
     },
     "libaubio-Debug-arm64-v8a": {
       "artifactName": "libaubio",
@@ -50,7 +35,7 @@
     "libavutil-Debug-arm64-v8a": {
       "artifactName": "libavutil",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavutil.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavutil.a"
     }
   }
 }

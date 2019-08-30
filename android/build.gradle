@@ -34,17 +34,19 @@ android {
         }
     }
     externalNativeBuild {
-    /*
+
         cmake {
             path "jni/CMakeLists.txt"
         }
-    */
 
+        /*
         ndkBuild {
             path "jni/Android.mk"
         }
+        */
 
     }
+
 }
 
 // called every time gradle gets executed, takes the native dependencies of

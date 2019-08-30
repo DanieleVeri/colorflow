@@ -16,7 +16,7 @@ function build {
     DESTDIR=$PWD/musalyzer/aubio/prebuilt/$2
     [ -d $DESTDIR ] && rm -rf $DESTDIR
 
-    export PKG_CONFIG_PATH="$PWD/libav/out/$2/lib/pkgconfig"
+    export PKG_CONFIG_PATH="$PWD/ffmpeg/out/$2/lib/pkgconfig"
 
     CURRENT_TOOLCHAIN=$NDK_TOOLCHAINS/$PLATFORM-$1
     CC=`ls $CURRENT_TOOLCHAIN/bin/*-linux-android*-gcc`
@@ -45,3 +45,6 @@ build arm64 arm64-v8a
 build arm armeabi-v7a
 # build x86_64
 # build x86
+
+rm -rf $PWD/musalyzer/aubio/include/
+mv /tmp/aubio_build/arm/usr/local/include/aubio $PWD/musalyzer/aubio/include/

@@ -6,25 +6,25 @@
     "/home/dan/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/dan/Desktop/colorflow/android/.externalNativeBuild/cmake/release/arm64-v8a --target clean"
   ],
   "libraries": {
-    "libavresample-Release-arm64-v8a": {
-      "artifactName": "libavresample",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavresample.a"
-    },
     "libavformat-Release-arm64-v8a": {
       "artifactName": "libavformat",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavformat.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavformat.a"
     },
     "libavcodec-Release-arm64-v8a": {
       "artifactName": "libavcodec",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavcodec.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavcodec.a"
     },
     "libavutil-Release-arm64-v8a": {
       "artifactName": "libavutil",
       "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavutil.a"
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavutil.a"
+    },
+    "libswresample-Release-arm64-v8a": {
+      "artifactName": "libswresample",
+      "abi": "arm64-v8a",
+      "output": "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libswresample.a"
     },
     "musalyzer-Release-arm64-v8a": {
       "artifactName": "musalyzer",
@@ -36,21 +36,6 @@
       "artifactName": "libaubio",
       "abi": "arm64-v8a",
       "output": "/home/dan/Desktop/colorflow/android/jni/musalyzer/aubio/prebuilt/arm64-v8a/libaubio.a"
-    },
-    "libavdevice-Release-arm64-v8a": {
-      "artifactName": "libavdevice",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavdevice.a"
-    },
-    "libavfilter-Release-arm64-v8a": {
-      "artifactName": "libavfilter",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavfilter.a"
-    },
-    "libswscale-Release-arm64-v8a": {
-      "artifactName": "libswscale",
-      "abi": "arm64-v8a",
-      "output": "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libswscale.a"
     }
   }
 }

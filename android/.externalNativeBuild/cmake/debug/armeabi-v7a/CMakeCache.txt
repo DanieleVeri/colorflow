@@ -196,7 +196,7 @@ Project_SOURCE_DIR:STATIC=/home/dan/Desktop/colorflow/android/jni
 log-lib:FILEPATH=/home/dan/Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/lib/liblog.so
 
 //Dependencies for the target
-musalyzer_LIB_DEPENDS:STATIC=general;/home/dan/Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/lib/liblog.so;general;libaubio;general;libavformat;general;libavcodec;general;libavresample;general;libswscale;general;libavfilter;general;libavutil;
+musalyzer_LIB_DEPENDS:STATIC=general;/home/dan/Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/lib/liblog.so;general;libaubio;general;libavformat;general;libavcodec;general;libswresample;general;libavutil;
 
 
 ########################

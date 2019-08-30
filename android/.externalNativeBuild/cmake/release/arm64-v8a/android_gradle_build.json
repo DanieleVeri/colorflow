@@ -21,23 +21,7 @@
 			"abi" : "arm64-v8a",
 			"artifactName" : "libavcodec",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavcodec.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavdevice-Release-arm64-v8a" : 
-		{
-			"abi" : "arm64-v8a",
-			"artifactName" : "libavdevice",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavdevice.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavfilter-Release-arm64-v8a" : 
-		{
-			"abi" : "arm64-v8a",
-			"artifactName" : "libavfilter",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavfilter.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavcodec.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"libavformat-Release-arm64-v8a" : 
@@ -45,15 +29,7 @@
 			"abi" : "arm64-v8a",
 			"artifactName" : "libavformat",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavformat.a",
-			"toolchain" : "5540526903968522087"
-		},
-		"libavresample-Release-arm64-v8a" : 
-		{
-			"abi" : "arm64-v8a",
-			"artifactName" : "libavresample",
-			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavresample.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavformat.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"libavutil-Release-arm64-v8a" : 
@@ -61,15 +37,15 @@
 			"abi" : "arm64-v8a",
 			"artifactName" : "libavutil",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libavutil.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libavutil.a",
 			"toolchain" : "5540526903968522087"
 		},
-		"libswscale-Release-arm64-v8a" : 
+		"libswresample-Release-arm64-v8a" : 
 		{
 			"abi" : "arm64-v8a",
-			"artifactName" : "libswscale",
+			"artifactName" : "libswresample",
 			"buildType" : "release",
-			"output" : "/home/dan/Desktop/colorflow/android/jni/libav/out/arm64-v8a/lib/libswscale.a",
+			"output" : "/home/dan/Desktop/colorflow/android/jni/ffmpeg/out/arm64-v8a/lib/libswresample.a",
 			"toolchain" : "5540526903968522087"
 		},
 		"musalyzer-Release-arm64-v8a" : 

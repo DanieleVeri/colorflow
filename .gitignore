@@ -35,6 +35,7 @@ com_crashlytics_export_strings.xml
 /android/jni/toolchains/
 /android/jni/aubio/
 /android/jni/libav/
+/android/jni/ffmpeg/
 /android/.externalNativeBuild/
 ## Eclipse
 
