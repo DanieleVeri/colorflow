@@ -57,15 +57,6 @@ class PlayStage(viewport: Viewport,
         addActor(background)
         ring = Ring(persistence.used_ring.src)
         addActor(ring)
-        music_analyzer.add_beat_cb {
-            GlobalScope.launch {
-                ring.setScale(1.1f)
-                delay(100)
-                ring.setScale(1f)
-            }
-        }
-        //music_analyzer.stop_beat_flow()
-        music_analyzer.start_beat_flow("0")
     }
 
     override fun addActor(actor: Actor?) {
@@ -90,6 +81,12 @@ class PlayStage(viewport: Viewport,
 
     fun get_ring_listener(): InputProcessor {
         return ring.getListener()
+    }
+
+    suspend fun on_beat() {
+        ring.setScale(1.1f)
+        delay(100)
+        ring.setScale(1f)
     }
 
     private fun _handle_collisions() {

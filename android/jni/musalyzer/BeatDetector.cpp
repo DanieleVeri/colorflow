@@ -37,7 +37,6 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
 
     const char_t *source_path = env->GetStringUTFChars(path, 0);
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
-    __android_log_print(ANDROID_LOG_INFO, APPNAME, "=========    %d\n", source);
     if (!source) {
         __android_log_print(ANDROID_LOG_ERROR, APPNAME, "error loading music file");
         return NULL;

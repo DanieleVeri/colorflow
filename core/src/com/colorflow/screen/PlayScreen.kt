@@ -34,6 +34,8 @@ class PlayScreen(
             when (state) {
                 PlayScreen.State.PLAY -> {
                     music_manager.play()
+                    music_analyzer.play_time()
+
                     multiplexer.clear()
                     multiplexer.addProcessor(playStage)
                     multiplexer.addProcessor(playStage.get_ring_listener())
@@ -41,11 +43,15 @@ class PlayScreen(
                 }
                 PlayScreen.State.PAUSE -> {
                     music_manager.pause()
+                    music_analyzer.pause_time()
+
                     multiplexer.clear()
                     multiplexer.addProcessor(hudStage)
                 }
                 PlayScreen.State.OVER -> {
                     music_manager.stop()
+                    music_analyzer.pause_time()
+
                     persistence.transaction {
                         persistence.coins += score.coins
                     }
@@ -71,6 +77,9 @@ class PlayScreen(
         this.playStage = PlayStage(ScreenViewport(this.cameraFlipY), persistence, score,
                 this, music_manager, music_analyzer)
         this.hudStage = HUDStage(ScreenViewport(this.camera), persistence, assets, score, this)
+
+        music_analyzer.add_beat_cb(playStage::on_beat)
+
     }
 
     override fun show() {
@@ -103,6 +112,7 @@ class PlayScreen(
 
     fun reset() {
         music_manager.reset()
+        music_analyzer.prepare("0")
         score.reset()
         playStage.reset()
         state = State.PLAY

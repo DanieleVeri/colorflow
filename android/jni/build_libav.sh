@@ -1,4 +1,5 @@
 #!/bin/bash
+####################### DON'T USE! USE `build_ffmpeg.sh` INSTEAD
 
 [ -z $PLATFORM ] && PLATFORM=android-21
 NDK_TOOLCHAINS=$PWD/toolchains
