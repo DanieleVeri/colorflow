@@ -32,12 +32,11 @@ import kotlinx.coroutines.launch
 class PlayStage(viewport: Viewport,
                 private val persistence: IStorage,
                 private val score: Score,
-                private val play_screen: PlayScreen,
-                private val music_manager: IMusicManager,
-                private val music_analyzer: IMusicAnalyzer) : Stage(viewport) {
+                private val play_screen: PlayScreen) : Stage(viewport) {
 
     private val spawner: Spawner = Spawner(this)
     private val background: BGManager = BGManager()
+    private var _delta_alpha = 1.0f
     private var ring: Ring = Ring(persistence.used_ring.src)
 
     fun reset() {
@@ -53,14 +52,14 @@ class PlayStage(viewport: Viewport,
         spawner.reset()
         background.reset()
         clear()
-        super.addActor(ShockWave.getInstance())
+        super.addActor(ShockWave.instance)
         addActor(background)
         ring = Ring(persistence.used_ring.src)
         addActor(ring)
     }
 
     override fun addActor(actor: Actor?) {
-        ShockWave.getInstance().addActor(actor)
+        ShockWave.instance.addActor(actor)
     }
 
     override fun act(delta: Float) {
@@ -68,7 +67,7 @@ class PlayStage(viewport: Viewport,
             return
         _handle_collisions()
         spawner.act(delta)
-        super.act(delta)
+        super.act(delta * _delta_alpha)
     }
 
     override fun dispose() {
@@ -83,17 +82,19 @@ class PlayStage(viewport: Viewport,
         return ring.getListener()
     }
 
-    suspend fun on_beat() {
+    suspend fun on_beat(confidence: Float) {
+        _delta_alpha = 7f
         ring.setScale(1.1f)
         delay(100)
         ring.setScale(1f)
+        _delta_alpha = 1.0f
     }
 
     private fun _handle_collisions() {
-        val collisions = ShockWave.getInstance().children.filter { it is Entity }.map { it as Entity }
+        val collisions = ShockWave.instance.children.filter { it is Entity }.map { it as Entity }
             .filter { Intersector.overlaps(it.bounds, this.ring.circle) }
         if(collisions.isNotEmpty())
-            ShockWave.getInstance().start(Position.center.x, Position.center.y)
+            ShockWave.instance.start(Position.center.x, Position.center.y)
 
         // Bonus
         collisions.filter { it is Bonus }.map { it as Bonus }.map { bonus ->
@@ -121,12 +122,12 @@ class PlayStage(viewport: Viewport,
                     Dot.Type.STD -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
                         score.incPoints(10)
                     } else {
-                        Gdx.input.vibrate(200)
-                        //play_screen.state = PlayScreen.State.OVER
+                        // Gdx.input.vibrate(200)
+                        // play_screen.state = PlayScreen.State.OVER
                     }
                     Dot.Type.REVERSE -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
-                        Gdx.input.vibrate(200)
-                        //play_screen.state = PlayScreen.State.OVER
+                        // Gdx.input.vibrate(200)
+                        // play_screen.state = PlayScreen.State.OVER
                     } else {
                         score.incPoints(10)
                     }
@@ -135,7 +136,7 @@ class PlayStage(viewport: Viewport,
                         score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        //play_screen.state = PlayScreen.State.OVER
+                        // play_screen.state = PlayScreen.State.OVER
                     }
                 }
             }

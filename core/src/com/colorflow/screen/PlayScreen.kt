@@ -13,10 +13,11 @@ import com.colorflow.play.Score
 import com.colorflow.persistence.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.utils.Position
+import com.colorflow.utils.effects.ShockWave
 
 class PlayScreen(
                  private val persistence: IStorage,
-                 private val assets: AssetProvider,
+                 assets: AssetProvider,
                  private val music_manager: IMusicManager,
                  private val music_analyzer: IMusicAnalyzer) : Screen {
 
@@ -74,9 +75,8 @@ class PlayScreen(
         this.multiplexer = InputMultiplexer()
 
         this.score = Score()
-        this.playStage = PlayStage(ScreenViewport(this.cameraFlipY), persistence, score,
-                this, music_manager, music_analyzer)
-        this.hudStage = HUDStage(ScreenViewport(this.camera), persistence, assets, score, this)
+        this.playStage = PlayStage(ScreenViewport(this.cameraFlipY), persistence, score, this)
+        this.hudStage = HUDStage(ScreenViewport(this.camera), assets, score, this)
 
         music_analyzer.add_beat_cb(playStage::on_beat)
 
@@ -114,6 +114,7 @@ class PlayScreen(
         music_manager.reset()
         music_analyzer.prepare("0")
         score.reset()
+        score.record = persistence.record
         playStage.reset()
         state = State.PLAY
     }

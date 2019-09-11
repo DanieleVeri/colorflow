@@ -1,12 +1,12 @@
 package com.colorflow.play
 
 class Score {
-
     private var multiplier: Float = 0.toFloat()
     var points: Int = 0
         private set
     var coins: Int = 0
         private set
+    var record: Int = 0
 
     init {
         reset()

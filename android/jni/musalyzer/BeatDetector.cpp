@@ -1,7 +1,3 @@
-//
-// Created by dan on 29/12/18.
-//
-
 #include "BeatDetector.h"
 
 JNI_BeatSample *loadJniBeatSample(JNIEnv *env) {
@@ -39,10 +35,10 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
     if (!source) {
         __android_log_print(ANDROID_LOG_ERROR, APPNAME, "error loading music file");
-        return NULL;
+        return nullptr;
     }
 
-    if (samplerate == 0) samplerate = aubio_source_get_samplerate(source);
+    samplerate = aubio_source_get_samplerate(source);
     fvec_t *in = new_fvec(hop_size); // input audio buffer
     fvec_t *out = new_fvec(1); // output position
     aubio_tempo_t *beat_tracking_obj = new_aubio_tempo("default", win_size, hop_size, samplerate);
@@ -70,14 +66,13 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         }
         n_frames += read;
     } while (read == hop_size);
-
     __android_log_print(ANDROID_LOG_INFO, APPNAME,
                         "read %.2fs, %d frames at %dHz (%d blocks) from %s\n",
                         n_frames * 1. / samplerate,
                         n_frames, samplerate,
                         n_frames / hop_size, source_path);
 
-    jobjectArray jBeatSampleArray = env->NewObjectArray(counter, jniBeatSample->cls, NULL);
+    jobjectArray jBeatSampleArray = env->NewObjectArray(counter, jniBeatSample->cls, nullptr);
     for (int i = 0; i < counter; i++)
         env->SetObjectArrayElement(jBeatSampleArray, i,
                                    struct2jobject(env, jniBeatSample, fill[i]));

@@ -1,7 +1,3 @@
-//
-// Created by dan on 29/12/18.
-//
-
 #ifndef COLORFLOW_BEATDETECTOR_H
 #define COLORFLOW_BEATDETECTOR_H
 

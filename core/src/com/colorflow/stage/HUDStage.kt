@@ -19,8 +19,7 @@ import com.colorflow.utils.Position
 import com.colorflow.utils.ButtonListener
 
 class HUDStage(viewport: Viewport,
-               private val persistence: IStorage,
-               private val assets: AssetProvider,
+               assets: AssetProvider,
                private val score: Score,
                private val play_screen: PlayScreen) : Stage(viewport) {
 
@@ -109,15 +108,11 @@ class HUDStage(viewport: Viewport,
         scorePause!!.setText(score.points.toString())
         coinsPause!!.setText(builder)
         builder.delete(0, builder.length)
-        /*
-        if (score.points <= persistence.record) {
-            builder.append("SCORE: ").append(score.points).append("\nRECORD: ")
-                    .append(persistence.record)
-
+        if (score.points <= score.record) {
+            builder.append("SCORE: ").append(score.points).append("\nRECORD: ").append(score.record)
         } else {
-            builder.append("NEW R3C0RD!\n").append(score.points)
+            builder.append("NEW RECORD!\n").append(score.points)
         }
-        */
         scoreOver!!.setText(builder)
         builder.delete(0, builder.length)
         builder.append("COINS: ").append(score.coins)

@@ -1,14 +1,15 @@
 ## COLORFLOW: Todo list
 
 ### not-functional
-- [ ] Constraint ring speed
-- [ ] Music Analyzer pause/stop
-- [x] FFmpeg
+- [ ] Use structure concurrency with coroutines (extend CoroutineScope)
 - [ ] Split playScreen into: PlayScreen, gameoverScreen, pauseScreen?
-- [ ] Emulator error: E/AndroidGraphics: waiting for pause synchronization took too long;
 - [ ] Implement g ads (what about 360?)
+- [ ] Profile and optimize particle & shader render
+- [x] Music Analyzer pause/stop
+- [x] FFmpeg
 
 ### functional
-- [x] Shockwave shader
+- [ ] Reimplement RingListener
 - [ ] Remove shop -> random purchase like bbtan
 - [ ] Refactor shop atlas
+- [x] Shockwave shader

@@ -8,6 +8,6 @@ interface IMusicAnalyzer {
     fun pause_time()
     fun play_time()
 
-    fun add_beat_cb(cb: suspend ()->Unit)
-    fun rem_beat_cb(cb: suspend ()->Unit)
+    fun add_beat_cb(cb: suspend (Float)->Unit)
+    fun rem_beat_cb(cb: suspend (Float)->Unit)
 }

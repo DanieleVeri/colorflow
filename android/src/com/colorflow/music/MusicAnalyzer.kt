@@ -1,6 +1,7 @@
 package com.colorflow.music
 
 import android.content.Context
+import com.badlogic.gdx.Gdx
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -41,17 +42,22 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
         _beat_timer = GlobalScope.launch {
             if (_start_pause > 0L)
                 return@launch
+
             val current = System.currentTimeMillis() - _start_time - _paused
             val sample = _beat_map[_current_track]!!.find { it.ms.toLong() >=  current}
             sample ?: return@launch
+
+            Gdx.app.log("musalyzer", sample.confidence.toString())
             delay(sample.ms.toLong() - current)
-            _beat_callbacks.forEach { runBlocking { it() } }
+            coroutineScope {
+                _beat_callbacks.forEach { launch { it(sample.confidence) } }
+            }
             _play()
         }
     }
 
     private val _beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-    private var _beat_callbacks: List<(suspend ()->Unit)> = ArrayList()
+    private var _beat_callbacks: List<(suspend (Float)->Unit)> = ArrayList()
     private lateinit var _beat_timer: Job
 
     override fun analyze_beat(track_id: String) {
@@ -59,10 +65,10 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
         _beat_map[track_id] = detectBeat(file.absolutePath)
     }
 
-    override fun add_beat_cb(cb: suspend ()->Unit) {
+    override fun add_beat_cb(cb: suspend (Float)->Unit) {
         _beat_callbacks += cb
     }
-    override fun rem_beat_cb(cb: suspend ()->Unit) {
+    override fun rem_beat_cb(cb: suspend (Float)->Unit) {
         _beat_callbacks -= cb
     }
 }

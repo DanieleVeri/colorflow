@@ -35,6 +35,7 @@ class MainGame(
             _assets = AssetProvider()
             music_manager.load("0")
             music_analyzer.analyze_beat("0")
+            music_analyzer.prepare("0")
             Gdx.app.postRunnable {
                 menu = MenuScreen(this@MainGame, storage, _assets!!)
                 play = PlayScreen(storage, _assets!!, music_manager, music_analyzer)
