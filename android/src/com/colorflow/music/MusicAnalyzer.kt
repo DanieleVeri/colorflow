@@ -39,6 +39,8 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
 
     private fun _play() {
         _beat_timer = GlobalScope.launch {
+            if (_start_pause > 0L)
+                return@launch
             val current = System.currentTimeMillis() - _start_time - _paused
             val sample = _beat_map[_current_track]!!.find { it.ms.toLong() >=  current}
             sample ?: return@launch
