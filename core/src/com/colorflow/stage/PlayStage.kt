@@ -79,12 +79,11 @@ class PlayStage(viewport: Viewport,
     }
 
     suspend fun on_beat(confidence: Float) {
-        _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity *= 3}
+        Gdx.app.postRunnable { _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity *= 3} }
         _ring.setScale(1.1f)
         delay(100)
         _ring.setScale(1f)
-        _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity /= 3}
-
+        Gdx.app.postRunnable { _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity /= 3} }
     }
 
     private fun _handle_collisions() {

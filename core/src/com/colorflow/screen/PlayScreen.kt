@@ -3,8 +3,11 @@ package com.colorflow.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.colorflow.ScreenManager
+import com.colorflow.ScreenType
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
 import com.colorflow.stage.HUDStage
@@ -13,10 +16,13 @@ import com.colorflow.play.Score
 import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.utils.Position
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class PlayScreen(
         private val persistence: IStorage,
-        assets: AssetProvider,
+        private val assets: AssetProvider,
         private val music_manager: IMusicManager,
         private val music_analyzer: IMusicAnalyzer) : Screen {
 
@@ -26,40 +32,6 @@ class PlayScreen(
     private val score: Score
     private val _play_stage: PlayStage
     private val _hud_stage: HUDStage
-
-    enum class State { PLAY, PAUSE, OVER }
-    var state: State = State.PLAY
-        set(state) {
-            when (state) {
-                PlayScreen.State.PLAY -> {
-                    music_manager.play()
-                    music_analyzer.play_time()
-                    multiplexer.clear()
-                    multiplexer.addProcessor(_play_stage)
-                    multiplexer.addProcessor(_play_stage.get_ring_listener())
-                    multiplexer.addProcessor(_hud_stage)
-                }
-                PlayScreen.State.PAUSE -> {
-                    music_manager.pause()
-                    music_analyzer.pause_time()
-                    multiplexer.clear()
-                    multiplexer.addProcessor(_hud_stage)
-                }
-                PlayScreen.State.OVER -> {
-                    music_manager.stop()
-                    music_analyzer.pause_time()
-                    persistence.transaction {
-                        persistence.coins += score.coins
-                    }
-                    if (persistence.record < score.points)
-                        persistence.record = score.points
-                    multiplexer.clear()
-                    multiplexer.addProcessor(_hud_stage)
-                }
-            }
-            _hud_stage.setState(state)
-            field = state
-        }
 
     init {
         camera.setToOrtho(false, Position.widthScreen, Position.heightScreen)
@@ -79,7 +51,83 @@ class PlayScreen(
         Gdx.input.inputProcessor = multiplexer
     }
 
+    fun reset() {
+        state = State.LOADING
+        GlobalScope.launch {
+            Gdx.app.debug("PlayScreen", "reset music manager and load track '0'")
+            music_manager.reset()
+            music_manager.load("0")
+            Gdx.app.debug("PlayScreen", "music analyzer prepare track '0'")
+            music_analyzer.analyze_beat("0")
+            music_analyzer.prepare("0")
+            val paused = _paused
+            Gdx.app.postRunnable {
+                _started = false
+                Gdx.app.debug("PlayScreen", "score reset and fetch record")
+                score.reset()
+                score.record = persistence.record
+                Gdx.app.debug("PlayScreen", "play_stage reset")
+                _play_stage.reset()
+                state = State.PLAY
+                if(paused)
+                    state = State.PAUSE
+            }
+        }
+
+    }
+
+    private var _started = false
+    enum class State { PLAY, PAUSE, OVER, LOADING }
+    var state: State = State.LOADING
+        set(state) {
+            when (state) {
+                State.PLAY -> {
+                    if(_started.not()) {
+                        assets.get_sound("start").play(1f)
+                        _started = true
+                    }
+                    music_manager.play()
+                    music_analyzer.play_time()
+                    multiplexer.clear()
+                    multiplexer.addProcessor(_play_stage)
+                    multiplexer.addProcessor(_play_stage.get_ring_listener())
+                    multiplexer.addProcessor(_hud_stage)
+                }
+                State.PAUSE -> {
+                    music_manager.pause()
+                    music_analyzer.pause_time()
+                    multiplexer.clear()
+                    multiplexer.addProcessor(_hud_stage)
+                }
+                State.OVER -> {
+                    music_manager.stop()
+                    music_analyzer.pause_time()
+                    persistence.transaction {
+                        persistence.coins += score.coins
+                    }
+                    if (persistence.record < score.points)
+                        persistence.record = score.points
+                    multiplexer.clear()
+                    multiplexer.addProcessor(_hud_stage)
+                }
+                State.LOADING -> {
+                    multiplexer.clear()
+                }
+            }
+            _hud_stage.setState(state)
+            field = state
+        }
+
+    private var t = 0.0
     override fun render(delta: Float) {
+        if(state == State.LOADING) {
+            t += Math.PI * delta
+            Gdx.gl.glClearColor((Math.sin(t) / 2 + 0.5).toFloat(),
+                    (Math.sin(t) / 2 + 0.5).toFloat(),
+                    (Math.sin(t) / 2 + 0.5).toFloat(), 1f)
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+            return
+        }
         _play_stage.act(delta)
         _hud_stage.act(delta)
         _play_stage.draw()
@@ -88,32 +136,21 @@ class PlayScreen(
 
     override fun resize(width: Int, height: Int) {}
 
+    private var _paused = false
     override fun pause() {
+        _paused = true
         if (this.state == State.PLAY)
             state = State.PAUSE
     }
 
-    override fun resume() {}
+    override fun resume() {
+        _paused = false
+    }
 
     override fun hide() {}
 
     override fun dispose() {
         _play_stage.dispose()
         _hud_stage.dispose()
-    }
-
-    fun reset() {
-        Gdx.app.debug("PlayScreen", "reset music manager and load track '0'")
-        music_manager.reset()
-        music_manager.load("0")
-        Gdx.app.debug("PlayScreen", "music analyzer prepare track '0'")
-        music_analyzer.analyze_beat("0")
-        music_analyzer.prepare("0")
-        Gdx.app.debug("PlayScreen", "score reset and fetch record")
-        score.reset()
-        score.record = persistence.record
-        Gdx.app.debug("PlayScreen", "play_stage reset")
-        _play_stage.reset()
-        state = State.PLAY
     }
 }

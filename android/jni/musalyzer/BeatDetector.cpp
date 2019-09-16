@@ -66,7 +66,7 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         }
         n_frames += read;
     } while (read == hop_size);
-    __android_log_print(ANDROID_LOG_INFO, APPNAME,
+    __android_log_print(ANDROID_LOG_INFO, "libmusalyzer",
                         "read %.2fs, %d frames at %dHz (%d blocks) from %s\n",
                         n_frames * 1. / samplerate,
                         n_frames, samplerate,

@@ -1,6 +1,5 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -13,7 +12,6 @@ import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.play.ring.Ring
 import com.colorflow.utils.ButtonListener
-import java.util.*
 
 class MenuStage (
         viewport: Viewport,
@@ -35,7 +33,7 @@ class MenuStage (
         coinsLabel = Label("COINS: " + persistence.coins, assets.get_skin("Menu"), "Menu")
         play_button = ImageButton(assets.get_skin("Menu"), "Play")
         slot_button = ImageButton(assets.get_skin("Menu"), "Slot")
-        play_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.PLAY)}))
+        play_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.PLAY) }))
         slot_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.SHOP)}))
         ring = Ring(assets, persistence.used_ring.src)
 

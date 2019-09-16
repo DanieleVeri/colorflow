@@ -43,6 +43,7 @@ class HUDStage(viewport: Viewport,
         coinsPause = Label("", assets.get_skin("Play"), "Score")
         scoreOver = Label("", assets.get_skin("Play"), "Score")
         coinsOver = Label("", assets.get_skin("Play"), "Score")
+
         val gameOver = Label("GAME OVER", assets.get_skin("Play"), "GameOver")
         val restartButton = ImageButton(assets.get_skin("Play"), "Redo")
         val adsButton = ImageButton(assets.get_skin("Play"), "Ads")
@@ -50,7 +51,10 @@ class HUDStage(viewport: Viewport,
         val playButton = ImageButton(assets.get_skin("Play"), "Play")
         val homeButtonFromPause = ImageButton(assets.get_skin("Play"), "Home")
         val homeButtonFromOver = ImageButton(assets.get_skin("Play"), "Home")
-        restartButton.addListener(ButtonListener(assets) {play_screen.reset()})
+
+        restartButton.addListener(ButtonListener(assets) {
+            play_screen.reset()
+        })
         adsButton.addListener(ButtonListener(assets) {
             //TODO: Implement
         })
@@ -58,9 +62,16 @@ class HUDStage(viewport: Viewport,
             if (play_screen.state == State.PLAY)
                 play_screen.state = State.PAUSE
         })
-        playButton.addListener(ButtonListener(assets) {play_screen.state = State.PLAY})
-        homeButtonFromPause.addListener(ButtonListener(assets) {ScreenManager.set(ScreenType.MENU)})
-        homeButtonFromOver.addListener(ButtonListener(assets) {ScreenManager.set(ScreenType.MENU)})
+        playButton.addListener(ButtonListener(assets) {
+            play_screen.state = State.PLAY
+        })
+        homeButtonFromPause.addListener(ButtonListener(assets) {
+            ScreenManager.set(ScreenType.MENU)
+        })
+        homeButtonFromOver.addListener(ButtonListener(assets) {
+            ScreenManager.set(ScreenType.MENU)
+        })
+
         // Play HUD
         play = Table()
         play!!.setFillParent(true)
