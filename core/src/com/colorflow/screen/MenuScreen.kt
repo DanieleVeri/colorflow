@@ -5,25 +5,15 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Button
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.colorflow.MainGame
-import com.colorflow.ScreenManager
-import com.colorflow.ScreenType
-import com.colorflow.play.ring.Ring
-import com.colorflow.persistence.AssetProvider
+import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.stage.MenuStage
 import com.colorflow.utils.Position
-import com.colorflow.utils.ButtonListener
 
-class MenuScreen(private val game: MainGame,
-                 private val persistence: IStorage,
-                 private val assets: AssetProvider) : Screen {
+class MenuScreen(persistence: IStorage,
+                 assets: AssetProvider) : Screen {
     private val camera: OrthographicCamera = OrthographicCamera()
     private val stage: MenuStage
     private val multiplexer: InputMultiplexer

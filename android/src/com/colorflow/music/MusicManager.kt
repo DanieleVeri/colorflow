@@ -10,7 +10,6 @@ import com.colorflow.music.MusicManager.State.*
 
 class MusicManager(private val context: Context):
         IMusicManager,
-        MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnErrorListener {
 
@@ -32,7 +31,6 @@ class MusicManager(private val context: Context):
         _media_player = MediaPlayer()
         _media_player.setAudioStreamType(AudioManager.STREAM_MUSIC)
         _media_player.setOnCompletionListener(this)
-        _media_player.setOnPreparedListener(this)
         _media_player.setOnErrorListener(this)
         _state = IDLE
         val equalizer = Equalizer(0, _media_player.audioSessionId)
@@ -52,8 +50,9 @@ class MusicManager(private val context: Context):
             return
         _media_player.setDataSource(context, Uri.fromFile(get_music_file(context, music_id)))
         _state = INIT
-        _media_player.prepareAsync()
         _state = PREPARING
+        _media_player.prepare()
+        _state = PREPARED
     }
 
     override fun play() {
@@ -81,10 +80,6 @@ class MusicManager(private val context: Context):
         _state = COMPLETED
         mp.reset()
         _state = IDLE
-    }
-
-    override fun onPrepared(mp: MediaPlayer) {
-        _state = PREPARED
     }
 
     override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {

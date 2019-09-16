@@ -2,13 +2,12 @@ package com.colorflow.utils
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
-import com.colorflow.persistence.AssetProvider
 
 class ButtonListener(private val assets: AssetProvider,
                      private val on_tap: ()->Unit) : ActorGestureListener() {
 
     override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
-        assets.getSound("button").play(1f)
+        assets.get_sound("button").play(1f)
         this.on_tap()
     }
 

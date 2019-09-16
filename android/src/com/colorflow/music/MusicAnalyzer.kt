@@ -6,13 +6,6 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
-    companion object {
-        init {
-            System.loadLibrary("musalyzer")
-        }
-    }
-    external fun detectBeat(path: String): Array<BeatSample>
-
     private lateinit var _current_track: String
 
     private var _start_pause: Long = 0
@@ -57,18 +50,28 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
     }
 
     private val _beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-    private var _beat_callbacks: List<(suspend (Float)->Unit)> = ArrayList()
+    private var _beat_callbacks: MutableSet<suspend (Float)->Unit> = HashSet()
     private lateinit var _beat_timer: Job
 
     override fun analyze_beat(track_id: String) {
+        if(_beat_map[track_id] != null)
+            return
         val file = get_music_file(context, track_id)
         _beat_map[track_id] = detectBeat(file.absolutePath)
     }
 
     override fun add_beat_cb(cb: suspend (Float)->Unit) {
-        _beat_callbacks += cb
+        _beat_callbacks.add(cb)
     }
     override fun rem_beat_cb(cb: suspend (Float)->Unit) {
-        _beat_callbacks -= cb
+        _beat_callbacks.remove(cb)
     }
+
+    companion object {
+        init {
+            System.loadLibrary("musalyzer")
+        }
+    }
+    // NOTE: native functions must be camelCase
+    external fun detectBeat(path: String): Array<BeatSample>
 }

@@ -1,5 +1,6 @@
 package com.colorflow.stage
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -8,15 +9,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
-import com.colorflow.persistence.AssetProvider
+import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.play.ring.Ring
 import com.colorflow.utils.ButtonListener
+import java.util.*
 
 class MenuStage (
         viewport: Viewport,
         private val persistence: IStorage,
-        private val assets: AssetProvider): Stage(viewport) {
+        assets: AssetProvider): Stage(viewport) {
 
     private var coins = 0
     private var record = 0
@@ -28,14 +30,14 @@ class MenuStage (
     private var dy = 0.0
 
     init {
-        val title = Label("COLORFLOW", assets.getSkin("Menu"), "Title")
-        recordLabel = Label("REC0RD: " + persistence.record, assets.getSkin("Menu"), "Menu")
-        coinsLabel = Label("COINS: " + persistence.coins, assets.getSkin("Menu"), "Menu")
-        play_button = ImageButton(assets.getSkin("Menu"), "Play")
-        slot_button = ImageButton(assets.getSkin("Menu"), "Slot")
+        val title = Label("COLORFLOW", assets.get_skin("Menu"), "Title")
+        recordLabel = Label("REC0RD: " + persistence.record, assets.get_skin("Menu"), "Menu")
+        coinsLabel = Label("COINS: " + persistence.coins, assets.get_skin("Menu"), "Menu")
+        play_button = ImageButton(assets.get_skin("Menu"), "Play")
+        slot_button = ImageButton(assets.get_skin("Menu"), "Slot")
         play_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.PLAY)}))
         slot_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.SHOP)}))
-        ring = Ring(persistence.used_ring.src)
+        ring = Ring(assets, persistence.used_ring.src)
 
         val table = Table()
         table.setFillParent(true)
@@ -60,11 +62,6 @@ class MenuStage (
         slot_button.moveBy(0f, Math.sin(1+dy).toFloat() / 2)
         dy += delta.toDouble()
         super.act(delta)
-    }
-
-    override fun dispose() {
-        ring.dispose()
-        super.dispose()
     }
 
     fun sync_from_storage() {

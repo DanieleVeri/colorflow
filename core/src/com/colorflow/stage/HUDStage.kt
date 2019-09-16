@@ -12,8 +12,7 @@ import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
 import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.PlayScreen.State
-import com.colorflow.persistence.AssetProvider
-import com.colorflow.persistence.IStorage
+import com.colorflow.utils.AssetProvider
 import com.colorflow.play.Score
 import com.colorflow.utils.Position
 import com.colorflow.utils.ButtonListener
@@ -38,19 +37,19 @@ class HUDStage(viewport: Viewport,
 
     init {
         val tablePad = Position.heightScreen / 48f
-        scorePlay = Label("", assets.getSkin("Play"), "Score")
-        coinsPlay = Label("", assets.getSkin("Play"), "Score")
-        scorePause = Label("", assets.getSkin("Play"), "Score")
-        coinsPause = Label("", assets.getSkin("Play"), "Score")
-        scoreOver = Label("", assets.getSkin("Play"), "Score")
-        coinsOver = Label("", assets.getSkin("Play"), "Score")
-        val gameOver = Label("GAME OVER", assets.getSkin("Play"), "GameOver")
-        val restartButton = ImageButton(assets.getSkin("Play"), "Redo")
-        val adsButton = ImageButton(assets.getSkin("Play"), "Ads")
-        val pauseButton = ImageButton(assets.getSkin("Play"), "Pause")
-        val playButton = ImageButton(assets.getSkin("Play"), "Play")
-        val homeButtonFromPause = ImageButton(assets.getSkin("Play"), "Home")
-        val homeButtonFromOver = ImageButton(assets.getSkin("Play"), "Home")
+        scorePlay = Label("", assets.get_skin("Play"), "Score")
+        coinsPlay = Label("", assets.get_skin("Play"), "Score")
+        scorePause = Label("", assets.get_skin("Play"), "Score")
+        coinsPause = Label("", assets.get_skin("Play"), "Score")
+        scoreOver = Label("", assets.get_skin("Play"), "Score")
+        coinsOver = Label("", assets.get_skin("Play"), "Score")
+        val gameOver = Label("GAME OVER", assets.get_skin("Play"), "GameOver")
+        val restartButton = ImageButton(assets.get_skin("Play"), "Redo")
+        val adsButton = ImageButton(assets.get_skin("Play"), "Ads")
+        val pauseButton = ImageButton(assets.get_skin("Play"), "Pause")
+        val playButton = ImageButton(assets.get_skin("Play"), "Play")
+        val homeButtonFromPause = ImageButton(assets.get_skin("Play"), "Home")
+        val homeButtonFromOver = ImageButton(assets.get_skin("Play"), "Home")
         restartButton.addListener(ButtonListener(assets) {play_screen.reset()})
         adsButton.addListener(ButtonListener(assets) {
             //TODO: Implement

@@ -1,29 +1,32 @@
 package com.colorflow.play.entity.dot
 
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
+import com.colorflow.utils.AssetProvider
 import com.colorflow.utils.Color
 import com.colorflow.utils.Position
-import com.colorflow.utils.effects.ExplosionPool
 
-class Dot : Entity() {
+class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<Entity>) {
     lateinit var type: Type
         protected set
     lateinit var colour: Color
         protected set
 
-    operator fun set(type: Type, color: Color, pathType: Path.Type, start: Position.Radial, speed: Float) {
+    fun set(type: Type, color: Color, pathType: Path.Type, start: Position.Radial, velocity: Float) {
         this.type = type
         this.colour = color
         when (type) {
-            Dot.Type.STD -> this.texture = stdTexture
-            Dot.Type.REVERSE -> this.texture = reverseTexture
-            Dot.Type.COIN -> this.texture = coinTexture
+            Dot.Type.STD -> this.texture = _assets.get_texture("dot_std")
+            Dot.Type.REVERSE -> this.texture = _assets.get_texture("dot_reverse")
+            Dot.Type.COIN -> this.texture = _assets.get_texture("dot_coin")
         }
         this.initTrail(color)
-        this.path[pathType, start] = speed
+        path.type = pathType
+        path.pos.x = start.x
+        path.pos.y = start.y
+        path.velocity = velocity
         this.bounds.setRadius(40f)
         super.set()
     }
@@ -40,8 +43,7 @@ class Dot : Entity() {
     }
 
     override fun destroy(cb: (Entity)->Unit) {
-        ExplosionPool.instance.start(stage, colour.rgb, position)
-        DotPool.instance.free(this)
+        _pool.free(this)
         super.destroy(cb)
     }
 
@@ -60,12 +62,6 @@ class Dot : Entity() {
 
     enum class Type {
         STD, REVERSE, COIN
-    }
-
-    companion object {
-        private val stdTexture = Texture("dots/std.png")
-        private val reverseTexture = Texture("dots/reverse.png")
-        private val coinTexture = Texture("dots/coin.png")
     }
 }
 

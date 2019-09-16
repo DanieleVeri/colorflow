@@ -1,5 +1,6 @@
 package com.colorflow
 
+import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -10,42 +11,46 @@ import com.colorflow.screen.MenuScreen
 import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.ShopScreen
 import com.colorflow.persistence.IStorage
-import com.colorflow.persistence.AssetProvider
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.colorflow.utils.AssetProvider
+import kotlin.concurrent.thread
 
 class MainGame(
         private val storage: IStorage,
         private val music_manager: IMusicManager,
         private val music_analyzer: IMusicAnalyzer) : Game() {
 
-    private var _assets: AssetProvider? = null
+    private lateinit var _assets: AssetProvider
 
-    private var load: Screen? = null
-    private var menu: Screen? = null
-    private var play: Screen? = null
-    private var shop: Screen? = null
+    private lateinit var load: Screen
+    private lateinit var menu: Screen
+    private lateinit var play: Screen
+    private lateinit var shop: Screen
+
+    private var _disposed = false
 
     override fun create() {
+        Gdx.app.logLevel =  LOG_DEBUG
         load = LoadingScreen()
         ScreenManager.add_cb(::_set_screen_listener)
         ScreenManager.set(ScreenType.LOAD)
-        GlobalScope.launch {
+        thread {
+            Gdx.app.debug("LoaderThread", "start loading assets")
             _first_start()
             _assets = AssetProvider()
-            music_manager.load("0")
-            music_analyzer.analyze_beat("0")
-            music_analyzer.prepare("0")
             Gdx.app.postRunnable {
-                menu = MenuScreen(this@MainGame, storage, _assets!!)
-                play = PlayScreen(storage, _assets!!, music_manager, music_analyzer)
-                shop = ShopScreen(storage, _assets!!)
+                _assets.finish_loading()
+                Gdx.app.debug("LoaderThread", "assets ready")
+                menu = MenuScreen(storage, _assets)
+                play = PlayScreen(storage, _assets, music_manager, music_analyzer)
+                shop = ShopScreen(storage, _assets)
                 ScreenManager.set(ScreenType.MENU)
             }
         }
     }
 
     override fun dispose() {
+        if(_disposed) return
+        _disposed = true
         super.dispose()
         ScreenManager.rem_cb(::_set_screen_listener)
         menu?.dispose()
@@ -55,9 +60,6 @@ class MainGame(
     }
 
     private fun _first_start() {
-        if (!Gdx.files.local("rings").exists())
-            Gdx.files.internal("rings").copyTo(Gdx.files.local("."))
-
         if (!Gdx.files.local("music").exists())
             Gdx.files.internal("music").copyTo(Gdx.files.local("."))
     }

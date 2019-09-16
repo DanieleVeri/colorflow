@@ -1,27 +1,28 @@
 package com.colorflow.play.entity.bonus
 
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
+import com.colorflow.utils.AssetProvider
 import com.colorflow.utils.Position
-import com.colorflow.utils.effects.ExplosionPool
 
-class Bonus : Entity() {
+class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as Pool<Entity>) {
     lateinit var type: Type
         protected set
 
-    operator fun set(type: Type, pathType: Path.Type, start: Position.Radial, speed: Float) {
+    fun set(type: Type, pathType: Path.Type, start: Position.Radial, velocity: Float) {
         this.type = type
         val colors = this.trail.emitters.first().tint.colors
         colors[0] = 1f
         colors[1] = 1f
         colors[2] = 1f
         when (type) {
-            Bonus.Type.BOMB -> this.texture = bombTexture
+            Bonus.Type.BOMB -> this.texture = _assets.get_texture("bonus_bomb")
             else -> throw IllegalStateException()
         }
-        this.path.set(pathType, start, speed)
+        path.type = pathType
+        path.pos = start
+        path.velocity = velocity
         this.bounds.setRadius(40f)
         super.set()
     }
@@ -32,8 +33,7 @@ class Bonus : Entity() {
     }
 
     override fun destroy(cb: (Entity)->Unit) {
-        ExplosionPool.instance.start(stage, Color.WHITE, position)
-        BonusPool.instance.free(this)
+        _pool.free(this)
         super.destroy(cb)
     }
 
@@ -45,10 +45,5 @@ class Bonus : Entity() {
 
     enum class Type {
         BOMB, GOLD, MAGNETIC
-    }
-
-    companion object {
-
-        private val bombTexture = Texture("bonus/bomb.png")
     }
 }

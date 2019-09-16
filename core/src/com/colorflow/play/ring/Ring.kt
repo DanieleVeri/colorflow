@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
+import com.colorflow.utils.AssetProvider
 import com.colorflow.utils.Color
 import com.colorflow.utils.Position
 
-class Ring(img_name: String) : Actor(), Disposable {
+class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
 
     private var texture: Texture? = null
     val circle: Circle
@@ -19,7 +20,7 @@ class Ring(img_name: String) : Actor(), Disposable {
     private val listener: RingListener
 
     init {
-        this.texture = Texture(Gdx.files.local("rings/$img_name"))
+        this.texture = asset_provider.get_texture(ring_id)
         this.radius = 150f
         setBounds(Position.widthScreen / 2 - texture!!.width / 2, Position.heightScreen / 2 - texture!!.height / 2,
                 texture!!.width.toFloat(), texture!!.height.toFloat())
@@ -35,10 +36,6 @@ class Ring(img_name: String) : Actor(), Disposable {
     override fun act(delta: Float) {
         addAction(listener.onRingAct())
         super.act(delta)
-    }
-
-    override fun dispose() {
-        texture!!.dispose()
     }
 
     fun getColorFor(angle: Float): Color {

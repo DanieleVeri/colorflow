@@ -16,7 +16,7 @@ class SQLiteManager(context: Context):
     companion object {
         // SQLite db
         private const val NAME = "Data.db"
-        private const val VERSION = 2
+        private const val VERSION = 3
 
         private val TABLES = object {
             val RING = object {
@@ -99,14 +99,14 @@ class SQLiteManager(context: Context):
         values.put(TABLES.RING.COL_COST, 0)
         values.put(TABLES.RING.COL_PURCHASED, 1)
         values.put(TABLES.RING.COL_USED, 1)
-        values.put(TABLES.RING.COL_SRC, "0.png")
+        values.put(TABLES.RING.COL_SRC, "ring_0")
         sqLiteDatabase.insert(TABLES.RING.TAB_NAME, null, values)
         values.clear()
         values.put(TABLES.RING.COL_ID, "1")
         values.put(TABLES.RING.COL_COST, 100)
         values.put(TABLES.RING.COL_PURCHASED, 0)
         values.put(TABLES.RING.COL_USED, 0)
-        values.put(TABLES.RING.COL_SRC, "1.png")
+        values.put(TABLES.RING.COL_SRC, "ring_1")
         sqLiteDatabase.insert(TABLES.RING.TAB_NAME, null, values)
         values.clear()
     }

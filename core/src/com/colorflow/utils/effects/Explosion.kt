@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.utils.Position
 
-class Explosion : Actor(), Disposable, Pool.Poolable {
+class Explosion(private val _pool: Pool<Explosion>) : Actor(), Disposable, Pool.Poolable {
 
     private val effect: ParticleEffect = ParticleEffect()
 
@@ -32,7 +32,7 @@ class Explosion : Actor(), Disposable, Pool.Poolable {
 
     override fun act(delta: Float) {
         if (effect.isComplete) {
-            ExplosionPool.instance.free(this)
+            _pool.free(this)
             this.remove()
         }
         effect.update(delta)

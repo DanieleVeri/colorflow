@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Actor
 
-class BGManager: Actor() {
+class BackgroundManager: Actor() {
     var bgColor: Color = Color.BLACK
 
     override fun act(delta: Float) {

@@ -9,15 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
+import com.colorflow.utils.AssetProvider
 import com.colorflow.utils.Position
 
-abstract class Entity protected constructor() : Actor(), Pool.Poolable, Disposable {
+abstract class Entity protected constructor(
+        protected val _assets: AssetProvider,
+        protected val _pool: Pool<Entity>)
+    : Actor(), Pool.Poolable, Disposable {
 
-    protected var texture: Texture? = null
+    var path: Path
     var bounds: Circle
         protected set
-    protected var path: Path
     protected var trail: ParticleEffect
+    protected lateinit var texture: Texture
     val position: Position.Radial
         get() = path.pos
 
@@ -29,9 +33,9 @@ abstract class Entity protected constructor() : Actor(), Pool.Poolable, Disposab
     }
 
     fun set() {
-        setBounds(path.pos.x - texture!!.width / 2,
-                path.pos.y - texture!!.height / 2,
-                texture!!.width.toFloat(), texture!!.height.toFloat())
+        setBounds(path.pos.x - texture.width / 2,
+                path.pos.y - texture.height / 2,
+                texture.width.toFloat(), texture.height.toFloat())
         bounds.setPosition(path.pos.x, path.pos.y)
         trail.reset()
     }
@@ -48,8 +52,8 @@ abstract class Entity protected constructor() : Actor(), Pool.Poolable, Disposab
         path.nextPos(delta)
         bounds.setPosition(path.pos.x, path.pos.y)
         addAction(Actions.moveTo(
-                path.pos.x - texture!!.width / 2,
-                path.pos.y - texture!!.height / 2))
+                path.pos.x - texture.width / 2,
+                path.pos.y - texture.height / 2))
         /* Trail */
         trail.setPosition(position.x, position.y)
         val angle = position.angleRadial

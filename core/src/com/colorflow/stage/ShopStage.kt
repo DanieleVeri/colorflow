@@ -1,6 +1,5 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -9,8 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
-import com.colorflow.persistence.AssetProvider
-import com.colorflow.persistence.DataRing
+import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.play.ring.Ring
 import com.colorflow.utils.ButtonListener
@@ -23,17 +21,17 @@ class ShopStage (
     private var coins = 0
     private var table: Table = Table()
     private var homeBtn: ImageButton? = null
-    private var coinLabel: Label = Label("", assets.getSkin("Shop"), "Coins")
+    private var coinLabel: Label = Label("", assets.get_skin("Shop"), "Coins")
     private var ringScroll: ScrollPane? = null
     private var ringList: Table = Table()
 
     init {
         table.setFillParent(true)
         table.pad(30f)
-        homeBtn = ImageButton(assets.getSkin("Shop"), "Home")
+        homeBtn = ImageButton(assets.get_skin("Shop"), "Home")
         homeBtn!!.addListener(ButtonListener(assets, on_tap = {ScreenManager.set(ScreenType.MENU)}))
         ringScroll = ScrollPane(ringList)
-        val title = Label("Have a lucky day", assets.getSkin("Shop"), "Title")
+        val title = Label("Have a lucky day", assets.get_skin("Shop"), "Title")
         table.add<ImageButton>(homeBtn).left()
         table.add<Label>(title)
         table.row()
@@ -43,10 +41,10 @@ class ShopStage (
         this.addActor(table)
 
         persistence.rings.map {
-            val ring = Ring(it.src)
+            val ring = Ring(assets, it.src)
             ring.addAction(Actions.repeat(RepeatAction.FOREVER, Actions.rotateBy(360f, 7f)))
-            val name = Label(it.src, assets.getSkin("Shop"), "ItemName")
-            val cost = TextButton(it.cost.toString(), assets.getSkin("Shop"), "Buy")
+            val name = Label(it.src, assets.get_skin("Shop"), "ItemName")
+            val cost = TextButton(it.cost.toString(), assets.get_skin("Shop"), "Buy")
             cost.addListener(ButtonListener(assets, on_tap = {
                 persistence.transaction {
                     persistence.purchase_ring(it.id)

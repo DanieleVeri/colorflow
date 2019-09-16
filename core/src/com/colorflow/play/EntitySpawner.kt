@@ -8,115 +8,79 @@ import com.colorflow.utils.Color
 import com.colorflow.play.entity.dot.Dot
 import com.colorflow.play.entity.dot.DotPool
 import com.colorflow.utils.Position
+import kotlin.collections.ArrayList
 
-import java.util.ArrayList
-
-class Spawner(
-        private val _dot_pool: DotPool,
+class EntitySpawner(private val _dot_pool: DotPool,
         private val _bonus_pool: BonusPool) {
 
-    companion object {
-        private val SPAWN_DIST = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) + Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
-    }
+    var dot_speed: Float = 1.5f
+    var bonus_speed: Float = 1f
+    var dot_path: Path.Type = Path.Type.RADIAL
+    var bonus_chance: Float = 0.1f
+    var delta_time_spawn: Float = 2f
 
-    private var dotSpeed: Float = 0.toFloat()
-    private var bonusSpeed: Float = 0.toFloat()
-    private var dotPath: Path.Type? = null
-    private var timer: Float = 0f
-    private val _entities = ArrayList<Entity>()
-    private val pickedColors: MutableList<Color>
-    private val start: Position.Radial
-
-    init {
-        this.pickedColors = ArrayList()
-        this.start = Position.Radial(0f, SPAWN_DIST)
-        reset()
-    }
+    private var _timer: Float = 0f
 
     fun reset() {
-        dotSpeed = 2.5f
-        bonusSpeed = 1f
-        dotPath = Path.Type.RADIAL
-        timer = 0f
+        dot_speed = 1.5f
+        bonus_speed = 1f
+        bonus_chance = 0.1f
+        dot_path = Path.Type.RADIAL
+        delta_time_spawn = 2f
+        _timer = 0f
     }
 
-    fun setDotSpeed(dotSpeed: Float) {
-        this.dotSpeed = dotSpeed
+    fun update_time(delta: Float) {
+        _timer += delta
     }
 
-    fun setBonusSpeed(bonusSpeed: Float) {
-        this.bonusSpeed = bonusSpeed
-    }
-
-    fun setDotPath(dotPath: Path.Type) {
-        this.dotPath = dotPath
-    }
-
-    fun act(delta: Float): List<Entity>
+    fun spawn(): List<Entity>
     {
-        _entities.clear()
-        timer += delta
-        // Dots
-        if (timer > 2) {
-            timer = 0f
-            waveDotMix(4)
+        val list = ArrayList<Entity>()
+        if(_timer > delta_time_spawn) {
+            _timer = 0f
+            list.addAll(_wave_dot_mix(1 + (Math.random() * 6.0).toInt()))
+            if (Math.random() < bonus_chance)
+                list.add(_bonus())
         }
-        // Bonus
-        if (Math.random() < 0.0005) {
-            bonus()
-        }
-        return _entities
+        return list
     }
 
-    private fun waveDotStd(num: Int) {
-        pickedColors.clear()
-        val ang = Math.random().toFloat() * 360f
-        if (num > 6 || num <= 0) {
-            throw IndexOutOfBoundsException()
-        }
-        for (i in 0 until num) {
-            pickedColors.add(Color.getRandomExcept(pickedColors))
+    private fun _wave_dot_mix(num: Int): List<Dot> {
+        val list = ArrayList<Dot>()
+        val picked_colors = ArrayList<Color>()
+        val num_constrained = if(num > 6) 6 else if (num < 1) 1 else num
+        val start_pos = Position.Radial(0f, SPAWN_DIST)
+        val start_ang = Math.random().toFloat() * 360f
+        for (i in 0 until num_constrained) {
+            picked_colors.add(Color.getRandomExcept(picked_colors))
             if (i == 0) {
-                start.set_angle(ang)
+                start_pos.set_angle(start_ang)
             } else {
-                start.set_angle(Position.Radial.regulate_angle(ang + Color.getAngleBetween(
-                        pickedColors[pickedColors.size - 1],
-                        pickedColors[0])))
-            }
-            _entities.add(_dot_pool.get(Dot.Type.COIN, pickedColors[pickedColors.size - 1],
-                    dotPath!!, start, dotSpeed))
-        }
-    }
-
-    private fun waveDotMix(num: Int) {
-        pickedColors.clear()
-        val ang = Math.random().toFloat() * 360f
-        if (num > 6 || num <= 0) {
-            throw IndexOutOfBoundsException()
-        }
-        for (i in 0 until num) {
-            pickedColors.add(Color.getRandomExcept(pickedColors))
-            if (i == 0) {
-                start.set_angle(ang)
-            } else {
-                start.set_angle(Position.Radial.regulate_angle(ang + Color.getAngleBetween(
-                        pickedColors[pickedColors.size - 1],
-                        pickedColors[0])))
+                start_pos.set_angle(Position.Radial.regulate_angle(start_ang + Color.getAngleBetween(
+                        picked_colors[picked_colors.size - 1],
+                        picked_colors[0])))
             }
             if (Math.random() < 0.5) {
-                _entities.add(_dot_pool.get(Dot.Type.STD, pickedColors[pickedColors.size - 1],
-                        dotPath!!, start, dotSpeed))
+                list.add(_dot_pool.get(Dot.Type.STD, picked_colors[picked_colors.size - 1],
+                        dot_path, start_pos, dot_speed))
             } else {
-                _entities.add(_dot_pool.get(Dot.Type.REVERSE,
-                        Color.getRandomExcept(pickedColors.subList(pickedColors.size - 1, pickedColors.size)),
-                        dotPath!!, start, dotSpeed))
+                list.add(_dot_pool.get(Dot.Type.REVERSE,
+                        Color.getRandomExcept(picked_colors.subList(picked_colors.size - 1, picked_colors.size)),
+                        dot_path, start_pos, dot_speed))
             }
         }
+        return list
     }
 
-    private fun bonus(): Bonus {
+    private fun _bonus(): Bonus {
         return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL,
-                Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonusSpeed)
+                Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
     }
 
+    companion object {
+        val SPAWN_DIST = (Math.sqrt(
+                Math.pow(Position.heightScreen.toDouble(), 2.0) +
+                        Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
+    }
 }
