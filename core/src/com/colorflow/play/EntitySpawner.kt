@@ -1,17 +1,19 @@
 package com.colorflow.play
 
+import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
 import com.colorflow.play.entity.bonus.Bonus
 import com.colorflow.play.entity.bonus.BonusPool
 import com.colorflow.utils.Color
 import com.colorflow.play.entity.dot.Dot
 import com.colorflow.play.entity.dot.DotPool
-import com.colorflow.stage.PlayStage
 import com.colorflow.utils.Position
 
 import java.util.ArrayList
 
-class Spawner(private val playStage: PlayStage) {
+class Spawner(
+        private val _dot_pool: DotPool,
+        private val _bonus_pool: BonusPool) {
 
     companion object {
         private val SPAWN_DIST = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) + Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
@@ -21,6 +23,7 @@ class Spawner(private val playStage: PlayStage) {
     private var bonusSpeed: Float = 0.toFloat()
     private var dotPath: Path.Type? = null
     private var timer: Float = 0f
+    private val _entities = ArrayList<Entity>()
     private val pickedColors: MutableList<Color>
     private val start: Position.Radial
 
@@ -49,8 +52,9 @@ class Spawner(private val playStage: PlayStage) {
         this.dotPath = dotPath
     }
 
-    fun act(delta: Float)
+    fun act(delta: Float): List<Entity>
     {
+        _entities.clear()
         timer += delta
         // Dots
         if (timer > 2) {
@@ -61,6 +65,7 @@ class Spawner(private val playStage: PlayStage) {
         if (Math.random() < 0.0005) {
             bonus()
         }
+        return _entities
     }
 
     private fun waveDotStd(num: Int) {
@@ -78,7 +83,7 @@ class Spawner(private val playStage: PlayStage) {
                         pickedColors[pickedColors.size - 1],
                         pickedColors[0])))
             }
-            playStage.addActor(DotPool.instance.get(Dot.Type.COIN, pickedColors[pickedColors.size - 1],
+            _entities.add(_dot_pool.get(Dot.Type.COIN, pickedColors[pickedColors.size - 1],
                     dotPath!!, start, dotSpeed))
         }
     }
@@ -99,19 +104,19 @@ class Spawner(private val playStage: PlayStage) {
                         pickedColors[0])))
             }
             if (Math.random() < 0.5) {
-                playStage.addActor(DotPool.instance.get(Dot.Type.STD, pickedColors[pickedColors.size - 1],
+                _entities.add(_dot_pool.get(Dot.Type.STD, pickedColors[pickedColors.size - 1],
                         dotPath!!, start, dotSpeed))
             } else {
-                playStage.addActor(DotPool.instance.get(Dot.Type.REVERSE,
+                _entities.add(_dot_pool.get(Dot.Type.REVERSE,
                         Color.getRandomExcept(pickedColors.subList(pickedColors.size - 1, pickedColors.size)),
                         dotPath!!, start, dotSpeed))
             }
         }
     }
 
-    private fun bonus() {
-        playStage.addActor(BonusPool.instance.get(Bonus.Type.BOMB, Path.Type.RADIAL,
-                Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonusSpeed))
+    private fun bonus(): Bonus {
+        return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL,
+                Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonusSpeed)
     }
 
 }
