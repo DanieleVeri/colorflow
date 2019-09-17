@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/)
 
 find_library(log-lib log)
 
 add_library(libaubio STATIC IMPORTED)
 set_target_properties(libaubio PROPERTIES 
-    INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/include
-    IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/prebuilt/${ANDROID_ABI}/libaubio.a)
+    INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/aubio/
+    IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/aubio/out/${ANDROID_ABI}/usr/local/lib/libaubio.a)
 
 set(AUDIOLIB ffmpeg)
 add_library(libavcodec STATIC IMPORTED)

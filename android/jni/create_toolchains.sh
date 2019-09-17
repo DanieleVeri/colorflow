@@ -18,5 +18,4 @@ function create {
 
 create arm64
 create arm
-# create x86_64
-# create x86
+create x86

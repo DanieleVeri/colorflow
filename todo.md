@@ -8,6 +8,7 @@
 
 ### not-functional
 - [ ] Merge music manager & analyzer
+- [ ] Db upgrade crash
 - [ ] Move musalyzer on core as possible
 - [ ] Improve beatdetector
 - [ ] Screen refactor

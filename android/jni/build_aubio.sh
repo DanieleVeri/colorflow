@@ -1,9 +1,10 @@
 #!/bin/bash
 
 [ -z $PLATFORM ] && PLATFORM=android-21
-
 NDK_PATH="/home/dan/Android/Sdk/ndk-bundle"
 NDK_TOOLCHAINS=$PWD/toolchains
+
+./create_toolchains.sh
 
 [ -d aubio ] || git clone https://git.aubio.org/aubio/aubio/ 
 cd aubio
@@ -11,9 +12,7 @@ cd aubio
 cd -
 
 function build {
-    TMPDIR=/tmp/aubio_build/$1
-    [ -d $TMPDIR ] && rm -rf $TMPDIR
-    DESTDIR=$PWD/musalyzer/aubio/prebuilt/$2
+    DESTDIR="$PWD/aubio/out/$2"
     [ -d $DESTDIR ] && rm -rf $DESTDIR
 
     export PKG_CONFIG_PATH="$PWD/ffmpeg/out/$2/lib/pkgconfig"
@@ -24,7 +23,7 @@ function build {
     cd aubio
     CFLAGS="-Os" CC=$CC \
         ./waf distclean configure build install \
-        --destdir=$TMPDIR \
+        --destdir=$DESTDIR \
         --verbose \
         --with-target-platform=android \
         --enable-avcodec \
@@ -34,17 +33,11 @@ function build {
         --disable-sndfile \
         --disable-docs
     cd -
-
-    mkdir -p $DESTDIR
-    mv $TMPDIR/usr/local/lib/libaubio.a $DESTDIR/libaubio.a
 }
-
-./create_toolchains.sh
 
 build arm64 arm64-v8a
 build arm armeabi-v7a
-# build x86_64
-# build x86
+build x86 x86
 
-rm -rf $PWD/musalyzer/aubio/include/
-mv /tmp/aubio_build/arm/usr/local/include/aubio $PWD/musalyzer/aubio/include/
+rm -rf "$PWD/musalyzer/aubio/include/"
+mv "$PWD/aubio/out/armeabi-v7a/usr/local/include/aubio" "$PWD/musalyzer/aubio/"

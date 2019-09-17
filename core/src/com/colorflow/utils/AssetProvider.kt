@@ -19,7 +19,8 @@ class AssetProvider : Disposable {
     private val _sound_map: MutableMap<String, String>
     private val _texture_map: MutableMap<String, String>
     private val _resolution: String
-        get() = Position.heightScreen.toInt().toString()+"x"+ Position.widthScreen.toInt().toString()
+        // get() = Position.heightScreen.toInt().toString()+"x"+ Position.widthScreen.toInt().toString()
+        get() = "2560x1440"
 
     init {
         this._skin_map = HashMap()
