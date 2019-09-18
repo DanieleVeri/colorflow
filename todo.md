@@ -16,3 +16,4 @@
 - [ ] Add game over screen
 - [ ] Remove business logic from setter
 - [ ] Profile and optimize particle & shader render
+- [ ] Update build script to NDK r20
