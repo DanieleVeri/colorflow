@@ -3,7 +3,7 @@ package com.colorflow.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.colorflow.ScreenManager
@@ -16,7 +16,6 @@ import com.colorflow.play.Score
 import com.colorflow.utils.AssetProvider
 import com.colorflow.persistence.IStorage
 import com.colorflow.utils.Position
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
@@ -53,7 +52,7 @@ class PlayScreen(
 
     fun reset() {
         state = State.LOADING
-        GlobalScope.launch {
+        thread {
             Gdx.app.debug("PlayScreen", "reset music manager and load track '0'")
             music_manager.reset()
             music_manager.load("0")
@@ -125,7 +124,7 @@ class PlayScreen(
             Gdx.gl.glClearColor((Math.sin(t) / 2 + 0.5).toFloat(),
                     (Math.sin(t) / 2 + 0.5).toFloat(),
                     (Math.sin(t) / 2 + 0.5).toFloat(), 1f)
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+            Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
             return
         }
         _play_stage.act(delta)
