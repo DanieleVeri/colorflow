@@ -3,8 +3,6 @@
 [ -z $PLATFORM ] && PLATFORM=android-21
 NDK_TOOLCHAINS=$PWD/toolchains
 
-./create_toolchains.sh
-
 [ -d ffmpeg ] || git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
 
 function build_x86 {

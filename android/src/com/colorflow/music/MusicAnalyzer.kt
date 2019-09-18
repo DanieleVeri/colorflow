@@ -40,7 +40,7 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
             val sample = _beat_map[_current_track]!!.find { it.ms.toLong() >=  current}
             sample ?: return@launch
 
-            Gdx.app.log(this::class.java.simpleName, sample.confidence.toString())
+            Gdx.app.log(this@MusicAnalyzer::class.java.simpleName, sample.confidence.toString())
             delay(sample.ms.toLong() - current)
             coroutineScope {
                 _beat_callbacks.forEach { launch { it(sample.confidence) } }

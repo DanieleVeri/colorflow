@@ -37,6 +37,7 @@ com_crashlytics_export_strings.xml
 /android/jni/libav/
 /android/jni/ffmpeg/
 /android/.externalNativeBuild/
+/android/.cxx/
 ## Eclipse
 
 .classpath

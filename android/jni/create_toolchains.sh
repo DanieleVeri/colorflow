@@ -1,8 +1,11 @@
 #!/bin/bash
 
+# NOTE: No needed if ndk version >= r19
+# NDKr18 @ https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
+
 [ -z $PLATFORM ] && PLATFORM=android-21
 
-NDK_PATH="/home/dan/Android/Sdk/ndk-bundle"
+NDK_PATH="/home/dan/Programs/android-ndk-r18b"
 NDK_TOOLCHAINS=$PWD/toolchains
 
 mkdir -p toolchains

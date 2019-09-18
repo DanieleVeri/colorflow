@@ -1,10 +1,7 @@
 #!/bin/bash
 
 [ -z $PLATFORM ] && PLATFORM=android-21
-NDK_PATH="/home/dan/Android/Sdk/ndk-bundle"
 NDK_TOOLCHAINS=$PWD/toolchains
-
-./create_toolchains.sh
 
 [ -d aubio ] || git clone https://git.aubio.org/aubio/aubio/ 
 cd aubio
@@ -39,5 +36,5 @@ build arm64 arm64-v8a
 build arm armeabi-v7a
 build x86 x86
 
-rm -rf "$PWD/musalyzer/aubio/include/"
+rm -rf "$PWD/musalyzer/aubio/"
 mv "$PWD/aubio/out/armeabi-v7a/usr/local/include/aubio" "$PWD/musalyzer/aubio/"
