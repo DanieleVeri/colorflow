@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.utils.Disposable
 import com.colorflow.utils.AssetProvider
 import com.colorflow.utils.Color
 import com.colorflow.utils.Position
@@ -15,13 +14,14 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
 
     private var texture: Texture? = null
     val circle: Circle
-    private var radius: Float = 0.toFloat()
+    private var radius: Float = 0f
     private var rotation = 0f
     private val listener: RingListener
 
     init {
-        this.texture = asset_provider.get_texture(ring_id)
-        this.radius = 150f
+        Gdx.app.error("======================",""+asset_provider.get_skin("play_stage").atlas.findRegion("ring").texture.width)
+        this.texture = asset_provider.get_skin("play_stage").atlas.findRegion(ring_id).texture
+        this.radius = texture!!.width / 2f
         setBounds(Position.widthScreen / 2 - texture!!.width / 2, Position.heightScreen / 2 - texture!!.height / 2,
                 texture!!.width.toFloat(), texture!!.height.toFloat())
         this.circle = Circle(Position.center.x, Position.center.y, radius)
@@ -40,20 +40,15 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
 
     fun getColorFor(angle: Float): Color {
         val range_angle = Position.Radial.regulate_angle(angle + getRotation())
-        if (range_angle in 0.0..60.0) {
-            return Color.CYAN
-        } else if (range_angle in 60.0..120.0) {
-            return Color.RED
-        } else if (range_angle in 120.0..180.0) {
-            return Color.YELLOW
-        } else if (range_angle in 180.0..240.0) {
-            return Color.GREEN
-        } else if (range_angle in 240.0..300.0) {
-            return Color.MAGENTA
-        } else if (range_angle in 300.0..360.0) {
-            return Color.BLUE
+        return when (range_angle) {
+            in 0.0..60.0 -> Color.CYAN
+            in 60.0..120.0 -> Color.RED
+            in 120.0..180.0 -> Color.YELLOW
+            in 180.0..240.0 -> Color.GREEN
+            in 240.0..300.0 -> Color.MAGENTA
+            in 300.0..360.0 -> Color.BLUE
+            else -> Color.BLUE
         }
-        return Color.BLUE
     }
 
     override fun getRotation(): Float {

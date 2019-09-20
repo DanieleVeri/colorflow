@@ -17,7 +17,7 @@ class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as P
         colors[1] = 1f
         colors[2] = 1f
         when (type) {
-            Bonus.Type.BOMB -> this.texture = _assets.get_texture("bonus_bomb")
+            Bonus.Type.BOMB -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("bonus_bomb").texture
             else -> throw IllegalStateException()
         }
         path.type = pathType

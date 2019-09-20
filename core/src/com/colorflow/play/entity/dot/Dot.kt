@@ -18,9 +18,9 @@ class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<
         this.type = type
         this.colour = color
         when (type) {
-            Dot.Type.STD -> this.texture = _assets.get_texture("dot_std")
-            Dot.Type.REVERSE -> this.texture = _assets.get_texture("dot_reverse")
-            Dot.Type.COIN -> this.texture = _assets.get_texture("dot_coin")
+            Type.STD -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_std").texture
+            Type.REVERSE -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_reverse").texture
+            Type.COIN -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_coin").texture
         }
         this.initTrail(color)
         path.type = pathType

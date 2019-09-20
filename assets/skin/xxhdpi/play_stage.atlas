@@ -1,0 +1,40 @@
+
+play_stage.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ring
+  rotate: false
+  xy: 1, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+dot_std
+  rotate: false
+  xy: 243, 141
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+dot_coin
+  rotate: false
+  xy: 243, 39
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+bonus_bomb
+  rotate: false
+  xy: 345, 141
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+dot_reverse
+  rotate: false
+  xy: 345, 39
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
