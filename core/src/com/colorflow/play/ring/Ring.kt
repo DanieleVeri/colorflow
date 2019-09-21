@@ -1,9 +1,8 @@
 package com.colorflow.play.ring
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.colorflow.utils.AssetProvider
@@ -12,25 +11,23 @@ import com.colorflow.utils.Position
 
 class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
 
-    private var texture: Texture? = null
+    private var texture: TextureRegion
     val circle: Circle
     private var radius: Float = 0f
     private var rotation = 0f
     private val listener: RingListener
 
     init {
-        Gdx.app.error("======================",""+asset_provider.get_skin("play_stage").atlas.findRegion("ring").texture.width)
-        this.texture = asset_provider.get_skin("play_stage").atlas.findRegion(ring_id).texture
-        this.radius = texture!!.width / 2f
-        setBounds(Position.widthScreen / 2 - texture!!.width / 2, Position.heightScreen / 2 - texture!!.height / 2,
-                texture!!.width.toFloat(), texture!!.height.toFloat())
+        this.texture = asset_provider.get_skin("play_stage").getRegion(ring_id)
+        this.radius = texture.regionWidth / 2f
+        setBounds(Position.widthScreen / 2 - texture.regionWidth / 2, Position.heightScreen / 2 - texture.regionHeight / 2,
+                texture.regionWidth.toFloat(), texture.regionHeight.toFloat())
         this.circle = Circle(Position.center.x, Position.center.y, radius)
         this.listener = SideTapListener()
     }
 
     override fun draw(batch: Batch?, alpha: Float) {
-        batch!!.draw(texture, x, y, width / 2, height / 2, width, height,
-                scaleX, scaleY, getRotation(), 0, 0, width.toInt(), height.toInt(), false, true)
+        batch!!.draw(texture, x, y, width / 2, height / 2, width, height, scaleX, scaleY, getRotation())
     }
 
     override fun act(delta: Float) {

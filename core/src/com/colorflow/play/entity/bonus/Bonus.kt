@@ -17,12 +17,12 @@ class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as P
         colors[1] = 1f
         colors[2] = 1f
         when (type) {
-            Bonus.Type.BOMB -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("bonus_bomb").texture
+            Type.BOMB -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("bonus_bomb")
             else -> throw IllegalStateException()
         }
         path.type = pathType
         path.pos = start
-        path.velocity = velocity
+        path.static_velocity = velocity
         this.bounds.setRadius(40f)
         super.set()
     }

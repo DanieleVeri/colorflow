@@ -37,8 +37,9 @@ class PlayStage(viewport: Viewport,
     private val _shockwave_layer = ShockWave()
     private val _spawner: EntitySpawner = EntitySpawner(_dot_pool, _bonus_pool)
     private val _background: BackgroundManager = BackgroundManager()
-    private var _delta_alpha = 1.0f
     private lateinit var _ring: Ring
+
+    private var _delta_alpha = 1.0f
 
     fun reset() {
         _shockwave_layer.children.filter { it is Entity }.forEach { (it as Entity).destroy {  } }
@@ -79,11 +80,11 @@ class PlayStage(viewport: Viewport,
     }
 
     suspend fun on_beat(confidence: Float) {
-        Gdx.app.postRunnable { _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity *= 3} }
+         _spawner.dyn_velocity *= 3f
         _ring.setScale(1.1f)
         delay(100)
         _ring.setScale(1f)
-        Gdx.app.postRunnable { _shockwave_layer.children.filter { it is Dot }.forEach { (it as Dot).path.velocity /= 3} }
+        _spawner.dyn_velocity /= 3f
     }
 
     private fun _handle_collisions() {
@@ -120,11 +121,11 @@ class PlayStage(viewport: Viewport,
                         _score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        _play_screen.state = PlayScreen.State.OVER
+                        //_play_screen.state = PlayScreen.State.OVER
                     }
                     Dot.Type.REVERSE -> if (_ring.getColorFor(p.angleRadial) == dot.colour) {
                         Gdx.input.vibrate(200)
-                        _play_screen.state = PlayScreen.State.OVER
+                       // _play_screen.state = PlayScreen.State.OVER
                     } else {
                         _score.incPoints(10)
                     }
@@ -133,7 +134,7 @@ class PlayStage(viewport: Viewport,
                         _score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        _play_screen.state = PlayScreen.State.OVER
+                        //_play_screen.state = PlayScreen.State.OVER
                     }
                 }
             }

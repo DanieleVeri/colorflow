@@ -13,9 +13,10 @@ import kotlin.collections.ArrayList
 class EntitySpawner(private val _dot_pool: DotPool,
         private val _bonus_pool: BonusPool) {
 
+    var dyn_velocity = 1.5f
     var dot_speed: Float = 1.5f
     var bonus_speed: Float = 1f
-    var dot_path: Path.Type = Path.Type.RADIAL
+    var dot_path: Path.Type = Path.Type.RADIAL_DYNAMIC
     var bonus_chance: Float = 0.1f
     var delta_time_spawn: Float = 2f
 
@@ -23,9 +24,10 @@ class EntitySpawner(private val _dot_pool: DotPool,
 
     fun reset() {
         dot_speed = 1.5f
+        dyn_velocity = 1.5f
         bonus_speed = 1f
         bonus_chance = 0.1f
-        dot_path = Path.Type.RADIAL
+        dot_path = Path.Type.RADIAL_DYNAMIC
         delta_time_spawn = 2f
         _timer = 0f
     }
@@ -39,10 +41,11 @@ class EntitySpawner(private val _dot_pool: DotPool,
         val list = ArrayList<Entity>()
         if(_timer > delta_time_spawn) {
             _timer = 0f
-            list.addAll(_wave_dot_mix(1 + (Math.random() * 6.0).toInt()))
+            list.addAll(_wave_dot_mix(6))
             if (Math.random() < bonus_chance)
                 list.add(_bonus())
         }
+        list.forEach { it.path.get_dyn_velocity = {dyn_velocity} }
         return list
     }
 
@@ -74,7 +77,7 @@ class EntitySpawner(private val _dot_pool: DotPool,
     }
 
     private fun _bonus(): Bonus {
-        return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL,
+        return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL_STATIC,
                 Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
     }
 

@@ -1,9 +1,9 @@
 package com.colorflow.play.entity
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -18,33 +18,29 @@ abstract class Entity protected constructor(
     : Actor(), Pool.Poolable, Disposable {
 
     var path: Path
-    var bounds: Circle
-        protected set
+    var bounds: Circle; protected set
     protected var trail: ParticleEffect
-    protected lateinit var texture: Texture
-    val position: Position.Radial
-        get() = path.pos
+    protected lateinit var texture: TextureRegion
+    val position: Position.Radial; get() = path.pos
 
     init {
-        this.bounds = Circle(0f, 0f, 1f)
-        this.path = Path(Path.Type.RADIAL, Position.Radial(1f, 1f), 1.5f)
-        this.trail = ParticleEffect()
+        bounds = Circle(0f, 0f, 1f)
+        path = Path(Path.Type.RADIAL_STATIC, Position.Radial(1f, 1f), 1.5f)
+        trail = ParticleEffect()
         trail.load(Gdx.files.internal("sprites/trail.p"), Gdx.files.internal("sprites"))
     }
 
     fun set() {
-        setBounds(path.pos.x - texture.width / 2,
-                path.pos.y - texture.height / 2,
-                texture.width.toFloat(), texture.height.toFloat())
+        setBounds(path.pos.x - texture.regionWidth / 2,
+                path.pos.y - texture.regionHeight / 2,
+                texture.regionWidth.toFloat(), texture.regionHeight.toFloat())
         bounds.setPosition(path.pos.x, path.pos.y)
         trail.reset()
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
         trail.draw(batch)
-        batch!!.draw(texture, x, y,
-                width / 2, height / 2,
-                width, height, 1f, 1f, rotation, 0, 0, width.toInt(), height.toInt(), false, true)
+        batch!!.draw(texture, x, y, width / 2, height / 2, width, height, 1f, 1f, rotation)
     }
 
     override fun act(delta: Float) {
@@ -52,8 +48,8 @@ abstract class Entity protected constructor(
         path.nextPos(delta)
         bounds.setPosition(path.pos.x, path.pos.y)
         addAction(Actions.moveTo(
-                path.pos.x - texture.width / 2,
-                path.pos.y - texture.height / 2))
+                path.pos.x - texture.regionWidth / 2,
+                path.pos.y - texture.regionHeight / 2))
         /* Trail */
         trail.setPosition(position.x, position.y)
         val angle = position.angleRadial

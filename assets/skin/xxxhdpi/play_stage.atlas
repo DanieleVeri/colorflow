@@ -9,7 +9,7 @@ ring
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
-  index: 0
+  index: -1
 dot_std
   rotate: false
   xy: 243, 141

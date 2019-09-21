@@ -13,6 +13,7 @@
 - [ ] Improve beatdetector
 - [ ] Use structured concurrency with coroutines (extend CoroutineScope)
 - [ ] Db upgrade crash
+- [ ] Cache beat detection result
 - [ ] Add game over screen
 - [ ] Remove business logic from setter
 - [ ] Profile and optimize particle & shader render
