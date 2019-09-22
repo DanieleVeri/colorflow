@@ -13,8 +13,8 @@ import kotlin.collections.ArrayList
 class EntitySpawner(private val _dot_pool: DotPool,
         private val _bonus_pool: BonusPool) {
 
-    var dyn_velocity = 1.5f
-    var dot_speed: Float = 1.5f
+    var dyn_velocity = 2.5f
+    var dot_speed: Float = 2.5f
     var bonus_speed: Float = 1f
     var dot_path: Path.Type = Path.Type.RADIAL_DYNAMIC
     var bonus_chance: Float = 0.1f
@@ -23,8 +23,8 @@ class EntitySpawner(private val _dot_pool: DotPool,
     private var _timer: Float = 0f
 
     fun reset() {
-        dot_speed = 1.5f
-        dyn_velocity = 1.5f
+        dot_speed = 2.5f
+        dyn_velocity = 2.5f
         bonus_speed = 1f
         bonus_chance = 0.1f
         dot_path = Path.Type.RADIAL_DYNAMIC

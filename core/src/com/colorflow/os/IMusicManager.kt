@@ -1,4 +1,4 @@
-package com.colorflow.music
+package com.colorflow.os
 
 interface IMusicManager {
     fun reset()

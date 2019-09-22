@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
 import com.colorflow.utils.AssetProvider
-import com.colorflow.persistence.IStorage
+import com.colorflow.os.IStorage
 import com.colorflow.play.ring.Ring
 import com.colorflow.utils.ButtonListener
 

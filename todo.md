@@ -1,6 +1,9 @@
 ## COLORFLOW: Todo list
 
 ### functional
+- [ ] Background
+- [ ] Illumination
+- [ ] Spawner flow
 - [ ] Reimplement RingListener
 - [ ] Remove shop -> random purchase like bbtan
 - [ ] Improve track analysis using `oneset`, `pitch` and `note` detection
@@ -12,7 +15,7 @@
 - [ ] Merge music manager & analyzer
 - [ ] Improve beatdetector
 - [ ] Use structured concurrency with coroutines (extend CoroutineScope)
-- [ ] Db upgrade crash
+- [C] Db upgrade crash
 - [ ] Cache beat detection result
 - [ ] Add game over screen
 - [ ] Remove business logic from setter

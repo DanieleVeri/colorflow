@@ -4,9 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.colorflow.persistence.DataRing
-import com.colorflow.persistence.IStorage
+import com.colorflow.play.ring.DataRing
+import com.colorflow.os.IStorage
 import java.util.ArrayList
 
 class SQLiteManager(context: Context):

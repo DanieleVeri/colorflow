@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.persistence.IStorage
+import com.colorflow.os.IStorage
 import com.colorflow.play.BackgroundManager
 import com.colorflow.play.Score
 import com.colorflow.play.EntitySpawner
@@ -40,6 +40,7 @@ class PlayStage(viewport: Viewport,
     private lateinit var _ring: Ring
 
     private var _delta_alpha = 1.0f
+    private var _confidence_threshold = .16f
 
     fun reset() {
         _shockwave_layer.children.filter { it is Entity }.forEach { (it as Entity).destroy {  } }
@@ -80,7 +81,8 @@ class PlayStage(viewport: Viewport,
     }
 
     suspend fun on_beat(confidence: Float) {
-         _spawner.dyn_velocity *= 3f
+        if (confidence < _confidence_threshold) return
+        _spawner.dyn_velocity *= 3f
         _ring.setScale(1.1f)
         delay(100)
         _ring.setScale(1f)
@@ -121,11 +123,11 @@ class PlayStage(viewport: Viewport,
                         _score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        //_play_screen.state = PlayScreen.State.OVER
+                        _play_screen.state = PlayScreen.State.OVER
                     }
                     Dot.Type.REVERSE -> if (_ring.getColorFor(p.angleRadial) == dot.colour) {
                         Gdx.input.vibrate(200)
-                       // _play_screen.state = PlayScreen.State.OVER
+                       _play_screen.state = PlayScreen.State.OVER
                     } else {
                         _score.incPoints(10)
                     }
@@ -134,7 +136,7 @@ class PlayStage(viewport: Viewport,
                         _score.incPoints(10)
                     } else {
                         Gdx.input.vibrate(200)
-                        //_play_screen.state = PlayScreen.State.OVER
+                        _play_screen.state = PlayScreen.State.OVER
                     }
                 }
             }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-
 import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.colorflow.database.SQLiteManager
@@ -14,11 +13,11 @@ import com.colorflow.music.MusicManager
 import java.util.ArrayList
 
 class AndroidLauncher : AndroidApplication() {
-
-    private var game: MainGame? = null
-    private var sqlite: SQLiteManager? = null
-    private var music_manager: MusicManager? = null
-    private var music_analyzer: MusicAnalyzer? = null
+    private lateinit var game: MainGame
+    private lateinit var sqlite: SQLiteManager
+    private lateinit var music_manager: MusicManager
+    private lateinit var music_analyzer: MusicAnalyzer
+    private lateinit var ad_handler: AdHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,22 +26,22 @@ class AndroidLauncher : AndroidApplication() {
         config.useAccelerometer = false
         config.useCompass = false
         config.useImmersiveMode = true
-
         askPermissions()
 
-        this.sqlite = SQLiteManager(context)
-        this.music_manager = MusicManager(context)
-        this.music_analyzer = MusicAnalyzer(context)
-        this.game = MainGame(sqlite!!, music_manager!!, music_analyzer!!)
+        sqlite = SQLiteManager(context)
+        music_manager = MusicManager(context)
+        music_analyzer = MusicAnalyzer(context)
+        ad_handler = AdHandler(this)
 
+        game = MainGame(sqlite, music_manager, music_analyzer, ad_handler)
         initialize(game, config)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        game?.dispose()
-        sqlite?.close()
-        music_manager?.release()
+        game.dispose()
+        sqlite.close()
+        music_manager.release()
     }
 
     private fun askPermissions() {

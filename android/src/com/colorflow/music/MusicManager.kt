@@ -7,6 +7,7 @@ import android.media.audiofx.Equalizer
 import android.net.Uri
 import android.util.Log
 import com.colorflow.music.MusicManager.State.*
+import com.colorflow.os.IMusicManager
 
 class MusicManager(private val context: Context):
         IMusicManager,

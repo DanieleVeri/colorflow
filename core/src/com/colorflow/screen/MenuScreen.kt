@@ -6,9 +6,8 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.colorflow.MainGame
 import com.colorflow.utils.AssetProvider
-import com.colorflow.persistence.IStorage
+import com.colorflow.os.IStorage
 import com.colorflow.stage.MenuStage
 import com.colorflow.utils.Position
 

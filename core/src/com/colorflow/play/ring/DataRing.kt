@@ -1,4 +1,4 @@
-package com.colorflow.persistence
+package com.colorflow.play.ring
 
 data class DataRing (
         val id: String,

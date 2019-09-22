@@ -61,6 +61,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+        implementation 'com.google.android.gms:play-services-ads:18.2.0'
     }
 }
 

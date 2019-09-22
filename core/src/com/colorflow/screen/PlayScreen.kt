@@ -6,24 +6,23 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.colorflow.ScreenManager
-import com.colorflow.ScreenType
-import com.colorflow.music.IMusicAnalyzer
-import com.colorflow.music.IMusicManager
+import com.colorflow.os.IMusicAnalyzer
+import com.colorflow.os.IMusicManager
+import com.colorflow.os.IAdHandler
 import com.colorflow.stage.HUDStage
 import com.colorflow.stage.PlayStage
 import com.colorflow.play.Score
 import com.colorflow.utils.AssetProvider
-import com.colorflow.persistence.IStorage
+import com.colorflow.os.IStorage
 import com.colorflow.utils.Position
-import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class PlayScreen(
         private val persistence: IStorage,
         private val assets: AssetProvider,
         private val music_manager: IMusicManager,
-        private val music_analyzer: IMusicAnalyzer) : Screen {
+        private val music_analyzer: IMusicAnalyzer,
+        private val ad_handler: IAdHandler) : Screen {
 
     private val camera: OrthographicCamera = OrthographicCamera()
     private val cameraFlipY: OrthographicCamera
@@ -41,7 +40,7 @@ class PlayScreen(
         multiplexer = InputMultiplexer()
         score = Score()
         _play_stage = PlayStage(ScreenViewport(this.cameraFlipY), assets, persistence, score, this)
-        _hud_stage = HUDStage(ScreenViewport(this.camera), assets, score, this)
+        _hud_stage = HUDStage(ScreenViewport(this.camera), assets, score, this, ad_handler)
         music_analyzer.add_beat_cb(_play_stage::on_beat)
     }
 
@@ -144,6 +143,7 @@ class PlayScreen(
 
     override fun resume() {
         _paused = false
+        Gdx.app.debug(this::class.java.simpleName, "earned: " + ad_handler.is_rewarded())
     }
 
     override fun hide() {}

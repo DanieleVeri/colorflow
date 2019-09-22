@@ -4,20 +4,22 @@ import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.colorflow.music.IMusicAnalyzer
-import com.colorflow.music.IMusicManager
+import com.colorflow.os.IMusicAnalyzer
+import com.colorflow.os.IMusicManager
+import com.colorflow.os.IAdHandler
 import com.colorflow.screen.LoadingScreen
 import com.colorflow.screen.MenuScreen
 import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.ShopScreen
-import com.colorflow.persistence.IStorage
+import com.colorflow.os.IStorage
 import com.colorflow.utils.AssetProvider
 import kotlin.concurrent.thread
 
 class MainGame(
         private val storage: IStorage,
         private val music_manager: IMusicManager,
-        private val music_analyzer: IMusicAnalyzer) : Game() {
+        private val music_analyzer: IMusicAnalyzer,
+        private val ad_handler: IAdHandler) : Game() {
 
     private lateinit var _assets: AssetProvider
 
@@ -41,7 +43,7 @@ class MainGame(
                 _assets.finish_loading()
                 Gdx.app.debug("LoaderThread", "assets ready")
                 menu = MenuScreen(storage, _assets)
-                play = PlayScreen(storage, _assets, music_manager, music_analyzer)
+                play = PlayScreen(storage, _assets, music_manager, music_analyzer, ad_handler)
                 shop = ShopScreen(storage, _assets)
                 ScreenManager.set(ScreenType.MENU)
             }
@@ -53,10 +55,10 @@ class MainGame(
         _disposed = true
         super.dispose()
         ScreenManager.rem_cb(::_set_screen_listener)
-        menu?.dispose()
-        play?.dispose()
-        shop?.dispose()
-        _assets?.dispose()
+        menu.dispose()
+        play.dispose()
+        shop.dispose()
+        _assets.dispose()
     }
 
     private fun _first_start() {

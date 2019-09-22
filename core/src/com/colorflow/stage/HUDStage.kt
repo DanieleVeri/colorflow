@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
+import com.colorflow.os.IAdHandler
 import com.colorflow.screen.PlayScreen
 import com.colorflow.screen.PlayScreen.State
 import com.colorflow.utils.AssetProvider
@@ -20,7 +21,8 @@ import com.colorflow.utils.ButtonListener
 class HUDStage(viewport: Viewport,
                assets: AssetProvider,
                private val score: Score,
-               private val play_screen: PlayScreen) : Stage(viewport) {
+               private val play_screen: PlayScreen,
+               private val ad_handler: IAdHandler) : Stage(viewport) {
 
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private var play: Table? = null
@@ -56,7 +58,7 @@ class HUDStage(viewport: Viewport,
             play_screen.reset()
         })
         adsButton.addListener(ButtonListener(assets) {
-            //TODO: Implement
+            ad_handler.show_ad()
         })
         pauseButton.addListener(ButtonListener(assets) {
             if (play_screen.state == State.PLAY)

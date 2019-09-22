@@ -2,6 +2,7 @@ package com.colorflow.music
 
 import android.content.Context
 import com.badlogic.gdx.Gdx
+import com.colorflow.os.IMusicAnalyzer
 import kotlinx.coroutines.*
 import java.util.*
 
