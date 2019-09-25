@@ -5,19 +5,19 @@
 - [ ] Illumination
 - [ ] Spawner flow
 - [ ] Reimplement RingListener
-- [ ] Remove shop -> random purchase like bbtan
+- [ ] Remove shop -> random purchase like bbtan ?????????
 - [ ] Improve track analysis using `oneset`, `pitch` and `note` detection
 - [ ] Refactor all atlas -> NEON-like colors
-- [ ] Implement google ads/play (what about 360?)
+
+- [ ] Chinese version (360 ads?)
 
 ### not-functional
-- [ ] Move musalyzer on core as possible
-- [ ] Merge music manager & analyzer
-- [ ] Improve beatdetector
-- [ ] Use structured concurrency with coroutines (extend CoroutineScope)
+- [ ] Move musalyzer on core as much as possible
+- [ ] Merge music manager & analyzer on core
+- [ ] Improve beatdetection (C implementation of the old algo)
+- [ ] Use structured concurrency with coroutines (make class extend CoroutineScope)
 - [C] Db upgrade crash
-- [ ] Cache beat detection result
-- [ ] Add game over screen
+- [C] Cache beat detection result (in sqlite)
 - [ ] Remove business logic from setter
 - [ ] Profile and optimize particle & shader render
-- [ ] Update build script to NDK r20
+- [ ] Update build scripts to NDK r20

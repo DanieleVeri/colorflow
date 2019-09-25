@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.utils.AssetProvider
+import com.colorflow.AssetProvider
 import com.colorflow.utils.Position
 
 abstract class Entity protected constructor(

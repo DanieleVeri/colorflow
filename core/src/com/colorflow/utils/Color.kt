@@ -40,7 +40,7 @@ enum class Color {
         }
 
         fun getAngleBetween(c1: Color, c2: Color): Float {
-            val dif = c1.ordinal - c2.ordinal
+            val dif = c2.ordinal - c1.ordinal
             return (60 * dif).toFloat()
         }
     }

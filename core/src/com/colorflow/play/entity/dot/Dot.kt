@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
-import com.colorflow.utils.AssetProvider
+import com.colorflow.AssetProvider
 import com.colorflow.utils.Color
 import com.colorflow.utils.Position
 
@@ -20,14 +20,13 @@ class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<
         when (type) {
             Type.STD -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_std")
             Type.REVERSE -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_reverse")
-            Type.COIN -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_coin")
         }
         this.initTrail(color)
         path.type = pathType
         path.pos.x = start.x
         path.pos.y = start.y
         path.static_velocity = velocity
-        this.bounds.setRadius(40f)
+        this.bounds.setRadius(texture.regionWidth/2f)
         super.set()
     }
 
@@ -61,7 +60,7 @@ class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<
     }
 
     enum class Type {
-        STD, REVERSE, COIN
+        STD, REVERSE
     }
 }
 

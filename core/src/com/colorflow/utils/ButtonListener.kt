@@ -2,6 +2,7 @@ package com.colorflow.utils
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
+import com.colorflow.AssetProvider
 
 class ButtonListener(private val assets: AssetProvider,
                      private val on_tap: ()->Unit) : ActorGestureListener() {

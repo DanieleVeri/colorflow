@@ -17,7 +17,8 @@ class EntitySpawner(private val _dot_pool: DotPool,
     var dot_speed: Float = 2.5f
     var bonus_speed: Float = 1f
     var dot_path: Path.Type = Path.Type.RADIAL_DYNAMIC
-    var bonus_chance: Float = 0.1f
+    var bomb_chance: Float = 0.1f
+    var gold_chance: Float = 0.1f
     var delta_time_spawn: Float = 2f
 
     private var _timer: Float = 0f
@@ -26,7 +27,8 @@ class EntitySpawner(private val _dot_pool: DotPool,
         dot_speed = 2.5f
         dyn_velocity = 2.5f
         bonus_speed = 1f
-        bonus_chance = 0.1f
+        bomb_chance = 0.1f
+        gold_chance = 0.1f
         dot_path = Path.Type.RADIAL_DYNAMIC
         delta_time_spawn = 2f
         _timer = 0f
@@ -42,8 +44,10 @@ class EntitySpawner(private val _dot_pool: DotPool,
         if(_timer > delta_time_spawn) {
             _timer = 0f
             list.addAll(_wave_dot_mix(6))
-            if (Math.random() < bonus_chance)
-                list.add(_bonus())
+            if (Math.random() < bomb_chance)
+                list.add(_bomb())
+            if (Math.random() < gold_chance)
+                list.add(_gold())
         }
         list.forEach { it.path.get_dyn_velocity = {dyn_velocity} }
         return list
@@ -76,14 +80,18 @@ class EntitySpawner(private val _dot_pool: DotPool,
         return list
     }
 
-    private fun _bonus(): Bonus {
+    private fun _bomb(): Bonus {
         return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL_STATIC,
                 Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
     }
 
+    private fun _gold(): Bonus {
+        return _bonus_pool.get(Bonus.Type.GOLD, Path.Type.RADIAL_STATIC,
+                Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
+    }
+
     companion object {
-        val SPAWN_DIST = (Math.sqrt(
-                Math.pow(Position.heightScreen.toDouble(), 2.0) +
-                        Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
+        val SPAWN_DIST = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) +
+                Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
     }
 }

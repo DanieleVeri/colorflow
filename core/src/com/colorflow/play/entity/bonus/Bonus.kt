@@ -3,7 +3,7 @@ package com.colorflow.play.entity.bonus
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
-import com.colorflow.utils.AssetProvider
+import com.colorflow.AssetProvider
 import com.colorflow.utils.Position
 
 class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as Pool<Entity>) {
@@ -18,12 +18,13 @@ class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as P
         colors[2] = 1f
         when (type) {
             Type.BOMB -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("bonus_bomb")
+            Type.GOLD -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_coin")
             else -> throw IllegalStateException()
         }
         path.type = pathType
         path.pos = start
         path.static_velocity = velocity
-        this.bounds.setRadius(40f)
+        this.bounds.setRadius(texture.regionWidth/2f)
         super.set()
     }
 

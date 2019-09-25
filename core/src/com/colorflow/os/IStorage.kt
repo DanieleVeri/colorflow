@@ -1,15 +1,23 @@
 package com.colorflow.os
 
-import com.colorflow.play.ring.DataRing
+import com.colorflow.Ring
+import com.colorflow.Track
 
 interface IStorage {
+    fun get_version(): String
+    fun set_version(version: String)
     fun transaction(task: ()->Unit)
 
-    var version: String
-    var coins: Int
-    var record: Int
+    fun get_coins(): Int
+    fun set_coins(coins: Int)
 
-    var used_ring: DataRing
-    fun purchase_ring(id: String)
-    val rings: List<DataRing>
+    fun get_record(): Int
+    fun set_record(record: Int)
+
+    fun get_rings(): List<Ring>
+    fun set_ring_selected(id: String)
+    fun set_ring_purchased(id: String)
+
+    fun get_tracks(): List<Track>
+    fun set_track_purchased(id: String)
 }

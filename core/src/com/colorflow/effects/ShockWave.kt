@@ -1,4 +1,4 @@
-package com.colorflow.utils.effects
+package com.colorflow.effects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL30

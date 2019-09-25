@@ -6,20 +6,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.ScreenManager
 import com.colorflow.ScreenType
-import com.colorflow.utils.AssetProvider
+import com.colorflow.AssetProvider
+import com.colorflow.GameState
 import com.colorflow.os.IStorage
 import com.colorflow.play.ring.Ring
 import com.colorflow.utils.ButtonListener
 
 class MenuStage (
         viewport: Viewport,
-        private val persistence: IStorage,
-        assets: AssetProvider): Stage(viewport) {
+        protected val state: GameState,
+        protected val assets: AssetProvider): Stage(viewport) {
 
-    private var coins = 0
-    private var record = 0
     private var recordLabel: Label
     private var coinsLabel: Label
     private var play_button: Button
@@ -29,13 +27,13 @@ class MenuStage (
 
     init {
         val title = Label("COLORFLOW", assets.get_skin("Menu"), "Title")
-        recordLabel = Label("REC0RD: " + persistence.record, assets.get_skin("Menu"), "Menu")
-        coinsLabel = Label("COINS: " + persistence.coins, assets.get_skin("Menu"), "Menu")
+        recordLabel = Label("REC0RD: " + state.record, assets.get_skin("Menu"), "Menu")
+        coinsLabel = Label("COINS: " + state.coins, assets.get_skin("Menu"), "Menu")
         play_button = ImageButton(assets.get_skin("Menu"), "Play")
         slot_button = ImageButton(assets.get_skin("Menu"), "Slot")
-        play_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.PLAY) }))
-        slot_button.addListener(ButtonListener(assets, on_tap = { ScreenManager.set(ScreenType.SHOP)}))
-        ring = Ring(assets, persistence.used_ring.src)
+        play_button.addListener(ButtonListener(assets) {state.set_screen(ScreenType.TRACK_SELECTION)})
+        slot_button.addListener(ButtonListener(assets) {state.set_screen(ScreenType.SHOP)})
+        ring = Ring(assets, state.ring_list.find { it.used }!!.src)
 
         val table = Table()
         table.setFillParent(true)
@@ -53,17 +51,12 @@ class MenuStage (
     }
 
     override fun act(delta: Float) {
-        recordLabel.setText("REC0RD: " + record)
-        coinsLabel.setText("COINS: " + coins)
+        recordLabel.setText("REC0RD: " + state.record)
+        coinsLabel.setText("COINS: " + state.coins)
         ring.rotateBy(1f)
         play_button.moveBy(0f, Math.sin(dy).toFloat() / 2)
         slot_button.moveBy(0f, Math.sin(1+dy).toFloat() / 2)
         dy += delta.toDouble()
         super.act(delta)
-    }
-
-    fun sync_from_storage() {
-        coins = persistence.coins
-        record = persistence.record
     }
 }

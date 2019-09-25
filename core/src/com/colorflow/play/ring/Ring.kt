@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.colorflow.utils.AssetProvider
+import com.colorflow.AssetProvider
 import com.colorflow.utils.Color
 import com.colorflow.utils.Position
 
@@ -38,12 +38,12 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
     fun getColorFor(angle: Float): Color {
         val range_angle = Position.Radial.regulate_angle(angle + getRotation())
         return when (range_angle) {
-            in 0.0..60.0 -> Color.CYAN
-            in 60.0..120.0 -> Color.RED
-            in 120.0..180.0 -> Color.YELLOW
-            in 180.0..240.0 -> Color.GREEN
-            in 240.0..300.0 -> Color.MAGENTA
-            in 300.0..360.0 -> Color.BLUE
+            in 0.0..60.0 -> Color.BLUE
+            in 60.0..120.0 -> Color.MAGENTA
+            in 120.0..180.0 -> Color.GREEN
+            in 180.0..240.0 -> Color.YELLOW
+            in 240.0..300.0 -> Color.RED
+            in 300.0..360.0 -> Color.CYAN
             else -> Color.BLUE
         }
     }
