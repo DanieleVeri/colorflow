@@ -16,7 +16,6 @@ class AssetProvider : Disposable {
     private val _manager: AssetManager = AssetManager()
     private val _skin_map: MutableMap<String, String>
     private val _sound_map: MutableMap<String, String>
-
     private val _screen_density: String
 
     init {
@@ -77,7 +76,7 @@ class AssetProvider : Disposable {
         _manager.dispose()
     }
 
-    enum class Densisties() {
+    enum class Densisties {
         hdpi { override fun dpi() = 240},
         xhdpi { override fun dpi() = 320},
         xxhdpi { override fun dpi() = 480},

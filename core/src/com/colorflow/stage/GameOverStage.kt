@@ -1,17 +1,18 @@
 package com.colorflow.stage
 
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
-import com.colorflow.CurrentGame
-import com.colorflow.GameState
-import com.colorflow.ScreenType
-import com.colorflow.os.IAdHandler
-import com.colorflow.utils.ButtonListener
-import com.colorflow.utils.Position
+import com.colorflow.state.CurrentGame
+import com.colorflow.state.GameState
+import com.colorflow.state.ScreenType
+import com.colorflow.ads.IAdHandler
+import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.Position
 
 class GameOverStage (
         viewport: Viewport,
@@ -21,6 +22,9 @@ class GameOverStage (
 
     protected val score: Label
     protected val coins: Label
+    protected val ad_button: ImageButton
+
+    private val table: Table = Table()
 
     init {
         score = Label("", assets.get_skin("Play"), "Score")
@@ -28,7 +32,7 @@ class GameOverStage (
 
         val title = Label("GAME OVER", assets.get_skin("Play"), "GameOver")
         val restart_button = ImageButton(assets.get_skin("Play"), "Redo")
-        val ads_button = ImageButton(assets.get_skin("Play"), "Ads")
+        ad_button = ImageButton(assets.get_skin("Play"), "Ads")
         val home_button = ImageButton(assets.get_skin("Play"), "Home")
 
         restart_button.addListener(ButtonListener(assets) {
@@ -36,7 +40,7 @@ class GameOverStage (
             state.current_game = CurrentGame(state.current_game!!.selected_track)
             state.set_screen(ScreenType.LOAD)
         })
-        ads_button.addListener(ButtonListener(assets) {
+        ad_button.addListener(ButtonListener(assets) {
             ad_handler.show_ad()
         })
         home_button.addListener(ButtonListener(assets) {
@@ -45,16 +49,15 @@ class GameOverStage (
             state.set_screen(ScreenType.MENU)
         })
 
-        val table = Table()
         val table_pad = Position.heightScreen / 48f
         table.setFillParent(true)
         table.pad(table_pad)
         table.add(title).colspan(2).expandX()
         table.row()
-        table.add<Label>(score).expandX().left()
-        table.add<Label>(coins).expandX().right()
+        table.add(score).expandX().left()
+        table.add(coins).expandX().right()
         table.row()
-        table.add(ads_button).colspan(2).expand()
+        table.add(ad_button).colspan(2).expand()
         table.row()
         table.add(restart_button).expand()
         table.add(home_button).expand()
@@ -62,6 +65,8 @@ class GameOverStage (
     }
 
     fun update() {
+        ad_button.touchable = Touchable.enabled
+
         if (state.current_game!!.score.points <= state.record)
             score.setText("SCORE: " + state.current_game!!.score.points + "\nRECORD: " + state.record)
         else
@@ -69,15 +74,23 @@ class GameOverStage (
         coins.setText("COINS: " + state.current_game!!.score.coins)
     }
 
-    override fun act(delta: Float) {
-        super.act(delta)
+    fun reward() {
+        ad_button.touchable = Touchable.disabled
+
+        state.current_game!!.score.coins *= 2
+        save_result()
+        coins.setText("COINS: " + state.current_game!!.score.coins)
     }
 
-    private fun save_result() {
+    protected fun save_result() {
         state.coins += state.current_game!!.score.coins
         if (state.current_game!!.score.points > state.record)
             state.record = state.current_game!!.score.points
         state.persist()
+    }
+
+    override fun act(delta: Float) {
+        super.act(delta)
     }
 
 }

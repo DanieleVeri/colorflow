@@ -1,7 +1,7 @@
 package com.colorflow.screen
 
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
+import com.colorflow.state.GameState
 import com.colorflow.stage.MenuStage
 
 class MenuScreen(

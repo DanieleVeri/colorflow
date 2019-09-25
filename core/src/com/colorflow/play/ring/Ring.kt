@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.colorflow.AssetProvider
-import com.colorflow.utils.Color
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Color
+import com.colorflow.graphic.Position
 
 class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
 
@@ -23,7 +23,7 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
         setBounds(Position.widthScreen / 2 - texture.regionWidth / 2, Position.heightScreen / 2 - texture.regionHeight / 2,
                 texture.regionWidth.toFloat(), texture.regionHeight.toFloat())
         this.circle = Circle(Position.center.x, Position.center.y, radius)
-        this.listener = SideTapListener()
+        this.listener = DragListener()
     }
 
     override fun draw(batch: Batch?, alpha: Float) {
@@ -31,7 +31,7 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
     }
 
     override fun act(delta: Float) {
-        addAction(listener.onRingAct())
+        addAction(listener.on_ring_act())
         super.act(delta)
     }
 

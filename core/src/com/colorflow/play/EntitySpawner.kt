@@ -4,10 +4,10 @@ import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
 import com.colorflow.play.entity.bonus.Bonus
 import com.colorflow.play.entity.bonus.BonusPool
-import com.colorflow.utils.Color
+import com.colorflow.graphic.Color
 import com.colorflow.play.entity.dot.Dot
 import com.colorflow.play.entity.dot.DotPool
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Position
 import kotlin.collections.ArrayList
 
 class EntitySpawner(private val _dot_pool: DotPool,

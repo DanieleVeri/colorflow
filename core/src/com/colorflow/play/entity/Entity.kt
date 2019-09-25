@@ -10,12 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
 import com.colorflow.AssetProvider
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Position
 
 abstract class Entity protected constructor(
         protected val _assets: AssetProvider,
-        protected val _pool: Pool<Entity>)
-    : Actor(), Pool.Poolable, Disposable {
+        protected val _pool: Pool<Entity>) : Actor(), Pool.Poolable, Disposable {
 
     var path: Path
     var bounds: Circle; protected set

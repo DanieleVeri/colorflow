@@ -1,4 +1,4 @@
-package com.colorflow.effects
+package com.colorflow.graphic.effects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Position
 
 class Explosion(private val _pool: Pool<Explosion>) : Actor(), Disposable, Pool.Poolable {
 

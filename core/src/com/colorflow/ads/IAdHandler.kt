@@ -1,4 +1,4 @@
-package com.colorflow.os
+package com.colorflow.ads
 
 interface IAdHandler {
     fun show_ad()

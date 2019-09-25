@@ -2,8 +2,8 @@ package com.colorflow.screen
 
 import com.badlogic.gdx.Gdx
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.os.IAdHandler
+import com.colorflow.state.GameState
+import com.colorflow.ads.IAdHandler
 import com.colorflow.stage.GameOverStage
 
 class GameOverScreen(state: GameState,
@@ -20,7 +20,10 @@ class GameOverScreen(state: GameState,
     }
 
     override fun resume() {
-        Gdx.app.debug(this::class.java.simpleName, "earned: " + ad_handler.is_rewarded())
+        if(ad_handler.is_rewarded()) {
+            Gdx.app.debug(this::class.java.simpleName, "rewarded")
+            stage.reward()
+        }
         super.resume()
     }
 }

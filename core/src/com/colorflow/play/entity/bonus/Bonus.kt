@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
 import com.colorflow.AssetProvider
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Position
 
 class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as Pool<Entity>) {
     lateinit var type: Type

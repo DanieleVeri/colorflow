@@ -6,12 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.ScreenType
+import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.os.IStorage
+import com.colorflow.state.GameState
 import com.colorflow.play.ring.Ring
-import com.colorflow.utils.ButtonListener
+import com.colorflow.graphic.ButtonListener
 
 class MenuStage (
         viewport: Viewport,

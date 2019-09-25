@@ -1,10 +1,10 @@
 package com.colorflow.screen
 
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.os.IAdHandler
-import com.colorflow.os.IMusicAnalyzer
-import com.colorflow.os.IMusicManager
+import com.colorflow.state.GameState
+import com.colorflow.ads.IAdHandler
+import com.colorflow.music.IMusicAnalyzer
+import com.colorflow.music.IMusicManager
 import com.colorflow.stage.TrackSelectionStage
 
 class TrackSelectionScreen(state: GameState,

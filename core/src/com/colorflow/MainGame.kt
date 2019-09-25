@@ -4,31 +4,31 @@ import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.colorflow.os.IMusicAnalyzer
-import com.colorflow.os.IMusicManager
-import com.colorflow.os.IAdHandler
-import com.colorflow.os.IStorage
+import com.colorflow.music.IMusicAnalyzer
+import com.colorflow.music.IMusicManager
+import com.colorflow.ads.IAdHandler
+import com.colorflow.state.IStorage
 import com.colorflow.screen.*
+import com.colorflow.state.GameState
+import com.colorflow.state.ScreenType
 import kotlin.concurrent.thread
 
 class MainGame(
-        private val persistence: IStorage,
-        private val music_manager: IMusicManager,
-        private val music_analyzer: IMusicAnalyzer,
-        private val ad_handler: IAdHandler) : Game() {
+        protected val persistence: IStorage,
+        protected val music_manager: IMusicManager,
+        protected val music_analyzer: IMusicAnalyzer,
+        protected val ad_handler: IAdHandler) : Game() {
 
-    private lateinit var assets: AssetProvider
+    protected lateinit var assets: AssetProvider
+    protected val game_state: GameState
+    protected var disposed = false
 
-    private lateinit var load: Screen
-    private lateinit var menu: Screen
-    private lateinit var play: Screen
-    private lateinit var shop: Screen
-    private lateinit var track_selection: Screen
-    private lateinit var game_over: Screen
-
-    private val game_state: GameState
-
-    private var _disposed = false
+    protected lateinit var load: Screen
+    protected lateinit var menu: Screen
+    protected lateinit var play: Screen
+    protected lateinit var shop: Screen
+    protected lateinit var track_selection: Screen
+    protected lateinit var game_over: Screen
 
     init {
         game_state = GameState(persistence, this::set_screen_listener)
@@ -64,8 +64,8 @@ class MainGame(
     }
 
     override fun dispose() {
-        if(_disposed) return
-        _disposed = true
+        if(disposed) return
+        disposed = true
 
         menu.dispose()
         play.dispose()
@@ -77,12 +77,12 @@ class MainGame(
         super.dispose()
     }
 
-    private fun copy_internal_tracks() {
+    protected fun copy_internal_tracks() {
         if (!Gdx.files.local("music").exists())
             Gdx.files.internal("music").copyTo(Gdx.files.local("."))
     }
 
-    private fun set_screen_listener(screen: ScreenType) {
+    protected fun set_screen_listener(screen: ScreenType) {
         when (screen) {
             ScreenType.LOAD -> setScreen(load)
             ScreenType.MENU -> setScreen(menu)

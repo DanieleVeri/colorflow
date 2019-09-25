@@ -2,16 +2,31 @@ package com.colorflow.music
 
 import android.content.Context
 import com.badlogic.gdx.Gdx
-import com.colorflow.os.IMusicAnalyzer
 import kotlinx.coroutines.*
 import java.util.*
 
 class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
     private lateinit var _current_track: String
-
     private var _start_pause: Long = 0
     private var _start_time: Long = 0
     private var _paused: Long = 0
+
+    private var listeners: MutableSet<IEventListener> = HashSet()
+
+    private val _beat_map: HashMap<String, Array<BeatSample>> = HashMap()
+    private lateinit var _beat_timer: Job
+
+    override fun add_listener(listener: IEventListener) {
+        listeners.add(listener)
+    }
+
+    override fun rem_listener(listener: IEventListener) {
+        listeners.add(listener)
+    }
+
+    override fun analyze(track_id: String) {
+        analyze_beat(track_id)
+    }
 
     override fun prepare(track_id: String) {
         _paused = 0
@@ -32,7 +47,7 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
         _beat_timer.cancel()
     }
 
-    private fun _play() {
+    protected fun _play() {
         _beat_timer = GlobalScope.launch {
             if (_start_pause > 0L)
                 return@launch
@@ -44,28 +59,19 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
             Gdx.app.log(this@MusicAnalyzer::class.java.simpleName, sample.confidence.toString())
             delay(sample.ms.toLong() - current)
             coroutineScope {
-                _beat_callbacks.forEach { launch { it(sample.confidence) } }
+                listeners.forEach {
+                    launch { it.on_beat(sample) }
+                }
             }
             _play()
         }
     }
 
-    private val _beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-    private var _beat_callbacks: MutableSet<suspend (Float)->Unit> = HashSet()
-    private lateinit var _beat_timer: Job
-
-    override fun analyze_beat(track_id: String) {
+    protected fun analyze_beat(track_id: String) {
         if(_beat_map[track_id] != null)
             return
         val file = get_music_file(context, track_id)
         _beat_map[track_id] = detectBeat(file.absolutePath)
-    }
-
-    override fun add_beat_cb(cb: suspend (Float)->Unit) {
-        _beat_callbacks.add(cb)
-    }
-    override fun rem_beat_cb(cb: suspend (Float)->Unit) {
-        _beat_callbacks.remove(cb)
     }
 
     companion object {

@@ -1,7 +1,4 @@
-package com.colorflow
-
-import com.colorflow.os.IStorage
-import com.colorflow.play.Score
+package com.colorflow.state
 
 class GameState(protected val persistence: IStorage,
                 protected val set_screen_cb: (ScreenType)->Unit) {
@@ -47,13 +44,18 @@ enum class ScreenType {
     GAME_OVER}
 
 data class CurrentGame (
-    val selected_track: String,
-    val score: Score = Score(),
-    var gameover: Boolean = false,
-    var paused: Boolean = false,
-    var started: Boolean = false)
+        val selected_track: String,
+        var score: Score = Score(),
+        var gameover: Boolean = false,
+        var paused: Boolean = false,
+        var started: Boolean = false)
 
-data class Track(
+data class Score (
+    var multiplier: Float = 1f,
+    var points: Int = 0,
+    var coins: Int = 0)
+
+data class Track (
     val id: String,
     val cost: Int,
     var purchased: Boolean,

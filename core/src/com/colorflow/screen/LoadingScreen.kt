@@ -3,10 +3,11 @@ package com.colorflow.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL30
-import com.colorflow.GameState
-import com.colorflow.ScreenType
-import com.colorflow.os.IMusicAnalyzer
-import com.colorflow.os.IMusicManager
+import com.colorflow.state.GameState
+import com.colorflow.state.ScreenType
+import com.colorflow.music.IMusicAnalyzer
+import com.colorflow.music.IMusicManager
+import com.colorflow.state.Score
 import kotlin.concurrent.thread
 import kotlin.math.sin
 
@@ -33,12 +34,12 @@ class LoadingScreen(
                 music_manager.reset()
                 music_manager.load(state.current_game!!.selected_track)
                 Gdx.app.debug(this::class.java.simpleName, "music analyzer prepare track '${state.current_game!!.selected_track}'")
-                music_analyzer.analyze_beat(state.current_game!!.selected_track)
+                music_analyzer.analyze(state.current_game!!.selected_track)
                 music_analyzer.prepare(state.current_game!!.selected_track)
                 val paused = state.current_game!!.paused
                 Gdx.app.postRunnable {
                     Gdx.app.debug(this::class.java.simpleName, "score reset")
-                    state.current_game!!.score.reset()
+                    state.current_game!!.score = Score()
                     if(paused)
                         state.current_game!!.paused = true
                     state.set_screen(ScreenType.PLAY)

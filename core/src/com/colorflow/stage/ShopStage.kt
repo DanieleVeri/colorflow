@@ -3,12 +3,11 @@ package com.colorflow.stage
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.ScreenType
+import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.os.IAdHandler
-import com.colorflow.os.IStorage
-import com.colorflow.utils.ButtonListener
+import com.colorflow.state.GameState
+import com.colorflow.ads.IAdHandler
+import com.colorflow.graphic.ButtonListener
 
 class ShopStage (
         viewport: Viewport,

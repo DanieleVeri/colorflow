@@ -8,17 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.ScreenType
+import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.utils.Position
-import com.colorflow.utils.ButtonListener
+import com.colorflow.state.GameState
+import com.colorflow.graphic.Position
+import com.colorflow.graphic.ButtonListener
 
 class HUDStage(viewport: Viewport,
                protected val state: GameState,
                assets: AssetProvider) : Stage(viewport) {
 
-    private val builder: StringBuilder = StringBuilder()
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private var play: Table
     private var pause: Table
@@ -53,31 +52,30 @@ class HUDStage(viewport: Viewport,
         play.pad(tablePad)
         play.top()
         play.add(pauseButton).expandX().left()
-        play.add<Label>(scorePlay).expandX().right()
+        play.add(scorePlay).expandX().right()
         play.row()
-        play.add<Label>(coinsPlay).expand().colspan(2).bottom().right()
+        play.add(coinsPlay).expand().colspan(2).bottom().right()
         addActor(play)
+
         // Pause HUD
         pause = Table()
         pause.setFillParent(true)
         pause.pad(tablePad)
         pause.top()
-        pause.add<Label>(scorePause).colspan(2).expandX().right()
+        pause.add(scorePause).colspan(2).expandX().right()
         pause.row()
         pause.add(playButton).expand()
         pause.add(homeButtonFromPause).expand()
         pause.row()
-        pause.add<Label>(coinsPause).colspan(2).expandX().right()
+        pause.add(coinsPause).colspan(2).expandX().right()
         addActor(pause)
     }
 
     override fun act(delta: Float) {
-        scorePlay.setText(state.current_game!!.score.points.toString())
-        builder.append(state.current_game!!.score.coins)
-        coinsPlay.setText(builder)
-        scorePause.setText(state.current_game!!.score.points.toString())
-        coinsPause.setText(builder)
-        builder.delete(0, builder.length)
+        scorePlay.setText(state.current_game!!.score.points)
+        coinsPlay.setText(state.current_game!!.score.coins)
+        scorePause.setText(state.current_game!!.score.points)
+        coinsPause.setText(state.current_game!!.score.coins)
 
         pause.isVisible = state.current_game!!.paused
         play.isVisible = !state.current_game!!.paused

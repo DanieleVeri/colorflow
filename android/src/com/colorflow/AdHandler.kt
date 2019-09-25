@@ -3,7 +3,7 @@ package com.colorflow
 import android.app.Activity
 import android.os.Handler
 import android.os.Message
-import com.colorflow.os.IAdHandler
+import com.colorflow.ads.IAdHandler
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback

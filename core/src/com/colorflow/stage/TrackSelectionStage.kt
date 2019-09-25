@@ -1,20 +1,18 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
-import com.colorflow.CurrentGame
-import com.colorflow.GameState
-import com.colorflow.ScreenType
-import com.colorflow.os.IAdHandler
-import com.colorflow.os.IMusicAnalyzer
-import com.colorflow.os.IMusicManager
-import com.colorflow.utils.ButtonListener
-import kotlin.concurrent.thread
+import com.colorflow.state.CurrentGame
+import com.colorflow.state.GameState
+import com.colorflow.state.ScreenType
+import com.colorflow.ads.IAdHandler
+import com.colorflow.music.IMusicAnalyzer
+import com.colorflow.music.IMusicManager
+import com.colorflow.graphic.ButtonListener
 
 class TrackSelectionStage (
         viewport: Viewport,

@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
 import com.colorflow.AssetProvider
-import com.colorflow.utils.Color
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Color
+import com.colorflow.graphic.Position
 
 class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<Entity>) {
     lateinit var type: Type

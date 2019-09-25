@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
-import com.colorflow.GameState
-import com.colorflow.utils.Position
+import com.colorflow.state.GameState
+import com.colorflow.graphic.Position
 
 abstract class UiScreen<T : Stage>(
         protected var state: GameState,

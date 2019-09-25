@@ -1,7 +1,4 @@
-package com.colorflow.os
-
-import com.colorflow.Ring
-import com.colorflow.Track
+package com.colorflow.state
 
 interface IStorage {
     fun get_version(): String

@@ -1,6 +1,6 @@
 package com.colorflow.play.entity
 
-import com.colorflow.utils.Position
+import com.colorflow.graphic.Position
 
 class Path(var type: Type,
            var pos: Position.Radial,
