@@ -54,7 +54,12 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
 
             val current = System.currentTimeMillis() - _start_time - _paused
             val sample = _beat_map[_current_track]!!.find { it.ms.toLong() >=  current}
-            sample ?: return@launch
+            if(sample == null) {
+                listeners.forEach {
+                     it.on_completition()
+                }
+                return@launch
+            }
 
             Gdx.app.log(this@MusicAnalyzer::class.java.simpleName, sample.confidence.toString())
             delay(sample.ms.toLong() - current)

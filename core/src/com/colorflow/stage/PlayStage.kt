@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.play.BackgroundManager
 import com.colorflow.play.EntitySpawner
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.bonus.Bonus
@@ -19,41 +17,30 @@ import com.colorflow.play.ring.Ring
 import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
-import com.colorflow.graphic.effects.ExplosionPool
-import com.colorflow.graphic.effects.ShockWave
 import com.colorflow.music.BeatSample
 import com.colorflow.music.IEventListener
 import kotlinx.coroutines.delay
 
 class PlayStage(viewport: Viewport,
                 protected val state: GameState,
-                protected val assets: AssetProvider) : Stage(viewport), IEventListener {
+                protected val assets: AssetProvider) : EffectStage(viewport), IEventListener {
 
     protected val dot_pool = DotPool(assets)
     protected val bonus_pool = BonusPool(assets)
-    protected val explosion_pool = ExplosionPool()
-    protected val shockwave_layer = ShockWave()
+
     protected val spawner: EntitySpawner = EntitySpawner(dot_pool, bonus_pool)
-    protected val background: BackgroundManager = BackgroundManager()
     protected var ring: Ring = Ring(assets, state.ring_list.find { it.used }!!.src)
 
     protected var delta_alpha = 1.0f
     protected var confidence_threshold = .10f
 
-    fun reset() {
-        shockwave_layer.children.filter { it is Entity }.forEach { (it as Entity).destroy {} }
-        shockwave_layer.clear()
-        spawner.reset()
-        background.reset()
-        ring = Ring(assets, state.ring_list.find { it.used }!!.src)
+    fun update() {
+        actors.filter { it is Entity }.forEach { (it as Entity).destroy {} }
         clear()
-        super.addActor(shockwave_layer)
-        addActor(background)
+        spawner.reset()
+        shockwave(Position.center)
+        ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         addActor(ring)
-    }
-
-    override fun addActor(actor: Actor?) {
-        shockwave_layer.addActor(actor)
     }
 
     override fun act(delta: Float) {
@@ -68,7 +55,7 @@ class PlayStage(viewport: Viewport,
     }
 
     protected fun handle_collisions() {
-        val collisions = shockwave_layer.children.filter {
+        val collisions = actors.filter {
             it is Entity && Intersector.overlaps(it.bounds, ring.circle) }
         collisions.forEach {
             if(it is Bonus) {
@@ -78,8 +65,8 @@ class PlayStage(viewport: Viewport,
                     when (bonus.type) {
                         Bonus.Type.BOMB -> {
                             state.current_game!!.score.points += 400
-                            shockwave_layer.start(Position.center.x, Position.center.y)
-                            shockwave_layer.children.forEach { dot ->
+                            shockwave(Position.center)
+                            actors.forEach { dot ->
                                 if(dot is Dot ) {
                                     dot.addAction(Actions.removeActor())
                                     explosion(dot.colour.rgb, dot.path.pos)
@@ -120,6 +107,8 @@ class PlayStage(viewport: Viewport,
 
     override suspend fun on_beat(sample: BeatSample) {
         if (sample.confidence < confidence_threshold) return
+        Gdx.app.debug(this::class.java.simpleName, sample.bpm.toString())
+        set_bg_color(Color(sample.confidence, sample.confidence, sample.confidence, 1f))
         spawner.dyn_velocity *= 3f
         ring.setScale(1.1f)
         delay(100)
@@ -127,16 +116,22 @@ class PlayStage(viewport: Viewport,
         spawner.dyn_velocity /= 3f
     }
 
-    protected fun explosion(color: Color, position: Position) {
-        val obj = explosion_pool.get()
-        addActor(obj)
-        obj.start(color, position)
+    override fun on_completition() {
+        shockwave(Position.center)
+        actors.forEach { dot ->
+            if(dot is Dot ) {
+                dot.addAction(Actions.removeActor())
+                explosion(dot.colour.rgb, dot.path.pos)
+            }
+        }
+        val action = RunnableAction()
+        action.runnable = Runnable { state.current_game!!.gameover = true }
+        addAction(Actions.delay(1f, action))
     }
 
     override fun dispose() {
         dot_pool.clear()
         bonus_pool.clear()
-        explosion_pool.clear()
         super.dispose()
     }
 

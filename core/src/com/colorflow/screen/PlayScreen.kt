@@ -1,5 +1,6 @@
 package com.colorflow.screen
 
+import com.badlogic.gdx.Gdx
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
 import com.colorflow.stage.HUDStage
@@ -49,6 +50,7 @@ class PlayScreen(
     protected fun game_over() {
         music_manager.stop()
         music_analyzer.pause_time()
+        assets.get_sound("backspin").play(1f)
         state.set_screen(ScreenType.GAME_OVER)
     }
 
@@ -79,7 +81,7 @@ class PlayScreen(
     }
 
     override fun show() {
-        play_stage.reset()
+        play_stage.update()
         super.show()
     }
 

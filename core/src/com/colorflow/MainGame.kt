@@ -41,11 +41,11 @@ class MainGame(
         game_state.set_screen(ScreenType.LOAD)
 
         thread {
-            Gdx.app.debug("LoaderThread", "start loading game state")
+            Gdx.app.debug("LoaderThread", "shockwave loading game state")
             game_state.load()
             Gdx.app.debug("LoaderThread", "game state loaded")
 
-            Gdx.app.debug("LoaderThread", "start loading assets")
+            Gdx.app.debug("LoaderThread", "shockwave loading assets")
             copy_internal_tracks()
             assets = AssetProvider()
             Gdx.app.postRunnable {
