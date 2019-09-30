@@ -8,7 +8,8 @@ import com.colorflow.AssetProvider
 import com.colorflow.graphic.Color
 import com.colorflow.graphic.Position
 
-class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<Entity>) {
+class Dot(assets: AssetProvider,
+          protected val pool: DotPool) : Entity(assets) {
     lateinit var type: Type
         protected set
     lateinit var colour: Color
@@ -18,8 +19,8 @@ class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<
         this.type = type
         this.colour = color
         when (type) {
-            Type.STD -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_std")
-            Type.REVERSE -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_reverse")
+            Type.STD -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_std")
+            Type.REVERSE -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_reverse")
         }
         this.initTrail(color)
         path.type = pathType
@@ -42,12 +43,8 @@ class Dot(assets: AssetProvider, pool: Pool<Dot>) : Entity(assets, pool as Pool<
     }
 
     override fun destroy(cb: (Entity)->Unit) {
-        _pool.free(this)
+        pool.free(this)
         super.destroy(cb)
-    }
-
-    override fun dispose() {
-        super.dispose()
     }
 
     override fun reset() {}

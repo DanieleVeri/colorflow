@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
 import com.colorflow.ads.IAdHandler
+import com.colorflow.music.Music
 import com.colorflow.state.IStorage
 import com.colorflow.screen.*
 import com.colorflow.state.GameState
@@ -21,6 +22,7 @@ class MainGame(
 
     protected lateinit var assets: AssetProvider
     protected val game_state: GameState
+    protected val music: Music
     protected var disposed = false
 
     protected lateinit var load: Screen
@@ -32,12 +34,13 @@ class MainGame(
 
     init {
         game_state = GameState(persistence, this::set_screen_listener)
+        music = Music(music_analyzer, music_manager)
     }
 
     override fun create() {
         Gdx.app.logLevel = LOG_DEBUG
 
-        load = LoadingScreen(game_state, music_manager, music_analyzer)
+        load = LoadingScreen(game_state, music)
         game_state.set_screen(ScreenType.LOAD)
 
         thread {
@@ -53,10 +56,10 @@ class MainGame(
                 Gdx.app.debug("LoaderThread", "assets ready")
 
                 menu = MenuScreen(game_state, assets)
-                play = PlayScreen(game_state, assets, music_manager, music_analyzer)
+                play = PlayScreen(game_state, assets, music)
                 shop = ShopScreen(game_state, assets, ad_handler)
                 game_over = GameOverScreen(game_state, assets, ad_handler)
-                track_selection = TrackSelectionScreen(game_state, assets, ad_handler, music_manager, music_analyzer)
+                track_selection = TrackSelectionScreen(game_state, assets, ad_handler)
 
                 game_state.set_screen(ScreenType.MENU)
             }
@@ -73,6 +76,7 @@ class MainGame(
         assets.dispose()
         track_selection.dispose()
         game_over.dispose()
+        music.dispose()
 
         super.dispose()
     }

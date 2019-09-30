@@ -12,9 +12,8 @@ import com.badlogic.gdx.utils.Pool
 import com.colorflow.AssetProvider
 import com.colorflow.graphic.Position
 
-abstract class Entity protected constructor(
-        protected val _assets: AssetProvider,
-        protected val _pool: Pool<Entity>) : Actor(), Pool.Poolable, Disposable {
+abstract class Entity (
+        protected val assets: AssetProvider) : Actor(), Pool.Poolable, Disposable {
 
     var path: Path
     var bounds: Circle; protected set
@@ -38,7 +37,7 @@ abstract class Entity protected constructor(
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
-        trail.draw(batch)
+        //trail.draw(batch)
         batch!!.draw(texture, x, y, width / 2, height / 2, width, height, 1f, 1f, rotation)
     }
 
@@ -49,13 +48,14 @@ abstract class Entity protected constructor(
         addAction(Actions.moveTo(
                 path.pos.x - texture.regionWidth / 2,
                 path.pos.y - texture.regionHeight / 2))
-        /* Trail */
+        /* Trail
         trail.setPosition(position.x, position.y)
         val angle = position.angleRadial
         trail.emitters.first().angle.setHigh(angle - 45, angle + 45)
         trail.emitters.first().angle.setLow(angle - 45, angle + 45)
         trail.flipY()
         trail.update(delta)
+        */
         /* Processing actions */
         super.act(delta)
         if (!isVisible) {
@@ -67,10 +67,6 @@ abstract class Entity protected constructor(
         isVisible = false
         cb(this)
         super.remove()
-    }
-
-    override fun remove(): Boolean {
-        return super.remove()
     }
 
     override fun dispose() {

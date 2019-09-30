@@ -18,17 +18,15 @@ class TrackSelectionStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler,
-        protected val music_manager: IMusicManager,
-        protected val music_analyzer: IMusicAnalyzer): Stage(viewport) {
+        protected val ad_handler: IAdHandler): Stage(viewport) {
 
     init {
         val home_button = ImageButton(assets.get_skin("Shop"), "Home")
-        home_button.addListener(ButtonListener(assets) { state.set_screen(ScreenType.MENU) })
+        home_button.addListener(ButtonListener(assets, home_button) { state.set_screen(ScreenType.MENU) })
 
         val track_label = Label("Track: 0", assets.get_skin("Menu"), "Title")
         val play_button = ImageButton(assets.get_skin("Menu"), "Play")
-        play_button.addListener(ButtonListener(assets) {
+        play_button.addListener(ButtonListener(assets, play_button) {
             state.current_game = CurrentGame("0")
             state.set_screen(ScreenType.LOAD)
         })

@@ -1,7 +1,6 @@
 package com.colorflow.stage
 
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -35,15 +34,15 @@ class GameOverStage (
         ad_button = ImageButton(assets.get_skin("Play"), "Ads")
         val home_button = ImageButton(assets.get_skin("Play"), "Home")
 
-        restart_button.addListener(ButtonListener(assets) {
+        restart_button.addListener(ButtonListener(assets, restart_button) {
             save_result()
             state.current_game = CurrentGame(state.current_game!!.selected_track)
             state.set_screen(ScreenType.LOAD)
         })
-        ad_button.addListener(ButtonListener(assets) {
+        ad_button.addListener(ButtonListener(assets, ad_button) {
             ad_handler.show_ad()
         })
-        home_button.addListener(ButtonListener(assets) {
+        home_button.addListener(ButtonListener(assets, home_button) {
             save_result()
             state.current_game = null
             state.set_screen(ScreenType.MENU)
@@ -65,7 +64,7 @@ class GameOverStage (
     }
 
     fun update() {
-        ad_button.touchable = Touchable.enabled
+        ad_button.isDisabled = false
 
         if (state.current_game!!.score.points <= state.record)
             score.setText("SCORE: " + state.current_game!!.score.points + "\nRECORD: " + state.record)
@@ -75,8 +74,8 @@ class GameOverStage (
     }
 
     fun reward() {
-        ad_button.touchable = Touchable.disabled
-
+        ad_button.isDisabled = true
+        assets.get_sound("cash").play(1f)
         state.current_game!!.score.coins *= 2
         save_result()
         coins.setText("COINS: " + state.current_game!!.score.coins)

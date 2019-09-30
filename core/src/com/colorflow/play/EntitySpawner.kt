@@ -10,39 +10,27 @@ import com.colorflow.play.entity.dot.DotPool
 import com.colorflow.graphic.Position
 import kotlin.collections.ArrayList
 
-class EntitySpawner(private val _dot_pool: DotPool,
-        private val _bonus_pool: BonusPool) {
+class EntitySpawner(protected val dot_pool: DotPool,
+                    protected val bonus_pool: BonusPool) {
 
     var dyn_velocity = 2.5f
     var dot_speed: Float = 2.5f
     var bonus_speed: Float = 1f
     var dot_path: Path.Type = Path.Type.RADIAL_DYNAMIC
-    var bomb_chance: Float = 0.1f
+    var bomb_chance: Float = 1.0f
     var gold_chance: Float = 0.1f
     var delta_time_spawn: Float = 2f
-
-    private var _timer: Float = 0f
-
-    fun reset() {
-        dot_speed = 2.5f
-        dyn_velocity = 2.5f
-        bonus_speed = 1f
-        bomb_chance = 0.1f
-        gold_chance = 0.1f
-        dot_path = Path.Type.RADIAL_DYNAMIC
-        delta_time_spawn = 2f
-        _timer = 0f
-    }
+    protected var timer: Float = 0f
 
     fun update_time(delta: Float) {
-        _timer += delta
+        timer += delta
     }
 
     fun spawn(): List<Entity>
     {
         val list = ArrayList<Entity>()
-        if(_timer > delta_time_spawn) {
-            _timer = 0f
+        if(timer > delta_time_spawn) {
+            timer = 0f
             list.addAll(_wave_dot_mix(6))
             if (Math.random() < bomb_chance)
                 list.add(_bomb())
@@ -69,10 +57,10 @@ class EntitySpawner(private val _dot_pool: DotPool,
                         picked_colors[0])))
             }
             if (Math.random() < 0.5) {
-                list.add(_dot_pool.get(Dot.Type.STD, picked_colors[picked_colors.size - 1],
+                list.add(dot_pool.get(Dot.Type.STD, picked_colors[picked_colors.size - 1],
                         dot_path, start_pos, dot_speed))
             } else {
-                list.add(_dot_pool.get(Dot.Type.REVERSE,
+                list.add(dot_pool.get(Dot.Type.REVERSE,
                         Color.getRandomExcept(picked_colors.subList(picked_colors.size - 1, picked_colors.size)),
                         dot_path, start_pos, dot_speed))
             }
@@ -81,12 +69,12 @@ class EntitySpawner(private val _dot_pool: DotPool,
     }
 
     private fun _bomb(): Bonus {
-        return _bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL_STATIC,
+        return bonus_pool.get(Bonus.Type.BOMB, Path.Type.RADIAL_STATIC,
                 Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
     }
 
     private fun _gold(): Bonus {
-        return _bonus_pool.get(Bonus.Type.GOLD, Path.Type.RADIAL_STATIC,
+        return bonus_pool.get(Bonus.Type.GOLD, Path.Type.RADIAL_STATIC,
                 Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST), bonus_speed)
     }
 

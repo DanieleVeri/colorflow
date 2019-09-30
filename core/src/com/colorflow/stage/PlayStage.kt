@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.play.EntitySpawner
 import com.colorflow.play.entity.Entity
@@ -27,17 +25,16 @@ class PlayStage(viewport: Viewport,
 
     protected val dot_pool = DotPool(assets)
     protected val bonus_pool = BonusPool(assets)
-
-    protected val spawner: EntitySpawner = EntitySpawner(dot_pool, bonus_pool)
+    protected var spawner: EntitySpawner = EntitySpawner(dot_pool, bonus_pool)
     protected var ring: Ring = Ring(assets, state.ring_list.find { it.used }!!.src)
-
     protected var delta_alpha = 1.0f
     protected var confidence_threshold = .10f
 
     fun update() {
-        actors.filter { it is Entity }.forEach { (it as Entity).destroy {} }
+        dot_pool.destroy_all()
+        bonus_pool.destroy_all()
         clear()
-        spawner.reset()
+        spawner = EntitySpawner(dot_pool, bonus_pool)
         shockwave(Position.center)
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         addActor(ring)
@@ -66,17 +63,17 @@ class PlayStage(viewport: Viewport,
                         Bonus.Type.BOMB -> {
                             state.current_game!!.score.points += 400
                             shockwave(Position.center)
-                            actors.forEach { dot ->
-                                if(dot is Dot ) {
-                                    dot.addAction(Actions.removeActor())
-                                    explosion(dot.colour.rgb, dot.path.pos)
-                                }
+                            dot_pool.destroy_all { dot ->
+                                explosion(dot.colour.rgb, dot.path.pos)
                             }
                         }
                         Bonus.Type.GOLD -> {
+                            assets.get_sound("coins").play(1f)
                             state.current_game!!.score.coins += 10
                         }
-                        else -> throw IllegalStateException()
+                        Bonus.Type.TODO -> {
+
+                        }
                     }
                 }
             } else if (it is Dot) {
@@ -91,11 +88,11 @@ class PlayStage(viewport: Viewport,
                             state.current_game!!.score.points += 10
                         } else {
                             Gdx.input.vibrate(200)
-                            state.current_game!!.gameover = true
+                            game_over()
                         }
                         Dot.Type.REVERSE -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
                             Gdx.input.vibrate(200)
-                            state.current_game!!.gameover = true
+                            game_over()
                         } else {
                             state.current_game!!.score.points += 10
                         }
@@ -103,6 +100,12 @@ class PlayStage(viewport: Viewport,
                 }
             }
         }
+    }
+
+    protected fun game_over() {
+        state.current_game!!.gameover = true
+        dot_pool.destroy_all()
+        bonus_pool.destroy_all()
     }
 
     override suspend fun on_beat(sample: BeatSample) {
@@ -116,18 +119,7 @@ class PlayStage(viewport: Viewport,
         spawner.dyn_velocity /= 3f
     }
 
-    override fun on_completition() {
-        shockwave(Position.center)
-        actors.forEach { dot ->
-            if(dot is Dot ) {
-                dot.addAction(Actions.removeActor())
-                explosion(dot.colour.rgb, dot.path.pos)
-            }
-        }
-        val action = RunnableAction()
-        action.runnable = Runnable { state.current_game!!.gameover = true }
-        addAction(Actions.delay(1f, action))
-    }
+    override fun on_completition() {}
 
     override fun dispose() {
         dot_pool.clear()

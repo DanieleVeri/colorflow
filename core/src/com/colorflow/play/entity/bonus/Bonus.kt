@@ -1,12 +1,12 @@
 package com.colorflow.play.entity.bonus
 
-import com.badlogic.gdx.utils.Pool
 import com.colorflow.play.entity.Entity
 import com.colorflow.play.entity.Path
 import com.colorflow.AssetProvider
 import com.colorflow.graphic.Position
 
-class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as Pool<Entity>) {
+class Bonus(assets: AssetProvider,
+            protected val pool: BonusPool) : Entity(assets) {
     lateinit var type: Type
         protected set
 
@@ -17,9 +17,9 @@ class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as P
         colors[1] = 1f
         colors[2] = 1f
         when (type) {
-            Type.BOMB -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("bonus_bomb")
-            Type.GOLD -> this.texture = _assets.get_skin("play_stage").atlas.findRegion("dot_coin")
-            else -> throw IllegalStateException()
+            Type.BOMB -> this.texture = assets.get_skin("play_stage").atlas.findRegion("bonus_bomb")
+            Type.GOLD -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_coin")
+            Type.TODO -> null
         }
         path.type = pathType
         path.pos = start
@@ -34,17 +34,13 @@ class Bonus(assets: AssetProvider, pool: Pool<Bonus>) : Entity(assets, pool as P
     }
 
     override fun destroy(cb: (Entity)->Unit) {
-        _pool.free(this)
+        pool.free(this)
         super.destroy(cb)
-    }
-
-    override fun dispose() {
-        super.dispose()
     }
 
     override fun reset() {}
 
     enum class Type {
-        BOMB, GOLD, MAGNETIC
+        BOMB, GOLD, TODO
     }
 }

@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.media.audiofx.Equalizer
 import android.net.Uri
 import android.util.Log
+import com.badlogic.gdx.Gdx
 
 class MusicManager(private val context: Context):
         IMusicManager,
@@ -12,6 +13,8 @@ class MusicManager(private val context: Context):
         MediaPlayer.OnErrorListener {
 
     private var media_player: MediaPlayer
+    override var on_completition_cb: () -> Unit = {}
+    override var on_error_cb: () -> Unit = {}
 
     init {
         media_player = MediaPlayer()
@@ -44,17 +47,18 @@ class MusicManager(private val context: Context):
     }
 
     override fun onCompletion(mp: MediaPlayer) {
+        on_completition_cb()
         mp.reset()
     }
 
     override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
         Log.e("Error MediaPlayer",
                 "what: " + what.toString() + " extra: " + extra.toString())
+        on_error_cb()
         return false
     }
 
-    fun release() {
-        stop()
+    override fun release() {
         media_player.release()
     }
 

@@ -6,4 +6,7 @@ interface IMusicManager {
     fun play()
     fun pause()
     fun stop()
+    fun release()
+    var on_completition_cb: ()->Unit
+    var on_error_cb: ()->Unit
 }

@@ -25,7 +25,9 @@ class ShopStage (
         table.setFillParent(true)
         table.pad(30f)
         homeBtn = ImageButton(assets.get_skin("Shop"), "Home")
-        homeBtn.addListener(ButtonListener(assets, on_tap = {state.set_screen(ScreenType.MENU)}))
+        homeBtn.addListener(ButtonListener(assets, homeBtn) {
+            state.set_screen(ScreenType.MENU)
+        })
         coin_label = Label("", assets.get_skin("Shop"), "Coins")
         val title = Label("Have a lucky day", assets.get_skin("Shop"), "Title")
         table.add<ImageButton>(homeBtn).left()

@@ -20,7 +20,7 @@ class MenuStage (
     private var recordLabel: Label
     private var coinsLabel: Label
     private var play_button: Button
-    private var slot_button: Button
+    private var shop_button: Button
     private var ring: Ring
     private var dy = 0.0
 
@@ -29,9 +29,9 @@ class MenuStage (
         recordLabel = Label("REC0RD: " + state.record, assets.get_skin("Menu"), "Menu")
         coinsLabel = Label("COINS: " + state.coins, assets.get_skin("Menu"), "Menu")
         play_button = ImageButton(assets.get_skin("Menu"), "Play")
-        slot_button = ImageButton(assets.get_skin("Menu"), "Slot")
-        play_button.addListener(ButtonListener(assets) {state.set_screen(ScreenType.TRACK_SELECTION)})
-        slot_button.addListener(ButtonListener(assets) {state.set_screen(ScreenType.SHOP)})
+        shop_button = ImageButton(assets.get_skin("Menu"), "Slot")
+        play_button.addListener(ButtonListener(assets, play_button) {state.set_screen(ScreenType.TRACK_SELECTION)})
+        shop_button.addListener(ButtonListener(assets, shop_button) {state.set_screen(ScreenType.SHOP)})
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
 
         val table = Table()
@@ -44,7 +44,7 @@ class MenuStage (
         table.add(play_button).expandY()
         table.add<Label>(recordLabel).expandY()
         table.row()
-        table.add(slot_button).expandY()
+        table.add(shop_button).expandY()
         table.add<Label>(coinsLabel).expandY()
         this.addActor(table)
     }
@@ -54,7 +54,7 @@ class MenuStage (
         coinsLabel.setText("COINS: " + state.coins)
         ring.rotateBy(1f)
         play_button.moveBy(0f, Math.sin(dy).toFloat() / 2)
-        slot_button.moveBy(0f, Math.sin(1+dy).toFloat() / 2)
+        shop_button.moveBy(0f, Math.sin(1+dy).toFloat() / 2)
         dy += delta.toDouble()
         super.act(delta)
     }

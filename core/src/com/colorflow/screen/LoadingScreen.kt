@@ -7,14 +7,14 @@ import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
+import com.colorflow.music.Music
 import com.colorflow.state.Score
 import kotlin.concurrent.thread
 import kotlin.math.sin
 
 class LoadingScreen(
         protected val state: GameState,
-        protected val music_manager: IMusicManager,
-        protected val music_analyzer: IMusicAnalyzer): Screen {
+        protected val music: Music): Screen {
 
     private var t = -Math.PI / 2
 
@@ -30,12 +30,10 @@ class LoadingScreen(
     override fun show() {
         if(state.current_game != null) {
             thread {
-                Gdx.app.debug(this::class.java.simpleName, "reset music manager and load track '${state.current_game!!.selected_track}'")
-                music_manager.reset()
-                music_manager.load(state.current_game!!.selected_track)
                 Gdx.app.debug(this::class.java.simpleName, "music analyzer prepare track '${state.current_game!!.selected_track}'")
-                music_analyzer.analyze(state.current_game!!.selected_track)
-                music_analyzer.prepare(state.current_game!!.selected_track)
+                music.analyze(state.current_game!!.selected_track)
+                Gdx.app.debug(this::class.java.simpleName, "reset music manager and load track '${state.current_game!!.selected_track}'")
+                music.prepare(state.current_game!!.selected_track)
                 val paused = state.current_game!!.paused
                 Gdx.app.postRunnable {
                     Gdx.app.debug(this::class.java.simpleName, "score reset")

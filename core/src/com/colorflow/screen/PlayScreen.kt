@@ -1,19 +1,18 @@
 package com.colorflow.screen
 
-import com.badlogic.gdx.Gdx
-import com.colorflow.music.IMusicAnalyzer
-import com.colorflow.music.IMusicManager
 import com.colorflow.stage.HUDStage
 import com.colorflow.stage.PlayStage
 import com.colorflow.AssetProvider
+import com.colorflow.music.BeatSample
+import com.colorflow.music.IEventListener
+import com.colorflow.music.Music
 import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
 
 class PlayScreen(
         game_state: GameState,
         assets: AssetProvider,
-        private val music_manager: IMusicManager,
-        private val music_analyzer: IMusicAnalyzer) : UiScreen<PlayStage>(game_state, assets) {
+        private val music: Music) : UiScreen<PlayStage>(game_state, assets), IEventListener {
 
     private val play_stage: PlayStage
     private val hud_stage: HUDStage
@@ -23,7 +22,8 @@ class PlayScreen(
     init {
         play_stage = PlayStage(viewport, game_state, assets)
         hud_stage = HUDStage(viewport, game_state, assets)
-        music_analyzer.add_listener(play_stage)
+        music.add_listener(play_stage)
+        music.add_listener(this)
     }
 
     override fun render(delta: Float) {
@@ -48,17 +48,19 @@ class PlayScreen(
     }
 
     protected fun game_over() {
-        music_manager.stop()
-        music_analyzer.pause_time()
+        music.stop()
         assets.get_sound("backspin").play(1f)
         state.set_screen(ScreenType.GAME_OVER)
     }
 
+    override fun on_completition() {
+        assets.get_sound("complete").play(1f)
+        state.set_screen(ScreenType.GAME_OVER)
+    }
+
     protected fun game_pause() {
-        if(state.current_game!!.started) {
-            music_manager.pause()
-            music_analyzer.pause_time()
-        }
+        if(state.current_game!!.started)
+            music.pause()
         multiplexer.clear()
         multiplexer.addProcessor(hud_stage)
     }
@@ -68,8 +70,7 @@ class PlayScreen(
             state.current_game!!.started = true
             assets.get_sound("start").play(1f)
         }
-        music_manager.play()
-        music_analyzer.play_time()
+        music.play()
         multiplexer.clear()
         multiplexer.addProcessor(play_stage)
         multiplexer.addProcessor(play_stage.get_ring_listener())
@@ -93,4 +94,6 @@ class PlayScreen(
         play_stage.dispose()
         hud_stage.dispose()
     }
+
+    override suspend fun on_beat(sample: BeatSample) {}
 }
