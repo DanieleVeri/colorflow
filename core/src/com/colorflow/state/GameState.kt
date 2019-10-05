@@ -44,11 +44,11 @@ enum class ScreenType {
     GAME_OVER}
 
 data class CurrentGame (
-        val selected_track: String,
-        var score: Score = Score(),
-        var gameover: Boolean = false,
-        var paused: Boolean = false,
-        var started: Boolean = false)
+    val selected_track: String,
+    var score: Score = Score(),
+    var gameover: Boolean = false,
+    var paused: Boolean = false,
+    var started: Boolean = false)
 
 data class Score (
     var multiplier: Float = 1f,

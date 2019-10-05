@@ -82,7 +82,7 @@ class PlayScreen(
     }
 
     override fun show() {
-        play_stage.update()
+        play_stage.reset()
         super.show()
     }
 

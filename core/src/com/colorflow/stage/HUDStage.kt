@@ -78,7 +78,6 @@ class HUDStage(viewport: Viewport,
         coins_play_label.setText(state.current_game!!.score.coins)
         pause.isVisible = state.current_game!!.paused
         play.isVisible = !state.current_game!!.paused
-
         super.act(delta)
     }
 

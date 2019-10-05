@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
-import com.colorflow.play.ring.Ring
+import com.colorflow.engine.ring.Ring
 import com.colorflow.graphic.ButtonListener
 
 class MenuStage (

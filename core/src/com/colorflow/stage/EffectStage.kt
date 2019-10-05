@@ -3,10 +3,12 @@ package com.colorflow.stage
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.graphic.Position
-import com.colorflow.graphic.effects.EffectLayer
+import com.colorflow.engine.background.EffectLayer
 import com.colorflow.graphic.effects.ExplosionPool
 
 open class EffectStage(viewport: Viewport) : Stage(viewport) {
@@ -31,8 +33,10 @@ open class EffectStage(viewport: Viewport) : Stage(viewport) {
         return effect_layer.children
     }
 
-    protected fun shockwave(position: Position) {
-        effect_layer.shockwave(position.x, position.y)
+    override fun dispose() {
+        effect_layer.dispose()
+        explosion_pool.clear()
+        super.dispose()
     }
 
     protected fun explosion(color: Color, position: Position) {
@@ -41,14 +45,31 @@ open class EffectStage(viewport: Viewport) : Stage(viewport) {
         obj.start(color, position)
     }
 
-    protected fun set_bg_color(color: Color) {
-        effect_layer.background_color = color
+    protected fun arc_fadein() {
+        val action = RunnableAction()
+        action.runnable = Runnable {
+            if(effect_layer.arcs.radius_offset <= 0)
+                return@Runnable
+            effect_layer.arcs.radius_offset -= 3f
+            effect_layer.arcs.addAction(Actions.delay(0.03f, action))
+        }
+        effect_layer.arcs.addAction(Actions.delay(0.03f, action))
     }
 
-    override fun dispose() {
-        effect_layer.dispose()
-        explosion_pool.clear()
-        super.dispose()
+    protected fun arc_fadeout() {
+        val action = RunnableAction()
+        action.runnable = Runnable {
+            if(effect_layer.arcs.radius_offset > MAX_VISIBLE)
+                return@Runnable
+            effect_layer.arcs.radius_offset += 3f
+            effect_layer.arcs.addAction(Actions.delay(0.03f, action))
+        }
+        effect_layer.arcs.addAction(Actions.delay(0.03f, action))
+    }
+
+    companion object {
+        val MAX_VISIBLE = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) +
+                Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
     }
 
 }
