@@ -13,6 +13,7 @@ import com.colorflow.engine.entity.dot.Dot
 import com.colorflow.engine.entity.dot.DotPool
 import com.colorflow.engine.ring.Ring
 import com.colorflow.AssetProvider
+import com.colorflow.engine.background.Arcs.Companion.MAX_VISIBLE
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
 import com.colorflow.music.BeatSample
@@ -25,7 +26,7 @@ class PlayStage(viewport: Viewport,
 
     protected val dot_pool = DotPool(assets)
     protected val bonus_pool = BonusPool(assets)
-    protected var coordinator: EntityCoordinator = EntityCoordinator(dot_pool, bonus_pool)
+    protected lateinit var coordinator: EntityCoordinator
     protected lateinit var ring: Ring
 
     protected var confidence_threshold = .10f
@@ -44,9 +45,7 @@ class PlayStage(viewport: Viewport,
         effect_layer.arcs.arc_width = ring.radius
         effect_layer.arcs.radius_offset = MAX_VISIBLE
         arc_fadein()
-        //effect_layer.twinkling()
-        effect_layer.glow()
-        effect_layer.shockwave(Position.center)
+        effect_layer.twinkling()
     }
 
     override fun act(delta: Float) {
@@ -70,6 +69,7 @@ class PlayStage(viewport: Viewport,
                         Bonus.Type.BOMB -> {
                             state.current_game!!.score.points += 400
                             effect_layer.shockwave(Position.center)
+                            effect_layer.glow(Position.center)
                             arc_fadeout()
                             dot_pool.destroy_all { dot ->
                                 explosion(dot.colour.rgb, dot.position)

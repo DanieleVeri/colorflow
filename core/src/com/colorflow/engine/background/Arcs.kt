@@ -16,7 +16,7 @@ class Arcs: Actor(), Disposable {
 
     val rot_vel = arrayOf(0.5f, 0.4f, 0.6f)
     val colors = arrayOf(Color.BLUE, Color.GREEN, Color.RED)
-    var radius_offset = 0f
+    var radius_offset = MAX_VISIBLE
     var arc_width: Float = 0f
 
     override fun act(delta: Float) {
@@ -38,7 +38,6 @@ class Arcs: Actor(), Disposable {
         shape.circle(Position.center.x, Position.center.y, arc_width*3)
         shape.circle(Position.center.x, Position.center.y, arc_width*4)
         shape.end()
-
         shape.begin(ShapeRenderer.ShapeType.Filled)
 
         shape.strokeArc(arc_width, Position.center.x, Position.center.y, arc_width*4+radius_offset,
@@ -69,5 +68,10 @@ class Arcs: Actor(), Disposable {
 
     override fun dispose() {
         shape.dispose()
+    }
+
+    companion object {
+        val MAX_VISIBLE = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) +
+                Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
     }
 }
