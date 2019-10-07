@@ -18,7 +18,7 @@ class Ring(asset_provider: AssetProvider, ring_id: String) : Actor() {
     private val listener: RingListener
 
     init {
-        this.texture = asset_provider.get_skin("play_stage").getRegion(ring_id)
+        this.texture = asset_provider.get_skin("game").getRegion(ring_id)
         this.radius = texture.regionWidth / 2f
         setBounds(Position.widthScreen / 2 - texture.regionWidth / 2, Position.heightScreen / 2 - texture.regionHeight / 2,
                 texture.regionWidth.toFloat(), texture.regionHeight.toFloat())

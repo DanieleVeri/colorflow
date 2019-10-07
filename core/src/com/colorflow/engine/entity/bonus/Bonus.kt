@@ -16,8 +16,8 @@ class Bonus(assets: AssetProvider,
         colors[1] = 1f
         colors[2] = 1f
         when (type) {
-            Type.BOMB -> this.texture = assets.get_skin("play_stage").atlas.findRegion("bonus_bomb")
-            Type.GOLD -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_coin")
+            Type.BOMB -> this.texture = assets.get_skin("game").atlas.findRegion("bonus_bomb")
+            Type.GOLD -> this.texture = assets.get_skin("game").atlas.findRegion("dot_coin")
             Type.TODO -> null
         }
         this.position.x = position.x

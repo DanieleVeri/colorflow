@@ -1,0 +1,82 @@
+
+ui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+shop
+  rotate: false
+  xy: 1, 197
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+menu_play
+  rotate: false
+  xy: 259, 197
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 1, 67
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+restart
+  rotate: false
+  xy: 517, 325
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ads
+  rotate: false
+  xy: 131, 67
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+new
+  rotate: false
+  xy: 647, 325
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 261, 67
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+track
+  rotate: false
+  xy: 1, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 517, 259
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lock
+  rotate: false
+  xy: 777, 421
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 391, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

@@ -18,8 +18,8 @@ class Dot(assets: AssetProvider,
         this.type = type
         this.colour = color
         when (type) {
-            Type.STD -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_std")
-            Type.REVERSE -> this.texture = assets.get_skin("play_stage").atlas.findRegion("dot_reverse")
+            Type.STD -> this.texture = assets.get_skin("game").atlas.findRegion("dot_std")
+            Type.REVERSE -> this.texture = assets.get_skin("game").atlas.findRegion("dot_reverse")
         }
         this.initTrail(color)
         this.position.x = position.x

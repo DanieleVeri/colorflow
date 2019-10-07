@@ -28,14 +28,14 @@ class HUDStage(viewport: Viewport,
 
     init {
         val tablePad = Position.heightScreen / 48f
-        score_play_label = Label("", assets.get_skin("Play"), "Score")
-        coins_play_label = Label("", assets.get_skin("Play"), "Score")
-        score_pause_label = Label("", assets.get_skin("Play"), "Score")
-        coins_pause_label = Label("", assets.get_skin("Play"), "Score")
+        score_play_label = Label("", assets.get_skin("ui"), "h3")
+        coins_play_label = Label("", assets.get_skin("ui"), "h3")
+        score_pause_label = Label("", assets.get_skin("ui"), "h3")
+        coins_pause_label = Label("", assets.get_skin("ui"), "h3")
 
-        val pause_button = ImageButton(assets.get_skin("Play"), "Pause")
-        val play_button = ImageButton(assets.get_skin("Play"), "Play")
-        val home_button = ImageButton(assets.get_skin("Play"), "Home")
+        val pause_button = ImageButton(assets.get_skin("ui"), "pause")
+        val play_button = ImageButton(assets.get_skin("ui"), "play")
+        val home_button = ImageButton(assets.get_skin("ui"), "back")
         pause_button.addListener(ButtonListener(assets, pause_button) {
             state.current_game!!.paused = true
         })

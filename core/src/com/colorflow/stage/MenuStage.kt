@@ -25,11 +25,11 @@ class MenuStage (
     private var dy = 0.0
 
     init {
-        val title = Label("COLORFLOW", assets.get_skin("Menu"), "Title")
-        recordLabel = Label("REC0RD: " + state.record, assets.get_skin("Menu"), "Menu")
-        coinsLabel = Label("COINS: " + state.coins, assets.get_skin("Menu"), "Menu")
-        play_button = ImageButton(assets.get_skin("Menu"), "Play")
-        shop_button = ImageButton(assets.get_skin("Menu"), "Slot")
+        val title = Label("COLORFLOW", assets.get_skin("ui"), "h1")
+        recordLabel = Label("REC0RD: " + state.record, assets.get_skin("ui"), "h2")
+        coinsLabel = Label("COINS: " + state.coins, assets.get_skin("ui"), "h2")
+        play_button = ImageButton(assets.get_skin("ui"), "menu_play")
+        shop_button = ImageButton(assets.get_skin("ui"), "shop")
         play_button.addListener(ButtonListener(assets, play_button) {state.set_screen(ScreenType.TRACK_SELECTION)})
         shop_button.addListener(ButtonListener(assets, shop_button) {state.set_screen(ScreenType.SHOP)})
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)

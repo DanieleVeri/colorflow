@@ -26,13 +26,13 @@ class GameOverStage (
     private val table: Table = Table()
 
     init {
-        score = Label("", assets.get_skin("Play"), "Score")
-        coins = Label("", assets.get_skin("Play"), "Score")
+        score = Label("", assets.get_skin("ui"), "h3")
+        coins = Label("", assets.get_skin("ui"), "h3")
 
-        val title = Label("GAME OVER", assets.get_skin("Play"), "GameOver")
-        val restart_button = ImageButton(assets.get_skin("Play"), "Redo")
-        ad_button = ImageButton(assets.get_skin("Play"), "Ads")
-        val home_button = ImageButton(assets.get_skin("Play"), "Home")
+        val title = Label("GAME OVER", assets.get_skin("ui"), "h1")
+        val restart_button = ImageButton(assets.get_skin("ui"), "restart")
+        ad_button = ImageButton(assets.get_skin("ui"), "ads")
+        val home_button = ImageButton(assets.get_skin("ui"), "back")
 
         restart_button.addListener(ButtonListener(assets, restart_button) {
             save_result()
