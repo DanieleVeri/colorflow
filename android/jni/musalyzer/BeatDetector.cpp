@@ -34,7 +34,7 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
     const char_t *source_path = env->GetStringUTFChars(path, 0);
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
     if (!source) {
-        __android_log_print(ANDROID_LOG_ERROR, APPNAME, "error loading music file");
+        __android_log_print(ANDROID_LOG_ERROR, "libmusalyzer", "error loading music file");
         return nullptr;
     }
 
@@ -47,13 +47,13 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         aubio_source_do(source, in, &read);
         aubio_tempo_do(beat_tracking_obj, in, out);
         if (out->data[0] != 0) {
-            /*
+/*
             __android_log_print(ANDROID_LOG_INFO, APPNAME,
                 "beat at %.3fms, %.3fs, frame %d, %.2fbpm with confidence %.2f\n",
                 aubio_tempo_get_last_ms(beat_tracking_obj), aubio_tempo_get_last_s(beat_tracking_obj),
                 aubio_tempo_get_last(beat_tracking_obj), aubio_tempo_get_bpm(beat_tracking_obj),
                 aubio_tempo_get_confidence(beat_tracking_obj));
-            */
+*/
             float conf = aubio_tempo_get_confidence(beat_tracking_obj);
             float ms = aubio_tempo_get_last_ms(beat_tracking_obj);
             float bpm = aubio_tempo_get_bpm(beat_tracking_obj);
@@ -73,9 +73,11 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
                         n_frames / hop_size, source_path);
 
     jobjectArray jBeatSampleArray = env->NewObjectArray(counter, jniBeatSample->cls, nullptr);
-    for (int i = 0; i < counter; i++)
-        env->SetObjectArrayElement(jBeatSampleArray, i,
-                                   struct2jobject(env, jniBeatSample, fill[i]));
+    for (int i = 0; i < counter; i++) {
+        jobject obj = struct2jobject(env, jniBeatSample, fill[i]);
+        env->SetObjectArrayElement(jBeatSampleArray, i, obj);
+        env->DeleteLocalRef(obj);
+    }
 
     del_aubio_tempo(beat_tracking_obj);
     del_fvec(in);

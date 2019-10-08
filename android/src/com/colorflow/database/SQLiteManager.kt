@@ -20,57 +20,17 @@ class SQLiteManager(context: Context):
         sqLiteDatabase.execSQL(DDL_CREATE_STATUS)
         sqLiteDatabase.execSQL(DDL_CREATE_RING)
         sqLiteDatabase.execSQL(DDL_CREATE_TRACK)
-        _init(sqLiteDatabase)
+        init(sqLiteDatabase)
     }
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {
-
+        // TODO
     }
 
     override fun close() {
         readable.close()
         writable.close()
         super.close()
-    }
-
-    private fun _init(sqLiteDatabase: SQLiteDatabase) {
-        val values = ContentValues()
-        // Status
-        values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.VERSION)
-        values.put(TABLES.STATUS.COL_VALUE, VERSION)
-        sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
-        values.clear()
-        values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.COINS)
-        values.put(TABLES.STATUS.COL_VALUE, "0")
-        sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
-        values.clear()
-        values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.RECORD)
-        values.put(TABLES.STATUS.COL_VALUE, "0")
-        sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
-        values.clear()
-
-        // Ring
-        values.put(TABLES.RING.COL_ID, "0")
-        values.put(TABLES.RING.COL_COST, 0)
-        values.put(TABLES.RING.COL_PURCHASED, 1)
-        values.put(TABLES.RING.COL_USED, 1)
-        values.put(TABLES.RING.COL_SRC, "ring")
-        sqLiteDatabase.insert(TABLES.RING.TAB_NAME, null, values)
-        values.clear()
-        values.put(TABLES.RING.COL_ID, "1")
-        values.put(TABLES.RING.COL_COST, 100)
-        values.put(TABLES.RING.COL_PURCHASED, 0)
-        values.put(TABLES.RING.COL_USED, 0)
-        values.put(TABLES.RING.COL_SRC, "ring")
-        sqLiteDatabase.insert(TABLES.RING.TAB_NAME, null, values)
-        values.clear()
-
-        // Tracks
-        values.put(TABLES.TRACK.COL_ID, "0")
-        values.put(TABLES.TRACK.COL_COST, 0)
-        values.put(TABLES.TRACK.COL_PURCHASED, 1)
-        values.put(TABLES.TRACK.COL_SRC, "0")
-        sqLiteDatabase.insert(TABLES.TRACK.TAB_NAME, null, values)
     }
 
     override fun transaction(task: ()->Unit) {
@@ -203,36 +163,9 @@ class SQLiteManager(context: Context):
     }
 
     companion object {
-        private const val NAME = "Data.db"
-        private const val VERSION = 1
+        const val NAME = "Data.db"
+        const val VERSION = 1
 
-        private val TABLES = object {
-            val TRACK = object {
-                val TAB_NAME = "TRACK"
-                val COL_ID = "ID"
-                val COL_COST = "COST"
-                val COL_PURCHASED = "PURCHASED"
-                val COL_SRC = "SRC"
-            }
-            val RING = object {
-                val TAB_NAME = "RING"
-                val COL_ID = "ID"
-                val COL_COST = "COST"
-                val COL_PURCHASED = "PURCHASED"
-                val COL_USED = "USED"
-                val COL_SRC = "SRC"
-            }
-            val STATUS = object {
-                val TAB_NAME = "STATUS"
-                val COL_KEY = "KEY"
-                val COL_VALUE = "VALUE"
-                val keys = object {
-                    val VERSION = "VERSION"
-                    val COINS = "COINS"
-                    val RECORD = "RECORD"
-                }
-            }
-        }
         private val DDL_CREATE_STATUS = "CREATE TABLE ${TABLES.STATUS.TAB_NAME}(" +
                 "${TABLES.STATUS.COL_KEY} TEXT," +
                 "${TABLES.STATUS.COL_VALUE} TEXT," +

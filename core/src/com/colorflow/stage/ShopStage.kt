@@ -15,30 +15,28 @@ class ShopStage (
         protected val assets: AssetProvider,
         protected val ad_handler: IAdHandler): Stage(viewport) {
 
-    private var coins = 0
-    private var table: Table
-    private var homeBtn: ImageButton
     private var coin_label: Label
 
     init {
-        table = Table()
-        table.setFillParent(true)
-        table.pad(30f)
-        homeBtn = ImageButton(assets.get_skin("ui"), "back")
-        homeBtn.addListener(ButtonListener(assets, homeBtn) {
+        val title = Label("Upgrade", assets.get_skin("ui"), "h1")
+        val home_button = ImageButton(assets.get_skin("ui"), "back")
+        home_button.addListener(ButtonListener(assets, home_button) {
             state.set_screen(ScreenType.MENU)
         })
         coin_label = Label("", assets.get_skin("ui"), "h3")
-        val title = Label("Have a lucky day", assets.get_skin("ui"), "h1")
-        table.add<ImageButton>(homeBtn).left()
-        table.add<Label>(title)
+
+        val table = Table()
+        table.setFillParent(true)
+        table.top()
+        table.add(home_button).left()
+        table.add(title).expandX()
         table.row()
-        table.add<Label>(coin_label).colspan(2)
+        table.add(coin_label).colspan(2)
         addActor(table)
     }
 
     override fun act(delta: Float) {
-        coin_label.setText("coins: $coins")
+        coin_label.setText("coins: ${state.coins}")
         super.act(delta)
     }
 
