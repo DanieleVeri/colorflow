@@ -6,8 +6,8 @@ class GameState(protected val persistence: IStorage,
     var record: Int = 0
     var track_list: List<Track> = ArrayList()
     var ring_list: List<Ring> = ArrayList()
-    var purchased_tracks: ArrayList<String> = ArrayList()
-    var purchased_rings: ArrayList<String> = ArrayList()
+    protected var purchased_tracks: ArrayList<String> = ArrayList()
+    protected var purchased_rings: ArrayList<String> = ArrayList()
 
     var current_game: CurrentGame? = null
 
@@ -27,6 +27,24 @@ class GameState(protected val persistence: IStorage,
             persistence.set_ring_selected(ring_list.find { it.used }!!.id)
             purchased_tracks.forEach { persistence.set_track_purchased(it) }
             purchased_tracks.clear()
+        }
+    }
+
+    fun purchase_track(track: Track) {
+        purchased_tracks.add(track.id)
+        track_list.find { it.id == track.id }!!.purchased = true
+        coins -= track.cost
+    }
+
+    fun purchase_ring(ring: Ring) {
+        purchased_rings.add(ring.id)
+        ring_list.find { it.id == ring.id }!!.purchased = true
+        coins -= ring.cost
+    }
+
+    fun select_ring(ring_id: String) {
+        ring_list.forEach {
+            it.used = it.id == ring_id
         }
     }
 

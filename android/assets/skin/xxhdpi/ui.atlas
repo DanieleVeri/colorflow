@@ -3,80 +3,80 @@ ui.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-shop
+ads
   rotate: false
-  xy: 1, 197
+  xy: 1, 713
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 1, 455
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 menu_play
   rotate: false
-  xy: 259, 197
+  xy: 259, 713
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 play
   rotate: false
-  xy: 1, 67
-  size: 128, 128
-  orig: 128, 128
+  xy: 1, 197
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 restart
   rotate: false
-  xy: 517, 325
-  size: 128, 128
-  orig: 128, 128
+  xy: 259, 455
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
-ads
+shop
   rotate: false
-  xy: 131, 67
+  xy: 517, 713
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+lock
+  rotate: false
+  xy: 1, 67
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 new
   rotate: false
-  xy: 647, 325
+  xy: 259, 325
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-back
+pause
   rotate: false
-  xy: 261, 67
+  xy: 517, 583
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 track
   rotate: false
-  xy: 1, 1
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-pause
-  rotate: false
-  xy: 517, 259
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-lock
-  rotate: false
-  xy: 777, 421
-  size: 32, 32
-  orig: 32, 32
+  xy: 775, 841
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 coin
   rotate: false
-  xy: 391, 163
-  size: 32, 32
-  orig: 32, 32
+  xy: 1, 1
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1

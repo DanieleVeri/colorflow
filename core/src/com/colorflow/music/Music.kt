@@ -25,7 +25,9 @@ class Music (protected val analyzer: IMusicAnalyzer,
                 it.on_completition()
             }
         }
-        manager.on_error_cb = {/**/}
+        manager.on_error_cb = {
+            // TODO
+        }
     }
 
     fun add_listener(listener: IEventListener) {

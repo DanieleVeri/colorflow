@@ -1,6 +1,7 @@
 package com.colorflow.stage
 
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -12,6 +13,7 @@ import com.colorflow.state.ScreenType
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
 import com.colorflow.graphic.Position
+import com.colorflow.graphic.action
 
 class GameOverStage (
         viewport: Viewport,
@@ -19,16 +21,20 @@ class GameOverStage (
         protected val assets: AssetProvider,
         protected val ad_handler: IAdHandler): Stage(viewport) {
 
-    protected val score: Label
-    protected val coins: Label
     protected val ad_button: ImageButton
 
-    private val table: Table = Table()
-
     init {
-        score = Label("", assets.get_skin("ui"), "h3")
-        coins = Label("", assets.get_skin("ui"), "h3")
-
+        val score = Label("", assets.get_skin("ui"), "h3")
+        score.addAction(Actions.forever(action {
+            if (state.current_game!!.score.points <= state.record)
+                score.setText("SCORE: " + state.current_game!!.score.points + "\nRECORD: " + state.record)
+            else
+                score.setText("NEW RECORD!\n" + state.current_game!!.score.points)
+        }))
+        val coins = Label("", assets.get_skin("ui"), "h3")
+        score.addAction(Actions.forever(action {
+            coins.setText("COINS: " + state.current_game!!.score.coins)
+        }))
         val title = Label("GAME OVER", assets.get_skin("ui"), "h1")
         val restart_button = ImageButton(assets.get_skin("ui"), "restart")
         ad_button = ImageButton(assets.get_skin("ui"), "ads")
@@ -47,7 +53,7 @@ class GameOverStage (
             state.current_game = null
             state.set_screen(ScreenType.MENU)
         })
-
+        val table = Table()
         val table_pad = Position.heightScreen / 48f
         table.setFillParent(true)
         table.pad(table_pad)
@@ -65,20 +71,12 @@ class GameOverStage (
 
     fun update() {
         ad_button.isDisabled = false
-
-        if (state.current_game!!.score.points <= state.record)
-            score.setText("SCORE: " + state.current_game!!.score.points + "\nRECORD: " + state.record)
-        else
-            score.setText("NEW RECORD!\n" + state.current_game!!.score.points)
-        coins.setText("COINS: " + state.current_game!!.score.coins)
     }
 
     fun reward() {
-        ad_button.isDisabled = true
         assets.get_sound("cash").play(1f)
         state.current_game!!.score.coins *= 2
         save_result()
-        coins.setText("COINS: " + state.current_game!!.score.coins)
     }
 
     protected fun save_result() {
@@ -86,10 +84,6 @@ class GameOverStage (
         if (state.current_game!!.score.points > state.record)
             state.record = state.current_game!!.score.points
         state.persist()
-    }
-
-    override fun act(delta: Float) {
-        super.act(delta)
     }
 
 }

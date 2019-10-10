@@ -13,7 +13,7 @@ import com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G
 
 class AdHandler(private val activity: Activity): Handler(), IAdHandler {
     private lateinit var rewarded_ad: RewardedAd
-    private var earned = false
+    private var earned : Boolean = false
     private var pending_start = false
     private var is_loading = false
 
@@ -81,7 +81,6 @@ class AdHandler(private val activity: Activity): Handler(), IAdHandler {
         }
 
         override fun onUserEarnedReward(p0: com.google.android.gms.ads.rewarded.RewardItem) {
-            // user reward
             earned = true
         }
 
