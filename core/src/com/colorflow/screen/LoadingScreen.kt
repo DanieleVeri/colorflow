@@ -28,6 +28,7 @@ class LoadingScreen(
     }
 
     override fun show() {
+        Gdx.input.inputProcessor = null
         if(state.current_game != null) {
             thread {
                 Gdx.app.debug(this::class.java.simpleName, "music analyzer prepare track '${state.current_game!!.selected_track}'")

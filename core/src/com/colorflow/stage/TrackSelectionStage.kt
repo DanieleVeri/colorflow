@@ -51,7 +51,6 @@ class TrackSelectionStage (
             val play_button = ImageButton(assets.get_skin("ui"), "play")
             id_label.width = Position.widthScreen - icon.width *2 - play_button.width
             play_button.addListener(ButtonListener(assets, play_button) {
-                Gdx.input.inputProcessor = null
                 state.current_game = CurrentGame(it.id)
                 state.set_screen(ScreenType.LOAD)
             })

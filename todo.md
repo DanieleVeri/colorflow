@@ -1,21 +1,19 @@
 ## COLORFLOW: Todo list
 
 ### functional
-- [S] ShopStage only bonus chance enhancement
 - [S] Score multiplier
-- [S] Headphones reccomended + epilepsy banner in loading screen?
+- [S] Headphones reccomended + epilepsy banner in loading screen
 - [S] Creative Commons license link
+- [S] Asset design (NEON-like colors)
+- [A] Track analysis using `oneset`, `pitch`, `note` detection or `FFT`
 
-- [S] Design (NEON-like colors)
-- [B] Track analysis using `oneset`, `pitch`, `note` detection or `FFT`
 - [D] Chinese version (360 ads?)
 
 ### not-functional
-- [S] Multiple click on play track cause multiple analyze
 - [S] ndi: arcs spawn at radius 0
 - [S] ndi: Fast dots on resume
 - [S] ndi: Shockwave loop after game over
-- [S] Db upgrade crash
+- [S] Db upgrade
 - [S] Cache beat detection result (in sqlite)
 
 - [B] Structured concurrency with coroutines (make class extend CoroutineScope) vs addAction() in music event listener
