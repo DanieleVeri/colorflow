@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.Disposable
 import com.colorflow.graphic.Position
 import strokeArc
@@ -68,6 +70,29 @@ class Arcs: Actor(), Disposable {
 
     override fun dispose() {
         shape.dispose()
+    }
+
+    fun fadein() {
+        radius_offset = MAX_VISIBLE
+        val action = RunnableAction()
+        action.runnable = Runnable {
+            if(radius_offset <= 0)
+                return@Runnable
+            radius_offset -= 3f
+            addAction(Actions.delay(0.03f, action))
+        }
+        addAction(Actions.delay(0.03f, action))
+    }
+
+    fun fadeout() {
+        val action = RunnableAction()
+        action.runnable = Runnable {
+            if(radius_offset > MAX_VISIBLE)
+                return@Runnable
+            radius_offset += 3f
+            addAction(Actions.delay(0.03f, action))
+        }
+        addAction(Actions.delay(0.03f, action))
     }
 
     companion object {

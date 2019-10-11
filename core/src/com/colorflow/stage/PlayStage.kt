@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.engine.EntityCoordinator
 import com.colorflow.engine.entity.Entity
@@ -13,9 +15,10 @@ import com.colorflow.engine.entity.dot.Dot
 import com.colorflow.engine.entity.dot.DotPool
 import com.colorflow.engine.ring.Ring
 import com.colorflow.AssetProvider
-import com.colorflow.engine.background.Arcs.Companion.MAX_VISIBLE
+import com.colorflow.engine.background.Arcs
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
+import com.colorflow.graphic.laction
 import com.colorflow.music.BeatSample
 import com.colorflow.music.IEventListener
 import kotlinx.coroutines.delay
@@ -26,35 +29,44 @@ class PlayStage(viewport: Viewport,
 
     protected val dot_pool = DotPool(assets)
     protected val bonus_pool = BonusPool(assets)
+
+    protected val arcs = Arcs()
+    protected lateinit var background_color: Color
+
     protected lateinit var coordinator: EntityCoordinator
     protected lateinit var ring: Ring
-
-    protected var confidence_threshold = .10f
+    fun get_ring_listener() = ring.getListener()
 
     fun reset() {
-        /* actors clean */
+        /* clean */
         dot_pool.destroy_all()
         bonus_pool.destroy_all()
         clear()
-        /* recreated */
+        /* lightweight recreation */
         coordinator = EntityCoordinator(dot_pool, bonus_pool)
-        addActor(coordinator)
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
+        arcs.arc_width = ring.radius
+        /* add actors */
+        addActor(arcs)
+        addActor(coordinator)
         addActor(ring)
+        addAction(Actions.forever(laction { handle_collisions() }))
         /* effects */
-        effect_layer.arcs.arc_width = ring.radius
-        effect_layer.arcs.radius_offset = MAX_VISIBLE
-        arc_fadein()
+        arcs.fadein()
         effect_layer.twinkling()
     }
 
-    override fun act(delta: Float) {
-        handle_collisions()
-        super.act(delta)
+    override fun dispose() {
+        dot_pool.clear()
+        bonus_pool.clear()
+        arcs.dispose()
+        super.dispose()
     }
 
-    fun get_ring_listener(): InputProcessor {
-        return ring.getListener()
+    protected fun game_over() {
+        state.current_game!!.gameover = true
+        dot_pool.destroy_all()
+        bonus_pool.destroy_all()
     }
 
     protected fun handle_collisions() {
@@ -70,7 +82,7 @@ class PlayStage(viewport: Viewport,
                             state.current_game!!.score.points += 400
                             effect_layer.shockwave(Position.center)
                             effect_layer.glow(Position.center)
-                            arc_fadeout()
+                            arcs.fadeout()
                             dot_pool.destroy_all { dot ->
                                 explosion(dot.colour.rgb, dot.position)
                             }
@@ -92,34 +104,19 @@ class PlayStage(viewport: Viewport,
                     p.y = dot.y + dot.height / 2.0f
                     explosion(dot.colour.rgb, dot.position)
                     when (dot.type) {
-                        Dot.Type.STD -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
-                            state.current_game!!.score.points += 10
-                        } else {
-                            Gdx.input.vibrate(200)
-                            game_over()
-                        }
-                        Dot.Type.REVERSE -> if (ring.getColorFor(p.angleRadial) == dot.colour) {
-                            Gdx.input.vibrate(200)
-                            game_over()
-                        } else {
-                            state.current_game!!.score.points += 10
-                        }
+                        Dot.Type.STD -> if (ring.getColorFor(p.angleRadial) != dot.colour) game_over()
+                            else state.current_game!!.score.points += 10
+                        Dot.Type.REVERSE -> if (ring.getColorFor(p.angleRadial) == dot.colour) game_over()
+                            else state.current_game!!.score.points += 10
                     }
                 }
             }
         }
     }
 
-    protected fun game_over() {
-        state.current_game!!.gameover = true
-        dot_pool.destroy_all()
-        bonus_pool.destroy_all()
-    }
-
     override suspend fun on_beat(sample: BeatSample) {
-        if (sample.confidence < confidence_threshold) return
         Gdx.app.debug(this::class.java.simpleName, sample.bpm.toString())
-        effect_layer.background_color = Color(sample.confidence, sample.confidence, sample.confidence, 1f)
+        background_color = Color(sample.confidence, sample.confidence, sample.confidence, 1f)
         coordinator.dot_velocity *= 3f
         ring.setScale(1.1f)
         delay(100)
@@ -128,11 +125,4 @@ class PlayStage(viewport: Viewport,
     }
 
     override fun on_completition() {}
-
-    override fun dispose() {
-        dot_pool.clear()
-        bonus_pool.clear()
-        super.dispose()
-    }
-
 }

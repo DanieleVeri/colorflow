@@ -10,10 +10,10 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.colorflow.graphic.Position
 
-class ShaderEffect(fragment: String, vertex: String = "vertex"): Disposable {
+class ShaderEffect(val fragment: String, vertex: String = "vertex"): Disposable {
     protected val shader_program: ShaderProgram
     protected lateinit var set_uniform: (ShaderProgram) -> Unit
-    protected val fbo: FrameBuffer
+    protected var fbo: FrameBuffer? = null
     protected var time: Float
     protected var last: Float
 
@@ -21,13 +21,12 @@ class ShaderEffect(fragment: String, vertex: String = "vertex"): Disposable {
         val vertex_shader = Gdx.files.internal("shaders/$vertex.glsl").readString()
         val fragment_shader = Gdx.files.internal("shaders/${fragment}_fragment.glsl").readString()
         shader_program = ShaderProgram(vertex_shader, fragment_shader)
-        fbo = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, true)
         time = 0f
         last = 0f
     }
 
     override fun dispose() {
-        fbo.dispose()
+        fbo?.dispose()
         shader_program.dispose()
     }
 
@@ -36,19 +35,24 @@ class ShaderEffect(fragment: String, vertex: String = "vertex"): Disposable {
     }
 
     fun apply(batch: Batch, current: Texture): Texture {
-        if(time > last) return current
+        if(time > last) {
+            fbo?.dispose()
+            fbo = null
+            return current
+        }
         batch.shader = shader_program
         shader_program.setUniformf("resolution", resolution)
         shader_program.setUniformf("time", time)
         set_uniform(shader_program)
-        fbo.begin()
+        if(fbo == null) fbo = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, true)
+        fbo!!.begin()
         batch.draw(current,
                 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
                 0, 0, Gdx.graphics.width, Gdx.graphics.height,
                 false, true)
-        fbo.end()
+        fbo!!.end()
         batch.shader = null
-        return fbo.colorBufferTexture
+        return fbo!!.colorBufferTexture
     }
 
     fun start(last: Float, set_uniform: (ShaderProgram)->Unit = {}) {

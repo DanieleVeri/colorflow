@@ -1,5 +1,6 @@
 package com.colorflow.screen
 
+import com.badlogic.gdx.Gdx
 import com.colorflow.stage.HUDStage
 import com.colorflow.stage.PlayStage
 import com.colorflow.AssetProvider
@@ -49,13 +50,22 @@ class PlayScreen(
 
     protected fun game_over() {
         music.stop()
-        assets.get_sound("backspin").play(1f)
+        Gdx.input.vibrate(50)
+        assets.get_sound("backspin").play(0.6f)
         state.set_screen(ScreenType.GAME_OVER)
+        state.coins += state.current_game!!.score.coins
+        if (state.current_game!!.score.points > state.record)
+            state.record = state.current_game!!.score.points
+        state.persist()
     }
 
     override fun on_completition() {
         assets.get_sound("complete").play(1f)
         state.set_screen(ScreenType.GAME_OVER)
+        state.coins += state.current_game!!.score.coins
+        if (state.current_game!!.score.points > state.record)
+            state.record = state.current_game!!.score.points
+        state.persist()
     }
 
     protected fun game_pause() {

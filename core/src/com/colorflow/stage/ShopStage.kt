@@ -10,7 +10,7 @@ import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
-import com.colorflow.graphic.action
+import com.colorflow.graphic.laction
 
 class ShopStage (
         viewport: Viewport,
@@ -26,13 +26,11 @@ class ShopStage (
         })
         val coin_image = Image(assets.get_skin("ui").getRegion("coin"))
         val coin_label = Label("", assets.get_skin("ui"), "h3")
-        coin_label.addAction(Actions.forever(action { coin_label.setText("${state.coins}") }))
-
+        coin_label.addAction(Actions.forever(laction { coin_label.setText("${state.coins}") }))
         val ring_table = Table()
         val ring_scroll = ScrollPane(ring_table)
         val bonus_table = Table()
         val bonus_scroll = ScrollPane(bonus_table)
-
         val root_table = Table()
         root_table.setFillParent(true)
         root_table.top()
@@ -68,49 +66,64 @@ class ShopStage (
             purchase_table.add(cost_label).expand()
 
             lateinit var cell: Cell<Table>
-            ring_table.addAction(Actions.forever(action {
+            ring_table.add(icon).padRight(30f)
+            ring_table.add(id_label).expandX().left().width(id_label.width).padLeft(15f)
+            cell = ring_table.add(purchase_table).padBottom(30f)
+            ring_table.row()
+
+            addAction(Actions.forever(laction {
                 if(it.used)
-                    icon.addAction(Actions.scaleTo(1.1f, 1.1f, 0.2f))
+                    icon.addAction(Actions.scaleTo(1.2f, 1.2f, 0.2f))
                 else
                     icon.addAction(Actions.scaleTo(1.0f, 1.0f, 0.2f))
                 select_button.isVisible = !it.used
                 cell.setActor(if(!it.purchased) purchase_table else select_button)
                 buy_button.isDisabled = state.coins < it.cost || it.purchased
             }))
-
-            ring_table.add(icon).padRight(30f)
-            ring_table.add(id_label).expandX().left().width(id_label.width).padLeft(15f)
-            cell = ring_table.add(purchase_table).padBottom(30f)
-            ring_table.row()
         }
 
         /* Bonus BOMB */
         val bomb_table = Table()
-        val bomb_label = Label("+5% chance", assets.get_skin("ui"), "h3")
-        val drawable_bomb = TextureRegionDrawable(assets.get_skin("game").getRegion("bonus_bomb"))
-        val bomb_button = ImageButton(drawable_bomb)
+        val bomb_label = Label("", assets.get_skin("ui"), "h3")
+        val bomb_button = ImageButton(TextureRegionDrawable(assets.get_skin("game").getRegion("bonus_bomb")))
         bomb_button.addListener(ButtonListener(assets, bomb_button) {
             assets.get_sound("cash").play(1f)
-            // TODO
+            state.coins -= (state.bomb_chance * BONUS_COST).toInt()
+            state.bomb_chance += BONUS_CHANCE_INC
+            state.persist()
         })
         bomb_table.add(bomb_button)
         bomb_table.row()
         bomb_table.add(bomb_label)
-        /* Bonus COIN */
-        val coin_table = Table()
-        val coin_bonus_label = Label("+5% chance", assets.get_skin("ui"), "h3")
-        val drawable_coin = TextureRegionDrawable(assets.get_skin("game").getRegion("dot_coin"))
-        val coin_bonus_button = ImageButton(drawable_coin)
-        coin_bonus_button.addListener(ButtonListener(assets, coin_bonus_button) {
+        /* Bonus GOLD */
+        val gold_table = Table()
+        val gold_label = Label("", assets.get_skin("ui"), "h3")
+        val gold_bonus_button = ImageButton(TextureRegionDrawable(assets.get_skin("game").getRegion("dot_coin")))
+        gold_bonus_button.addListener(ButtonListener(assets, gold_bonus_button) {
             assets.get_sound("cash").play(1f)
-            // TODO
+            state.coins -= (state.gold_chance * BONUS_COST).toInt()
+            state.gold_chance += BONUS_CHANCE_INC
+            state.persist()
         })
-        coin_table.add(coin_bonus_button)
-        coin_table.row()
-        coin_table.add(coin_bonus_label)
+        gold_table.add(gold_bonus_button)
+        gold_table.row()
+        gold_table.add(gold_label)
 
         bonus_table.add(bomb_table).expandX().padLeft(40f)
-        bonus_table.add(coin_table).expandX()
+        bonus_table.add(gold_table).expandX()
+        addAction(Actions.forever(laction {
+            val bomb_cost = (state.bomb_chance * BONUS_COST).toInt()
+            val gold_cost = (state.gold_chance * BONUS_COST).toInt()
+            bomb_label.setText("$bomb_cost -> +5%")
+            gold_label.setText("$gold_cost -> +5%")
+            bomb_button.isDisabled = state.coins < bomb_cost
+            gold_bonus_button.isDisabled = state.coins < gold_cost
+        }))
+    }
+
+    companion object {
+        const val BONUS_COST = 10000
+        const val BONUS_CHANCE_INC = 0.05f
     }
 
 }

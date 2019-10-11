@@ -1,6 +1,5 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -12,7 +11,7 @@ import com.colorflow.state.ScreenType
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
 import com.colorflow.graphic.Position
-import com.colorflow.graphic.action
+import com.colorflow.graphic.laction
 
 class TrackSelectionStage (
         viewport: Viewport,
@@ -28,7 +27,7 @@ class TrackSelectionStage (
         })
         val coin_image = Image(assets.get_skin("ui").getRegion("coin"))
         val coin_label = Label("", assets.get_skin("ui"), "h3")
-        coin_label.addAction(Actions.forever(action { coin_label.setText("coins: ${state.coins}") }))
+        coin_label.addAction(Actions.forever(laction { coin_label.setText(state.coins) }))
         val track_table = Table()
         val track_scroll = ScrollPane(track_table)
 
@@ -67,7 +66,7 @@ class TrackSelectionStage (
             purchase_table.add(cost_label).expand()
 
             lateinit var cell: Cell<Table>
-            track_table.addAction(Actions.forever(action {
+            track_table.addAction(Actions.forever(laction {
                 cell.setActor(if(!it.purchased) purchase_table else play_button)
                 buy_button.isDisabled = state.coins < it.cost || it.purchased
             }))

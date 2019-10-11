@@ -15,9 +15,9 @@ import com.colorflow.state.ScreenType
 import kotlin.concurrent.thread
 
 class MainGame(
-        protected val persistence: IStorage,
-        protected val music_manager: IMusicManager,
-        protected val music_analyzer: IMusicAnalyzer,
+        persistence: IStorage,
+        music_manager: IMusicManager,
+        music_analyzer: IMusicAnalyzer,
         protected val ad_handler: IAdHandler) : Game() {
 
     protected lateinit var assets: AssetProvider
@@ -44,12 +44,16 @@ class MainGame(
         game_state.set_screen(ScreenType.LOAD)
 
         thread {
-            Gdx.app.debug("LoaderThread", "shockwave loading game state")
+            Gdx.app.debug("LoaderThread", "loading game state")
             game_state.load()
             Gdx.app.debug("LoaderThread", "game state loaded")
 
-            Gdx.app.debug("LoaderThread", "shockwave loading assets")
-            copy_internal_tracks()
+            if (!Gdx.files.local("music").exists()) {
+                Gdx.app.debug("LoaderThread", "copying internal music")
+                Gdx.files.internal("music").copyTo(Gdx.files.local("."))
+            }
+
+            Gdx.app.debug("LoaderThread", "loading assets")
             assets = AssetProvider()
             Gdx.app.postRunnable {
                 assets.finish_loading()
@@ -79,11 +83,6 @@ class MainGame(
         music.dispose()
 
         super.dispose()
-    }
-
-    protected fun copy_internal_tracks() {
-        if (!Gdx.files.local("music").exists())
-            Gdx.files.internal("music").copyTo(Gdx.files.local("."))
     }
 
     protected fun set_screen_listener(screen: ScreenType) {

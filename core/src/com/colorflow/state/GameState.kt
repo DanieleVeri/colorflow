@@ -4,6 +4,8 @@ class GameState(protected val persistence: IStorage,
                 protected val set_screen_cb: (ScreenType)->Unit) {
     var coins: Int = 0
     var record: Int = 0
+    var bomb_chance: Float = 0.0f
+    var gold_chance: Float = 0.0f
     var track_list: List<Track> = ArrayList()
     var ring_list: List<Ring> = ArrayList()
     protected var purchased_tracks: ArrayList<String> = ArrayList()
@@ -14,6 +16,8 @@ class GameState(protected val persistence: IStorage,
     fun load() {
         record = persistence.get_record()
         coins = persistence.get_coins()
+        bomb_chance = persistence.get_bomb_chance()
+        gold_chance = persistence.get_gold_chance()
         ring_list = persistence.get_rings()
         track_list = persistence.get_tracks()
     }
@@ -22,6 +26,8 @@ class GameState(protected val persistence: IStorage,
         persistence.transaction {
             persistence.set_coins(coins)
             persistence.set_record(record)
+            persistence.set_bomb_chance(bomb_chance)
+            persistence.set_gold_chance(gold_chance)
             purchased_rings.forEach { persistence.set_ring_purchased(it) }
             purchased_rings.clear()
             persistence.set_ring_selected(ring_list.find { it.used }!!.id)

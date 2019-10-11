@@ -1,6 +1,7 @@
 package com.colorflow.database
 
 import android.content.ContentValues
+import com.colorflow.database.SQLiteManager.Companion.TABLES
 import android.database.sqlite.SQLiteDatabase
 
 fun init(sqLiteDatabase: SQLiteDatabase) {
@@ -16,6 +17,14 @@ fun init(sqLiteDatabase: SQLiteDatabase) {
     values.clear()
     values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.RECORD)
     values.put(TABLES.STATUS.COL_VALUE, "0")
+    sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
+    values.clear()
+    values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.BOMB_CHANCE)
+    values.put(TABLES.STATUS.COL_VALUE, 0.1f)
+    sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
+    values.clear()
+    values.put(TABLES.STATUS.COL_KEY, TABLES.STATUS.keys.GOLD_CHANCE)
+    values.put(TABLES.STATUS.COL_VALUE, 0.1f)
     sqLiteDatabase.insert(TABLES.STATUS.TAB_NAME, null, values)
     values.clear()
 

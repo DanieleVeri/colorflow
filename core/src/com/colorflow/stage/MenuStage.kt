@@ -12,7 +12,7 @@ import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.engine.ring.Ring
 import com.colorflow.graphic.ButtonListener
-import com.colorflow.graphic.action
+import com.colorflow.graphic.laction
 
 class MenuStage (
         viewport: Viewport,
@@ -26,9 +26,9 @@ class MenuStage (
     init {
         val title = Label("COLORFLOW", assets.get_skin("ui"), "h1")
         val record = Label("REC0RD: " + state.record, assets.get_skin("ui"), "h2")
-        record.addAction(Actions.forever(action { record.setText("REC0RD: " + state.record) }))
+        record.addAction(Actions.forever(laction { record.setText("REC0RD: " + state.record) }))
         val coins = Label("COINS: " + state.coins, assets.get_skin("ui"), "h2")
-        coins.addAction(Actions.forever(action{ coins.setText("COINS: " + state.coins) }))
+        coins.addAction(Actions.forever(laction{ coins.setText("COINS: " + state.coins) }))
         play_button = ImageButton(assets.get_skin("ui"), "menu_play")
         shop_button = ImageButton(assets.get_skin("ui"), "shop")
         play_button.addListener(ButtonListener(assets, play_button) {state.set_screen(ScreenType.TRACK_SELECTION)})

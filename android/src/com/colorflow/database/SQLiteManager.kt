@@ -43,59 +43,38 @@ class SQLiteManager(context: Context):
         }
     }
 
-    override fun get_version(): String {
+    override fun get_version() = get_value(TABLES.STATUS.keys.VERSION)
+    override fun set_version(value: String) = set_value(TABLES.STATUS.keys.VERSION, value)
+
+    override fun get_record() = Integer.parseInt(get_value(TABLES.STATUS.keys.RECORD))
+    override fun set_record(value: Int) = set_value(TABLES.STATUS.keys.RECORD, value.toString())
+
+    override fun get_coins() = Integer.parseInt(get_value(TABLES.STATUS.keys.COINS))
+    override fun set_coins(value: Int) = set_value(TABLES.STATUS.keys.COINS, value.toString())
+
+    override fun get_bomb_chance() = get_value(TABLES.STATUS.keys.BOMB_CHANCE).toFloat()
+    override fun set_bomb_chance(value: Float) = set_value(TABLES.STATUS.keys.BOMB_CHANCE, value.toString())
+
+    override fun get_gold_chance() = get_value(TABLES.STATUS.keys.GOLD_CHANCE).toFloat()
+    override fun set_gold_chance(value: Float) = set_value(TABLES.STATUS.keys.GOLD_CHANCE, value.toString())
+
+    protected fun get_value(key: String): String {
         readable.query(TABLES.STATUS.TAB_NAME,
                 arrayOf(TABLES.STATUS.COL_VALUE),
                 "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.VERSION), null, null, null).use {
+                arrayOf(key), null, null, null).use {
             it.moveToNext()
             return it.getString(it.getColumnIndexOrThrow(TABLES.STATUS.COL_VALUE))
         }
     }
-    override fun set_version(version: String) {
+
+    protected fun set_value(key: String, value: String) {
         val values = ContentValues()
-        values.put(TABLES.STATUS.COL_VALUE, version)
+        values.put(TABLES.STATUS.COL_VALUE, value)
         writable.update(TABLES.STATUS.TAB_NAME,
                 values,
                 "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.VERSION))
-    }
-
-    override fun get_record(): Int {
-        readable.query(TABLES.STATUS.TAB_NAME,
-                arrayOf(TABLES.STATUS.COL_VALUE),
-                "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.RECORD), null, null, null).use {
-            it.moveToNext()
-            return Integer.parseInt(it.getString(it.getColumnIndexOrThrow(TABLES.STATUS.COL_VALUE)))
-        }
-    }
-    override fun set_record(value: Int) {
-        val values = ContentValues()
-        values.put(TABLES.STATUS.COL_VALUE, value.toString())
-        writable.update(TABLES.STATUS.TAB_NAME,
-                values,
-                "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.RECORD))
-    }
-
-    override fun get_coins(): Int {
-        readable.query(TABLES.STATUS.TAB_NAME,
-                arrayOf(TABLES.STATUS.COL_VALUE),
-                "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.COINS), null, null, null).use {
-            it.moveToNext()
-            return Integer.parseInt(it.getString(it.getColumnIndexOrThrow(TABLES.STATUS.COL_VALUE)))
-        }
-    }
-
-    override fun set_coins(value: Int) {
-        val values = ContentValues()
-        values.put(TABLES.STATUS.COL_VALUE, value.toString())
-        writable.update(TABLES.STATUS.TAB_NAME,
-                values,
-                "${TABLES.STATUS.COL_KEY} =?",
-                arrayOf(TABLES.STATUS.keys.COINS))
+                arrayOf(key))
     }
 
     override fun get_rings(): List<Ring> {
@@ -166,6 +145,11 @@ class SQLiteManager(context: Context):
         const val NAME = "Data.db"
         const val VERSION = 1
 
+        object TABLES {
+            val TRACK: TRACK = TRACK()
+            val RING: RING = RING()
+            val STATUS: STATUS = STATUS()}
+
         private val DDL_CREATE_STATUS = "CREATE TABLE ${TABLES.STATUS.TAB_NAME}(" +
                 "${TABLES.STATUS.COL_KEY} TEXT," +
                 "${TABLES.STATUS.COL_VALUE} TEXT," +
@@ -191,3 +175,31 @@ class SQLiteManager(context: Context):
     }
 
 }
+
+data class TRACK (
+        val TAB_NAME: String = "TRACK",
+        val COL_ID: String = "ID",
+        val COL_COST: String = "COST",
+        val COL_PURCHASED: String = "PURCHASED",
+        val COL_SRC: String = "SRC")
+
+data class RING (
+        val TAB_NAME: String = "RING",
+        val COL_ID: String = "ID",
+        val COL_COST: String = "COST",
+        val COL_PURCHASED: String = "PURCHASED",
+        val COL_USED: String = "USED",
+        val COL_SRC: String = "SRC")
+
+data class STATUS (
+        val TAB_NAME: String = "STATUS",
+        val COL_KEY: String = "KEY",
+        val COL_VALUE: String = "VALUE",
+        val keys: Keys = Keys())
+
+data class Keys (
+        val VERSION: String = "VERSION",
+        val COINS: String = "COINS",
+        val RECORD: String = "RECORD",
+        val BOMB_CHANCE: String = "BOMB_CHANCE",
+        val GOLD_CHANCE: String = "GOLD_CHANCE")

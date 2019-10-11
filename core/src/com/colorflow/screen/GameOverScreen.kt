@@ -15,13 +15,13 @@ class GameOverScreen(state: GameState,
     }
 
     override fun show() {
-        stage.update()
+        stage.enable_reward()
         super.show()
     }
 
     override fun resume() {
         if(ad_handler.is_rewarded()) {
-            Gdx.app.debug(this::class.java.simpleName, "rewarded")
+            Gdx.app.debug(this::class.java.simpleName, "ad rewarded")
             stage.reward()
         }
         super.resume()

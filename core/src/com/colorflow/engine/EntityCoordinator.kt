@@ -94,5 +94,4 @@ class EntityCoordinator(protected val dot_pool: DotPool,
     protected fun gold(): Bonus {
         return bonus_pool.get(Bonus.Type.GOLD, Position.Radial(Math.random().toFloat() * 360f, SPAWN_DIST))
     }
-
 }

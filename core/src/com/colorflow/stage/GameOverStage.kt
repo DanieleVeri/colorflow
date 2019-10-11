@@ -13,7 +13,7 @@ import com.colorflow.state.ScreenType
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
 import com.colorflow.graphic.Position
-import com.colorflow.graphic.action
+import com.colorflow.graphic.laction
 
 class GameOverStage (
         viewport: Viewport,
@@ -25,14 +25,11 @@ class GameOverStage (
 
     init {
         val score = Label("", assets.get_skin("ui"), "h3")
-        score.addAction(Actions.forever(action {
-            if (state.current_game!!.score.points <= state.record)
-                score.setText("SCORE: " + state.current_game!!.score.points + "\nRECORD: " + state.record)
-            else
-                score.setText("NEW RECORD!\n" + state.current_game!!.score.points)
+        score.addAction(Actions.forever(laction {
+            score.setText("SCORE: " + state.current_game!!.score.points + "\nBEST: " + state.record)
         }))
         val coins = Label("", assets.get_skin("ui"), "h3")
-        score.addAction(Actions.forever(action {
+        score.addAction(Actions.forever(laction {
             coins.setText("COINS: " + state.current_game!!.score.coins)
         }))
         val title = Label("GAME OVER", assets.get_skin("ui"), "h1")
@@ -41,7 +38,6 @@ class GameOverStage (
         val home_button = ImageButton(assets.get_skin("ui"), "back")
 
         restart_button.addListener(ButtonListener(assets, restart_button) {
-            save_result()
             state.current_game = CurrentGame(state.current_game!!.selected_track)
             state.set_screen(ScreenType.LOAD)
         })
@@ -49,7 +45,6 @@ class GameOverStage (
             ad_handler.show_ad()
         })
         home_button.addListener(ButtonListener(assets, home_button) {
-            save_result()
             state.current_game = null
             state.set_screen(ScreenType.MENU)
         })
@@ -69,21 +64,16 @@ class GameOverStage (
         addActor(table)
     }
 
-    fun update() {
+    fun enable_reward() {
         ad_button.isDisabled = false
     }
 
     fun reward() {
+        ad_button.isDisabled = true
         assets.get_sound("cash").play(1f)
-        state.current_game!!.score.coins *= 2
-        save_result()
-    }
-
-    protected fun save_result() {
         state.coins += state.current_game!!.score.coins
-        if (state.current_game!!.score.points > state.record)
-            state.record = state.current_game!!.score.points
         state.persist()
+        state.current_game!!.score.coins *= 2
     }
 
 }
