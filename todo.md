@@ -1,12 +1,17 @@
 ## COLORFLOW: Todo list
 
 ### functional
-- [S] Score multiplier
 - [S] Headphones reccomended + epilepsy banner in loading screen
 - [S] Creative Commons license link
+- [S] Score multiplier
 - [S] Asset design (NEON-like colors)
-- [A] Track analysis using `oneset`, `pitch`, `note` detection or `FFT`
+- [S] Ring <-> shader <-> FFT
+- [A] Track analysis using `oneset`, `pitch`, `note` detection
+- [A] Logo: note like
+- [A] Registered mark in title?
 
+- [C] Share score for reward
+- [C] Slot machine (watch ad for a run)
 - [D] Chinese version (360 ads?)
 
 ### not-functional
