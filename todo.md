@@ -6,10 +6,10 @@
 - [S] Score multiplier
 - [S] Asset design (NEON-like colors)
 - [S] Ring <-> shader <-> FFT
-- [A] Track analysis using `oneset`, `pitch`, `note` detection
 - [A] Logo: note like
 - [A] Registered mark in title?
 
+- [C] Track analysis using `oneset`, `pitch`, `note` detection
 - [C] Share score for reward
 - [C] Slot machine (watch ad for a run)
 - [D] Chinese version (360 ads?)
