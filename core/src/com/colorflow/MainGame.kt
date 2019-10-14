@@ -1,12 +1,11 @@
 package com.colorflow
 
+import com.badlogic.gdx.*
 import com.badlogic.gdx.Application.LOG_DEBUG
-import com.badlogic.gdx.Game
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
 import com.colorflow.ads.IAdHandler
+import com.colorflow.graphic.effects.Effects
 import com.colorflow.music.Music
 import com.colorflow.state.IStorage
 import com.colorflow.screen.*
@@ -80,10 +79,13 @@ class MainGame(
         assets.dispose()
         track_selection.dispose()
         game_over.dispose()
+
         music.dispose()
+        Effects.dispose()
 
         super.dispose()
     }
+
 
     protected fun set_screen_listener(screen: ScreenType) {
         when (screen) {

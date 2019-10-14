@@ -1,6 +1,6 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -12,6 +12,7 @@ import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.effects.EffectStage
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.laction
 
@@ -19,7 +20,7 @@ class GameOverStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): Stage(viewport) {
+        protected val ad_handler: IAdHandler): EffectStage(viewport) {
 
     protected val ad_button: ImageButton
 
@@ -49,9 +50,8 @@ class GameOverStage (
             state.set_screen(ScreenType.MENU)
         })
         val table = Table()
-        val table_pad = Position.heightScreen / 48f
-        table.setFillParent(true)
-        table.pad(table_pad)
+        table.width = Position.widthScreen
+        table.height = Position.heightScreen
         table.add(title).colspan(2).expandX()
         table.row()
         table.add(score).expandX().left()
@@ -74,6 +74,11 @@ class GameOverStage (
         state.coins += state.current_game!!.score.coins
         state.persist()
         state.current_game!!.score.coins *= 2
+    }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
+        return super.touchDragged(screenX, screenY, pointer)
     }
 
 }

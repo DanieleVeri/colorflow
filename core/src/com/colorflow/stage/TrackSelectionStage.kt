@@ -1,6 +1,6 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -10,6 +10,7 @@ import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.effects.EffectStage
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.laction
 
@@ -17,7 +18,7 @@ class TrackSelectionStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): Stage(viewport) {
+        protected val ad_handler: IAdHandler): EffectStage(viewport) {
 
     init {
         val title = Label("Tracks", assets.get_skin("ui"), "h1")
@@ -32,7 +33,8 @@ class TrackSelectionStage (
         val track_scroll = ScrollPane(track_table)
 
         val root_table = Table()
-        root_table.setFillParent(true)
+        root_table.width = Position.widthScreen
+        root_table.height = Position.heightScreen
         root_table.top()
         root_table.add(home_button).left()
         root_table.add(title).expandX()
@@ -76,6 +78,11 @@ class TrackSelectionStage (
             cell = track_table.add(play_button).padBottom(30f) as Cell<Table>
             track_table.row()
         }
+    }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
+        return super.touchDragged(screenX, screenY, pointer)
     }
 
 }

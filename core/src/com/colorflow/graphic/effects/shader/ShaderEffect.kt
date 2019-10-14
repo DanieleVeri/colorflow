@@ -1,4 +1,4 @@
-package com.colorflow.graphic.effects
+package com.colorflow.graphic.effects.shader
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Pixmap

@@ -12,4 +12,5 @@ class MenuScreen(
         stage = MenuStage(viewport, state, assets)
         multiplexer.addProcessor(stage)
     }
+
 }

@@ -1,72 +1,67 @@
 package com.colorflow.graphic.effects
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL30
-import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.utils.Disposable
 import com.colorflow.graphic.Position
 
-class EffectLayer: Group(), Disposable {
-    protected var fbo: FrameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, true)
-    protected val shader_effects: ArrayList<ShaderEffect> = ArrayList()
-
-    init {
-        shader_effects.add(ShaderEffect("shockwave"))
-        shader_effects.add(ShaderEffect("twinkling"))
-        shader_effects.add(ShaderEffect("glow"))
-    }
-
-    fun stop_all() {
-        shader_effects.forEach { it.stop() }
-    }
+class EffectLayer: Group() {
 
     fun shockwave(position: Position) {
         val v = Vector2(position.x, position.y)
         v.x = v.x / Gdx.graphics.width
         v.y = v.y / Gdx.graphics.height
-        shader_effects.find { it.fragment == "shockwave" }!!.start(1f) { shader ->
+        Effects.shader_effects.find { it.fragment == "shockwave" }!!.start(1f) { shader ->
             shader.setUniformf("center", v)
         }
     }
 
     fun twinkling() {
-        shader_effects.find { it.fragment == "twinkling" }!!.start(1f)
+        Effects.shader_effects.find { it.fragment == "twinkling" }!!.start(1f)
     }
 
     fun glow(position: Position = Position.center) {
-        shader_effects.find { it.fragment == "glow" }!!.start(1f)
+        Effects.shader_effects.find { it.fragment == "glow" }!!.start(1f)
     }
 
-    override fun dispose() {
-        fbo.dispose()
-        shader_effects.forEach { it.dispose() }
+    fun explosion(color: Color, position: Position) {
+        val obj = Effects.explosion_pool.get()
+        addActor(obj)
+        obj.start(color, position)
+    }
+
+    fun stop_all() {
+        Effects.shader_effects.forEach { it.stop() }
     }
 
     override fun act(delta: Float) {
-        shader_effects.forEach { it.update(delta) }
+        Effects.shader_effects.forEach { it.update(delta) }
         super.act(delta)
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
-        batch ?: return
+        if(batch == null) {
+            Gdx.app.error(this::class.java.simpleName, "null batch: skipping draw")
+            return
+        }
         batch.end()
         batch.flush()
-        fbo.begin()
+        Effects.fbo.begin()
         batch.begin()
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glClearColor(0f, 0f, 0f, parentAlpha)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         super.draw(batch, parentAlpha)
         batch.flush()
-        fbo.end()
+        Effects.fbo.end()
 
-        var current = fbo.colorBufferTexture
-        shader_effects.forEach {
+        var current = Effects.fbo.colorBufferTexture
+        Effects.shader_effects.forEach {
             current = it.apply(batch, current)
         }
+
         batch.draw(current,
                 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
                 0, 0, Gdx.graphics.width, Gdx.graphics.height,

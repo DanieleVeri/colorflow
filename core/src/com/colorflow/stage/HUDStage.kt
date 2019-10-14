@@ -44,7 +44,8 @@ class HUDStage(viewport: Viewport,
 
         // Play HUD
         val play = Table()
-        play.setFillParent(true)
+        play.width = Position.widthScreen
+        play.height = Position.heightScreen
         play.top()
         play.add(pause_button).expandX().left()
         play.row()
@@ -55,7 +56,8 @@ class HUDStage(viewport: Viewport,
 
         // Pause HUD
         val pause = Table()
-        pause.setFillParent(true)
+        pause.width = Position.widthScreen
+        pause.height = Position.heightScreen
         pause.bottom()
         pause.add(Label("PAUSE", assets.get_skin("ui"), "h1")).colspan(2).expandX()
         pause.row()

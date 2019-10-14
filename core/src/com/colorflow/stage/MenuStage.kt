@@ -1,6 +1,6 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -12,12 +12,15 @@ import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.engine.ring.Ring
 import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.Position
+import com.colorflow.graphic.effects.EffectStage
+import com.colorflow.graphic.effects.Effects
 import com.colorflow.graphic.laction
 
 class MenuStage (
         viewport: Viewport,
         protected val state: GameState,
-        protected val assets: AssetProvider): Stage(viewport) {
+        protected val assets: AssetProvider): EffectStage(viewport) {
 
     private var play_button: Button
     private var shop_button: Button
@@ -31,13 +34,18 @@ class MenuStage (
         coins.addAction(Actions.forever(laction{ coins.setText("COINS: " + state.coins) }))
         play_button = ImageButton(assets.get_skin("ui"), "menu_play")
         shop_button = ImageButton(assets.get_skin("ui"), "shop")
-        play_button.addListener(ButtonListener(assets, play_button) {state.set_screen(ScreenType.TRACK_SELECTION)})
-        shop_button.addListener(ButtonListener(assets, shop_button) {state.set_screen(ScreenType.SHOP)})
+        play_button.addListener(ButtonListener(assets, play_button) {
+            state.set_screen(ScreenType.TRACK_SELECTION)
+        })
+        shop_button.addListener(ButtonListener(assets, shop_button) {
+            state.set_screen(ScreenType.SHOP)
+        })
         val ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         ring.addAction(Actions.forever(Actions.rotateBy(1f)))
 
         val table = Table()
-        table.setFillParent(true)
+        table.width = Position.widthScreen
+        table.height = Position.heightScreen
         table.top()
         table.add(title).colspan(2).expandY()
         table.row()
@@ -57,4 +65,11 @@ class MenuStage (
         dy += delta.toDouble()
         super.act(delta)
     }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
+        effect_layer.stop_all()
+        return super.touchDragged(screenX, screenY, pointer)
+    }
+
 }

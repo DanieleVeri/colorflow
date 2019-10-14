@@ -1,6 +1,6 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -10,13 +10,15 @@ import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.effects.EffectStage
+import com.colorflow.graphic.Position
 import com.colorflow.graphic.laction
 
 class ShopStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): Stage(viewport) {
+        protected val ad_handler: IAdHandler): EffectStage(viewport) {
 
     init {
         val title = Label("Upgrade", assets.get_skin("ui"), "h1")
@@ -32,7 +34,8 @@ class ShopStage (
         val bonus_table = Table()
         val bonus_scroll = ScrollPane(bonus_table)
         val root_table = Table()
-        root_table.setFillParent(true)
+        root_table.width = Position.widthScreen
+        root_table.height = Position.heightScreen
         root_table.top()
         root_table.add(home_button).left()
         root_table.add(title).expandX()
@@ -119,6 +122,11 @@ class ShopStage (
             bomb_button.isDisabled = state.coins < bomb_cost
             gold_bonus_button.isDisabled = state.coins < gold_cost
         }))
+    }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
+        return super.touchDragged(screenX, screenY, pointer)
     }
 
     companion object {

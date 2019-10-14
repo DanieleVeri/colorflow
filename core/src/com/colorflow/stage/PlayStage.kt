@@ -14,7 +14,7 @@ import com.colorflow.engine.entity.dot.DotPool
 import com.colorflow.engine.ring.Ring
 import com.colorflow.AssetProvider
 import com.colorflow.engine.background.Arcs
-import com.colorflow.graphic.EffectStage
+import com.colorflow.graphic.effects.EffectStage
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.laction
@@ -38,6 +38,7 @@ class PlayStage(viewport: Viewport,
     fun get_ring_listener() = ring.getListener()
 
     fun reset() {
+        isDebugAll = true
         Gdx.app.debug(this::class.java.simpleName, "reset")
         /* clean */
         dot_pool.destroy_all()
@@ -48,8 +49,8 @@ class PlayStage(viewport: Viewport,
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         arcs.arc_width = ring.radius
         /* add actors */
-        addActor(music)
         addActor(arcs)
+        addActor(music)
         addActor(coordinator)
         addActor(ring)
         addAction(Actions.forever(laction { handle_collisions() }))
@@ -79,7 +80,7 @@ class PlayStage(viewport: Viewport,
             if(it is Bonus) {
                 val bonus = it as Bonus
                 bonus.destroy {
-                    explosion(Color.WHITE, bonus.position)
+                    effect_layer.explosion(Color.WHITE, bonus.position)
                     when (bonus.type) {
                         Bonus.Type.BOMB -> {
                             state.current_game!!.score.points += 400
@@ -87,7 +88,7 @@ class PlayStage(viewport: Viewport,
                             effect_layer.glow(Position.center)
                             arcs.fadeout()
                             dot_pool.destroy_all { dot ->
-                                explosion(dot.colour.rgb, dot.position)
+                                effect_layer.explosion(dot.colour.rgb, dot.position)
                             }
                         }
                         Bonus.Type.GOLD -> {
@@ -105,7 +106,7 @@ class PlayStage(viewport: Viewport,
                     val p = Position.Pixel(0f, 0f)
                     p.x = dot.x + dot.width / 2.0f
                     p.y = dot.y + dot.height / 2.0f
-                    explosion(dot.colour.rgb, dot.position)
+                    effect_layer.explosion(dot.colour.rgb, dot.position)
                     when (dot.type) {
                         Dot.Type.STD -> if (ring.getColorFor(p.angleRadial) != dot.colour) game_over()
                             else state.current_game!!.score.points += 10
