@@ -3,7 +3,6 @@ package com.colorflow.engine.entity.bonus
 import com.colorflow.engine.entity.Entity
 import com.colorflow.AssetProvider
 import com.colorflow.graphic.Position
-import com.colorflow.stage.EffectStage
 
 class Bonus(assets: AssetProvider,
             protected val pool: BonusPool) : Entity(assets) {

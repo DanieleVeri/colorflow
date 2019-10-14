@@ -24,11 +24,7 @@ class DragListener : InputAdapter(), RingListener {
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        if(pointer >= pointers.size) return false
-        pointers[pointer] = -1
-        if(pointers.all { it == -1 }) {
-            angle = 0f
-        }
+        angle = 0f
         return false
     }
 

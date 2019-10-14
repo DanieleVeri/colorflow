@@ -35,12 +35,9 @@ class LoadingScreen(
                 music.analyze(state.current_game!!.selected_track)
                 Gdx.app.debug(this::class.java.simpleName, "reset music manager and load track '${state.current_game!!.selected_track}'")
                 music.prepare(state.current_game!!.selected_track)
-                val paused = state.current_game!!.paused
                 Gdx.app.postRunnable {
                     Gdx.app.debug(this::class.java.simpleName, "score reset")
                     state.current_game!!.score = Score()
-                    if(paused)
-                        state.current_game!!.paused = true
                     state.set_screen(ScreenType.PLAY)
                 }
             }

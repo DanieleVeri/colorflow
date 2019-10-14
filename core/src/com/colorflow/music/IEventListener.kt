@@ -1,6 +1,6 @@
 package com.colorflow.music
 
 interface IEventListener {
-    suspend fun on_beat(sample: BeatSample)
+    fun on_beat(music: Music, sample: BeatSample)
     fun on_completition()
 }

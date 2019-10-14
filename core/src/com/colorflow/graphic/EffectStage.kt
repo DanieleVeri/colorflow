@@ -1,15 +1,12 @@
-package com.colorflow.stage
+package com.colorflow.graphic
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.colorflow.engine.background.Arcs.Companion.MAX_VISIBLE
 import com.colorflow.graphic.Position
-import com.colorflow.engine.background.EffectLayer
+import com.colorflow.graphic.effects.EffectLayer
 import com.colorflow.graphic.effects.ExplosionPool
 
 open class EffectStage(viewport: Viewport) : Stage(viewport) {

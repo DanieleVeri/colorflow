@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.colorflow.stage.HUDStage
 import com.colorflow.stage.PlayStage
 import com.colorflow.AssetProvider
+import com.colorflow.graphic.UiScreen
 import com.colorflow.music.BeatSample
 import com.colorflow.music.IEventListener
 import com.colorflow.music.Music
@@ -21,7 +22,7 @@ class PlayScreen(
     private var prev_paused = false
 
     init {
-        play_stage = PlayStage(viewport, game_state, assets)
+        play_stage = PlayStage(viewport, game_state, assets, music)
         hud_stage = HUDStage(viewport, game_state, assets)
         music.add_listener(play_stage)
         music.add_listener(this)
@@ -105,5 +106,5 @@ class PlayScreen(
         hud_stage.dispose()
     }
 
-    override suspend fun on_beat(sample: BeatSample) {}
+    override fun on_beat(music: Music, sample: BeatSample) {}
 }

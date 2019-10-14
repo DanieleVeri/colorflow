@@ -3,6 +3,7 @@ package com.colorflow.screen
 import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.ads.IAdHandler
+import com.colorflow.graphic.UiScreen
 import com.colorflow.stage.ShopStage
 
 class ShopScreen(

@@ -1,4 +1,4 @@
-package com.colorflow.screen
+package com.colorflow.graphic
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
-import com.colorflow.graphic.Position
 
 abstract class UiScreen<T : Stage>(
         protected var state: GameState,

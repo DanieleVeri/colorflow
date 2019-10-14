@@ -1,23 +1,22 @@
 package com.colorflow.music
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.Disposable
+import com.colorflow.graphic.laction
 import kotlinx.coroutines.*
 import java.util.HashMap
 import java.util.HashSet
 
 class Music (protected val analyzer: IMusicAnalyzer,
-             protected val manager: IMusicManager): Disposable {
+             protected val manager: IMusicManager): Actor(), Disposable {
 
     private lateinit var current_track: String
-    private var start_pause: Long = 0
-    private var start_time: Long = 0
-    private var paused: Long = 0
-
+    private var played_time: Float? = null
     private var listeners: MutableSet<IEventListener> = HashSet()
-
     private val beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-    private lateinit var beat_timer: Job
 
     init {
         manager.on_completition_cb = {
@@ -43,49 +42,40 @@ class Music (protected val analyzer: IMusicAnalyzer,
     }
 
     fun prepare(track_id: String) {
-        paused = 0
-        start_pause = 0
-        start_time = System.currentTimeMillis()
+        played_time = null
         current_track = track_id
         manager.reset()
         manager.load(track_id)
     }
 
     fun play() {
-        if (start_pause > 0L)
-            paused += (System.currentTimeMillis() - start_pause)
-        start_pause = 0L
+        if(played_time == null)
+            played_time = 0f
         manager.play()
-        analyzer_play()
     }
 
     fun pause() {
         manager.pause()
-        start_pause = System.currentTimeMillis()
-        beat_timer.cancel()
     }
 
     fun stop() {
         manager.stop()
-        start_pause = System.currentTimeMillis()
-        beat_timer.cancel()
+        clearActions()
+        played_time = null
     }
 
-    protected fun analyzer_play() {
-        beat_timer = GlobalScope.launch {
-            if (start_pause > 0L)
-                return@launch
-            val current = System.currentTimeMillis() - start_time - paused
-            val sample = beat_map[current_track]!!.find { it.ms.toLong() >=  current} ?: return@launch
-            Gdx.app.debug(this@Music::class.java.simpleName, sample.confidence.toString())
-            delay(sample.ms.toLong() - current)
-            coroutineScope {
+    override fun act(delta: Float) {
+        if(played_time != null) {
+            played_time = played_time!! + delta
+            val sample = beat_map[current_track]!!.find {
+                it.ms/1000f >=  played_time!!-delta && it.ms/1000f < played_time!!}
+            if(sample != null) {
                 listeners.forEach {
-                    launch { it.on_beat(sample) }
+                    it.on_beat(this, sample)
                 }
             }
-            analyzer_play()
         }
+        super.act(delta)
     }
 
     protected fun analyze_beat(track_id: String) {

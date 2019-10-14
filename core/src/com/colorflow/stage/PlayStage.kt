@@ -1,11 +1,9 @@
 package com.colorflow.stage
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.engine.EntityCoordinator
 import com.colorflow.engine.entity.Entity
@@ -16,16 +14,18 @@ import com.colorflow.engine.entity.dot.DotPool
 import com.colorflow.engine.ring.Ring
 import com.colorflow.AssetProvider
 import com.colorflow.engine.background.Arcs
+import com.colorflow.graphic.EffectStage
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.laction
 import com.colorflow.music.BeatSample
 import com.colorflow.music.IEventListener
-import kotlinx.coroutines.delay
+import com.colorflow.music.Music
 
 class PlayStage(viewport: Viewport,
                 protected val state: GameState,
-                protected val assets: AssetProvider) : EffectStage(viewport), IEventListener {
+                protected val assets: AssetProvider,
+                protected val music: Music) : EffectStage(viewport), IEventListener {
 
     protected val dot_pool = DotPool(assets)
     protected val bonus_pool = BonusPool(assets)
@@ -38,6 +38,7 @@ class PlayStage(viewport: Viewport,
     fun get_ring_listener() = ring.getListener()
 
     fun reset() {
+        Gdx.app.debug(this::class.java.simpleName, "reset")
         /* clean */
         dot_pool.destroy_all()
         bonus_pool.destroy_all()
@@ -47,12 +48,14 @@ class PlayStage(viewport: Viewport,
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         arcs.arc_width = ring.radius
         /* add actors */
+        addActor(music)
         addActor(arcs)
         addActor(coordinator)
         addActor(ring)
         addAction(Actions.forever(laction { handle_collisions() }))
         /* effects */
         arcs.fadein()
+        effect_layer.stop_all()
         effect_layer.twinkling()
     }
 
@@ -114,14 +117,15 @@ class PlayStage(viewport: Viewport,
         }
     }
 
-    override suspend fun on_beat(sample: BeatSample) {
+    override fun on_beat(music: Music, sample: BeatSample) {
         Gdx.app.debug(this::class.java.simpleName, sample.bpm.toString())
         background_color = Color(sample.confidence, sample.confidence, sample.confidence, 1f)
         coordinator.dot_velocity *= 3f
         ring.setScale(1.1f)
-        delay(100)
-        ring.setScale(1f)
-        coordinator.dot_velocity /= 3f
+        music.addAction(Actions.sequence(Actions.delay(0.1f), laction {
+            ring.setScale(1f)
+            coordinator.dot_velocity /= 3f
+        }))
     }
 
     override fun on_completition() {}

@@ -1,4 +1,4 @@
-package com.colorflow.engine.background
+package com.colorflow.graphic.effects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL30
@@ -18,6 +18,10 @@ class EffectLayer: Group(), Disposable {
         shader_effects.add(ShaderEffect("shockwave"))
         shader_effects.add(ShaderEffect("twinkling"))
         shader_effects.add(ShaderEffect("glow"))
+    }
+
+    fun stop_all() {
+        shader_effects.forEach { it.stop() }
     }
 
     fun shockwave(position: Position) {

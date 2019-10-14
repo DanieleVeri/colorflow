@@ -1,4 +1,4 @@
-package com.colorflow.engine.background
+package com.colorflow.graphic.effects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Pixmap
@@ -35,7 +35,7 @@ class ShaderEffect(val fragment: String, vertex: String = "vertex"): Disposable 
     }
 
     fun apply(batch: Batch, current: Texture): Texture {
-        if(time > last) {
+        if(time >= last) {
             fbo?.dispose()
             fbo = null
             return current
@@ -59,6 +59,11 @@ class ShaderEffect(val fragment: String, vertex: String = "vertex"): Disposable 
         this.set_uniform = set_uniform
         this.last = last
         time = 0f
+    }
+
+    fun stop() {
+        time = 0f
+        last = 0f
     }
 
     companion object {
