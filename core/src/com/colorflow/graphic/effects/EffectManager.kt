@@ -11,7 +11,7 @@ import com.colorflow.graphic.effects.particle.Particle
 import com.colorflow.graphic.effects.particle.ParticlePool
 import com.colorflow.graphic.effects.shader.ShaderEffect
 
-class EffectManager (assets: AssetProvider): Disposable {
+internal class EffectManager (assets: AssetProvider): Disposable {
     val fbo: FrameBuffer
     protected val effect_list: ArrayList<ShaderEffect>
     protected val particle_pool: ParticlePool

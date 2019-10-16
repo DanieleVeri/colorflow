@@ -1,12 +1,12 @@
 ## COLORFLOW: Todo list
 
 ### functional
+- [S] Ring <-> shader <-> FFT
 - [S] Headphones reccomended + epilepsy banner in loading screen
 - [S] Creative Commons license link
 - [S] Score multiplier
 - [S] AdManager
 - [S] Asset design (NEON-like colors)
-- [S] Ring <-> shader <-> FFT
 - [A] Logo: note like
 - [A] Registered mark in title?
 

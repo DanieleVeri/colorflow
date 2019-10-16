@@ -85,7 +85,7 @@ class MainGame(
         game_over.dispose()
 
         music.dispose()
-        EffectLayer.manager.dispose()
+        EffectLayer.dispose()
         assets.dispose()
 
         super.dispose()

@@ -73,9 +73,12 @@ class EffectLayer: Group() {
     }
 
     companion object {
-        lateinit var manager: EffectManager
+        lateinit private var manager: EffectManager
         fun init(asset: AssetProvider) {
             manager = EffectManager(asset)
+        }
+        fun dispose() {
+            manager?.dispose()
         }
     }
 
