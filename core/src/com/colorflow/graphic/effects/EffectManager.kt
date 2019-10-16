@@ -11,7 +11,7 @@ import com.colorflow.graphic.effects.particle.Particle
 import com.colorflow.graphic.effects.particle.ParticlePool
 import com.colorflow.graphic.effects.shader.ShaderEffect
 
-class EffectManager (protected val assets: AssetProvider): Disposable {
+class EffectManager (assets: AssetProvider): Disposable {
     val fbo: FrameBuffer
     protected val effect_list: ArrayList<ShaderEffect>
     protected val particle_pool: ParticlePool
@@ -19,7 +19,7 @@ class EffectManager (protected val assets: AssetProvider): Disposable {
     init {
         fbo = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, true)
         effect_list = ArrayList()
-        particle_pool = ParticlePool()
+        particle_pool = ParticlePool(assets)
 
         effect_list.add(ShaderEffect(assets.get_shader("twinkling"), "twinkling"))
         effect_list.add(ShaderEffect(assets.get_shader("shockwave"), "shockwave"))

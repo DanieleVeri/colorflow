@@ -25,8 +25,7 @@ abstract class Entity (
     init {
         position = Position.Radial(0f, 0f)
         bounds = Circle(0f, 0f, 1f)
-        trail = ParticleEffect()
-        trail.load(Gdx.files.internal("sprites/trail.p"), Gdx.files.internal("sprites"))
+        trail = ParticleEffect(assets.get_particles("trail"))
     }
 
     fun set() {

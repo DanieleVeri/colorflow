@@ -2,14 +2,15 @@ package com.colorflow
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader
 import com.badlogic.gdx.assets.loaders.ShaderProgramLoader
 import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.audio.Sound
+import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
-import com.colorflow.graphic.effects.shader.ShaderEffect
 
 import java.util.HashMap
 import kotlin.math.abs
@@ -20,12 +21,14 @@ class AssetProvider : Disposable {
     private val _skin_map: MutableMap<String, String>
     private val _sound_map: MutableMap<String, String>
     private val _shader_map: MutableMap<String, String>
+    private val _particle_map: MutableMap<String, String>
     private val _screen_density: String
 
     init {
         _skin_map = HashMap()
         _sound_map = HashMap()
         _shader_map = HashMap()
+        _particle_map = HashMap()
 
         val dpi = (Gdx.graphics.density * 160f).toInt()
         var best_match = Densisties.hdpi
@@ -39,6 +42,7 @@ class AssetProvider : Disposable {
         _load_sounds()
         _load_skins()
         _load_shaders()
+        _load_particles()
     }
 
     fun finish_loading() {
@@ -64,6 +68,23 @@ class AssetProvider : Disposable {
             _manager.finishLoadingAsset(_shader_map[shader_name])
         }
         return _manager.get(_shader_map[shader_name])
+    }
+
+    fun get_particles(name: String): ParticleEffect {
+        if (!_manager.isLoaded(_particle_map[name])) {
+            _manager.finishLoadingAsset(_particle_map[name])
+        }
+        return _manager.get(_particle_map[name])
+    }
+
+    private fun _load_particles() {
+        val dir = Gdx.files.internal("sprites")
+        val files = dir.list()
+        files.filter { it.extension() == "p" }.forEach { file ->
+            Gdx.app.debug(this::class.java.simpleName, "load particle "+file.path())
+            _manager.load(file.path(), ParticleEffect::class.java)
+            _particle_map[file.nameWithoutExtension()] = file.path()
+        }
     }
 
     private fun _load_shaders() {

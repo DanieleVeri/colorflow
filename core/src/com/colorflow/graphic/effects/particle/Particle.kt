@@ -1,21 +1,18 @@
 package com.colorflow.graphic.effects.particle
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Pool
+import com.colorflow.AssetProvider
 import com.colorflow.graphic.Position
 
-class Particle(protected val pool: Pool<Particle>) : Actor(), Disposable, Pool.Poolable {
+class Particle(assets: AssetProvider,
+        protected val pool: Pool<Particle>) : Actor(), Disposable, Pool.Poolable {
 
-    private val effect: ParticleEffect = ParticleEffect()
-
-    init {
-        this.effect.load(Gdx.files.internal("sprites/exp.p"), Gdx.files.internal("sprites"))
-    }
+    private val effect: ParticleEffect = ParticleEffect(assets.get_particles("exp"))
 
     fun start(color: Color, position: Position) {
         effect.reset()
