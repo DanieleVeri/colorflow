@@ -31,7 +31,11 @@ class AdHandler(private val activity: Activity): Handler(), IAdHandler {
     }
 
     override fun is_rewarded(): Boolean {
-        return earned
+        if(earned) {
+            earned = false
+            return true
+        }
+        return false
     }
 
     override fun handleMessage(message: Message) {
@@ -94,4 +98,5 @@ class AdHandler(private val activity: Activity): Handler(), IAdHandler {
         LOAD_AD { override fun code() = 0 };
         abstract fun  code(): Int
     }
+
 }

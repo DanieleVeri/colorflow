@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
+import com.colorflow.ads.AdManager
 import com.colorflow.state.GameState
 import com.colorflow.ads.IAdHandler
 import com.colorflow.graphic.ButtonListener
@@ -18,7 +19,7 @@ class ShopStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): EffectStage(viewport) {
+        protected val ad: AdManager): EffectStage(viewport) {
 
     init {
         val title = Label("Upgrade", assets.get_skin("ui"), "h1")

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
+import com.colorflow.ads.AdManager
 import com.colorflow.state.CurrentGame
 import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
@@ -18,7 +19,7 @@ class TrackSelectionStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): EffectStage(viewport) {
+        protected val ad: AdManager): EffectStage(viewport) {
 
     init {
         val title = Label("Tracks", assets.get_skin("ui"), "h1")

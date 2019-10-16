@@ -1,5 +1,6 @@
 package com.colorflow.stage
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -14,7 +15,6 @@ import com.colorflow.engine.ring.Ring
 import com.colorflow.graphic.ButtonListener
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.effects.EffectStage
-import com.colorflow.graphic.effects.Effects
 import com.colorflow.graphic.laction
 
 class MenuStage (

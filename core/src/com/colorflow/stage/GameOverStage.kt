@@ -1,5 +1,6 @@
 package com.colorflow.stage
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -7,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.AssetProvider
+import com.colorflow.ads.AdManager
 import com.colorflow.state.CurrentGame
 import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
@@ -20,7 +22,7 @@ class GameOverStage (
         viewport: Viewport,
         protected val state: GameState,
         protected val assets: AssetProvider,
-        protected val ad_handler: IAdHandler): EffectStage(viewport) {
+        protected val ad: AdManager): EffectStage(viewport) {
 
     protected val ad_button: ImageButton
 
@@ -43,7 +45,7 @@ class GameOverStage (
             state.set_screen(ScreenType.LOAD)
         })
         ad_button.addListener(ButtonListener(assets, ad_button) {
-            ad_handler.show_ad()
+            ad.show()
         })
         home_button.addListener(ButtonListener(assets, home_button) {
             state.current_game = null
@@ -62,14 +64,13 @@ class GameOverStage (
         table.add(restart_button).expand()
         table.add(home_button).expand()
         addActor(table)
-    }
 
-    fun enable_reward() {
-        ad_button.isDisabled = false
+        addAction(Actions.forever(laction {
+            ad_button.isDisabled = !ad.available
+        }))
     }
 
     fun reward() {
-        ad_button.isDisabled = true
         assets.get_sound("cash").play(1f)
         state.coins += state.current_game!!.score.coins
         state.persist()

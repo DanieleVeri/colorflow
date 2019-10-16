@@ -10,24 +10,19 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.colorflow.graphic.Position
 
-class ShaderEffect(val fragment: String, vertex: String = "vertex"): Disposable {
-    protected val shader_program: ShaderProgram
+class ShaderEffect(protected val shader_program: ShaderProgram, val name: String): Disposable {
     protected lateinit var set_uniform: (ShaderProgram) -> Unit
     protected var fbo: FrameBuffer? = null
     protected var time: Float
     protected var last: Float
 
     init {
-        val vertex_shader = Gdx.files.internal("shaders/$vertex.glsl").readString()
-        val fragment_shader = Gdx.files.internal("shaders/${fragment}_fragment.glsl").readString()
-        shader_program = ShaderProgram(vertex_shader, fragment_shader)
         time = 0f
         last = 0f
     }
 
     override fun dispose() {
         fbo?.dispose()
-        shader_program.dispose()
     }
 
     fun update(delta: Float) {

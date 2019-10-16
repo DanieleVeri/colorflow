@@ -2,10 +2,11 @@ package com.colorflow
 
 import com.badlogic.gdx.*
 import com.badlogic.gdx.Application.LOG_DEBUG
+import com.colorflow.ads.AdManager
 import com.colorflow.music.IMusicAnalyzer
 import com.colorflow.music.IMusicManager
 import com.colorflow.ads.IAdHandler
-import com.colorflow.graphic.effects.Effects
+import com.colorflow.graphic.effects.EffectLayer
 import com.colorflow.music.Music
 import com.colorflow.state.IStorage
 import com.colorflow.screen.*
@@ -22,6 +23,7 @@ class MainGame(
     protected lateinit var assets: AssetProvider
     protected val game_state: GameState
     protected val music: Music
+    protected val ad_manager: AdManager
     protected var disposed = false
 
     protected lateinit var load: Screen
@@ -34,6 +36,7 @@ class MainGame(
     init {
         game_state = GameState(persistence, this::set_screen_listener)
         music = Music(music_analyzer, music_manager)
+        ad_manager = AdManager(ad_handler)
     }
 
     override fun create() {
@@ -56,13 +59,14 @@ class MainGame(
             assets = AssetProvider()
             Gdx.app.postRunnable {
                 assets.finish_loading()
+                EffectLayer.init(assets)
                 Gdx.app.debug("LoaderThread", "assets ready")
 
                 menu = MenuScreen(game_state, assets)
                 play = PlayScreen(game_state, assets, music)
-                shop = ShopScreen(game_state, assets, ad_handler)
-                game_over = GameOverScreen(game_state, assets, ad_handler)
-                track_selection = TrackSelectionScreen(game_state, assets, ad_handler)
+                shop = ShopScreen(game_state, assets, ad_manager)
+                game_over = GameOverScreen(game_state, assets, ad_manager)
+                track_selection = TrackSelectionScreen(game_state, assets, ad_manager)
 
                 game_state.set_screen(ScreenType.MENU)
             }
@@ -70,18 +74,19 @@ class MainGame(
     }
 
     override fun dispose() {
-        if(disposed) return
+        if(disposed)
+            return
         disposed = true
 
         menu.dispose()
         play.dispose()
         shop.dispose()
-        assets.dispose()
         track_selection.dispose()
         game_over.dispose()
 
         music.dispose()
-        Effects.dispose()
+        EffectLayer.manager.dispose()
+        assets.dispose()
 
         super.dispose()
     }
