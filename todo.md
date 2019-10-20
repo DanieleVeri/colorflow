@@ -1,6 +1,7 @@
 ## COLORFLOW: Todo list
 
 ### functional
+- [S] Background
 - [S] Ring <-> shader <-> FFT
 - [S] Headphones reccomended + epilepsy banner in loading screen
 - [S] Creative Commons license link
@@ -19,6 +20,7 @@
 - [S] arcs spawn at radius 0 -> delta too big
 - [S] Db upgrade
 - [S] Cache beat detection result (in sqlite)
+- [S] Basic telemetry
 - [S] Trail handling
 - [S] Use Gdx music
 

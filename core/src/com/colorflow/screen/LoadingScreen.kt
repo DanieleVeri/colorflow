@@ -31,10 +31,10 @@ class LoadingScreen(
         Gdx.input.inputProcessor = null
         if(state.current_game != null) {
             thread {
-                Gdx.app.debug(this::class.java.simpleName, "music analyzer prepare track '${state.current_game!!.selected_track}'")
-                music.analyze(state.current_game!!.selected_track)
                 Gdx.app.debug(this::class.java.simpleName, "reset music manager and load track '${state.current_game!!.selected_track}'")
                 music.prepare(state.current_game!!.selected_track)
+                Gdx.app.debug(this::class.java.simpleName, "music analyzer prepare track '${state.current_game!!.selected_track}'")
+                music.analyze(state.current_game!!.selected_track)
                 Gdx.app.postRunnable {
                     Gdx.app.debug(this::class.java.simpleName, "score reset")
                     state.current_game!!.score = Score()
