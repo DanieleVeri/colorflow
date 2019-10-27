@@ -38,7 +38,6 @@ class PlayStage(viewport: Viewport,
     fun get_ring_listener() = ring.getListener()
 
     fun reset() {
-        isDebugAll = true
         Gdx.app.debug(this::class.java.simpleName, "reset")
         /* clean */
         dot_pool.destroy_all()
@@ -58,6 +57,7 @@ class PlayStage(viewport: Viewport,
         arcs.fadein()
         effect_layer.stop_all()
         effect_layer.twinkling()
+        effect_layer.spectrum()
     }
 
     override fun dispose() {

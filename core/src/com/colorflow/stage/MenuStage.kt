@@ -57,6 +57,7 @@ class MenuStage (
         table.add(shop_button).expandY()
         table.add(coins).expandY()
         addActor(table)
+        effect_layer.spectrum()
     }
 
     override fun act(delta: Float) {
@@ -68,7 +69,6 @@ class MenuStage (
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
         effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
-        effect_layer.stop_all()
         return super.touchDragged(screenX, screenY, pointer)
     }
 

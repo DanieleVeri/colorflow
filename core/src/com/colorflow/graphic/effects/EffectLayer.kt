@@ -35,6 +35,10 @@ class EffectLayer: Group() {
         manager.get_effect("glow").start(1f)
     }
 
+    fun spectrum() {
+        manager.get_bg_effect("spectrum").start(Float.POSITIVE_INFINITY)
+    }
+
     fun explosion(color: Color, position: Position) {
         val obj = manager.get_explosion_particle()
         addActor(obj)
@@ -55,25 +59,35 @@ class EffectLayer: Group() {
             Gdx.app.error(this::class.java.simpleName, "null batch: skipping draw")
             return
         }
+
         batch.end()
         batch.flush()
-        manager.fbo.begin()
         batch.begin()
+
         Gdx.gl.glClearColor(0f, 0f, 0f, parentAlpha)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+        // background effects
+        manager.fbo.begin()
+        var texture = manager.fbo.colorBufferTexture
+        texture = manager.apply_bg_effects(batch, texture)
+        batch.draw(texture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
+                0, 0, Gdx.graphics.width, Gdx.graphics.height,
+                false, true)
         super.draw(batch, parentAlpha)
         batch.flush()
         manager.fbo.end()
-        var texture = manager.fbo.colorBufferTexture
+
+        // after effects
+        texture = manager.fbo.colorBufferTexture
         texture = manager.apply_effects(batch, texture)
-        batch.draw(texture,
-                0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
+        batch.draw(texture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
                 0, 0, Gdx.graphics.width, Gdx.graphics.height,
                 false, true)
     }
 
     companion object {
-        lateinit private var manager: EffectManager
+        private lateinit var manager: EffectManager
         fun init(asset: AssetProvider) {
             manager = EffectManager(asset)
         }

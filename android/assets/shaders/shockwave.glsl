@@ -10,7 +10,7 @@ varying vec2 v_texCoords;
 
 void main() {
     vec2 l_texCoords = v_texCoords;
-    vec3 shockParams = vec3(10.0, 0.8, 0.05);
+    vec3 shockParams = vec3(10.0, 0.8, 0.1);
     float offset = (time- floor(time))/time;
     float currentTime = (time)*(offset);
     float distance = distance(v_texCoords, center);
