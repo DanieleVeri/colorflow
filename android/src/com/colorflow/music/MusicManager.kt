@@ -6,6 +6,7 @@ import android.media.audiofx.Equalizer
 import android.net.Uri
 import android.util.Log
 import com.badlogic.gdx.Gdx
+import com.colorflow.music.MusicAnalyzer.Companion.get_music_file
 
 class MusicManager(private val context: Context):
         IMusicManager,

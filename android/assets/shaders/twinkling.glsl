@@ -10,7 +10,7 @@ varying vec2 v_texCoords;
 
 void main() {
 	vec3 c;
-	float l,z=time;
+	float l=0.0,z=time;
 	for(int i=0; i<3; i++) {
 		vec2 uv, p = v_texCoords;
 		uv = p;

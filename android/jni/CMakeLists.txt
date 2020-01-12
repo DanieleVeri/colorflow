@@ -29,7 +29,8 @@ set_target_properties(libavutil PROPERTIES
     IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/${AUDIOLIB}/out/${ANDROID_ABI}/lib/libavutil.a)
 
 add_library(musalyzer SHARED 
-    ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/BeatDetector.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/BeatDetector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/musalyzer/Spectrum.cpp)
 
 target_link_libraries(musalyzer
     ${log-lib}

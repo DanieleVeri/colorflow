@@ -34,7 +34,7 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
     const char_t *source_path = env->GetStringUTFChars(path, 0);
     aubio_source_t *source = new_aubio_source(source_path, samplerate, hop_size);
     if (!source) {
-        __android_log_print(ANDROID_LOG_ERROR, "libmusalyzer", "error loading music file");
+        __android_log_print(ANDROID_LOG_ERROR, LIBNAME, "error loading music file");
         return nullptr;
     }
 
@@ -48,7 +48,7 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         aubio_tempo_do(beat_tracking_obj, in, out);
         if (out->data[0] != 0) {
 /*
-            __android_log_print(ANDROID_LOG_INFO, APPNAME,
+            __android_log_print(ANDROID_LOG_INFO, LIBNAME,
                 "beat at %.3fms, %.3fs, frame %d, %.2fbpm with confidence %.2f\n",
                 aubio_tempo_get_last_ms(beat_tracking_obj), aubio_tempo_get_last_s(beat_tracking_obj),
                 aubio_tempo_get_last(beat_tracking_obj), aubio_tempo_get_bpm(beat_tracking_obj),
@@ -66,7 +66,7 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         }
         n_frames += read;
     } while (read == hop_size);
-    __android_log_print(ANDROID_LOG_INFO, "libmusalyzer",
+    __android_log_print(ANDROID_LOG_INFO, LIBNAME,
                         "read %.2fs, %d frames at %dHz (%d blocks) from %s\n",
                         n_frames * 1. / samplerate,
                         n_frames, samplerate,

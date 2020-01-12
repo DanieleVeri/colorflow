@@ -4,12 +4,11 @@
 extern "C" {
 
 #include <jni.h>
-#include <BeatDetector.h>
 #include <aubio.h>
 #include <cstddef>
 #include <android/log.h>
 
-#define APPNAME "Colorflow"
+#define LIBNAME "libmusalyzer"
 
 typedef struct _JNI_BeatSample {
     jclass cls;

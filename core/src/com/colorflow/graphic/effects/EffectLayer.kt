@@ -3,18 +3,12 @@ package com.colorflow.graphic.effects
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.glutils.FrameBuffer
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.utils.Disposable
 import com.colorflow.AssetProvider
 import com.colorflow.graphic.Position
-import com.colorflow.graphic.effects.particle.Particle
-import com.colorflow.graphic.effects.particle.ParticlePool
-import com.colorflow.graphic.effects.shader.ShaderEffect
 
 class EffectLayer: Group() {
 
@@ -35,8 +29,8 @@ class EffectLayer: Group() {
         manager.get_effect("glow").start(1f)
     }
 
-    fun spectrum() {
-        manager.get_bg_effect("spectrum").start(Float.POSITIVE_INFINITY)
+    fun spectrum(cb: (ShaderProgram) -> Unit) {
+        manager.get_bg_effect("spectrum").start(Float.POSITIVE_INFINITY, cb)
     }
 
     fun explosion(color: Color, position: Position) {

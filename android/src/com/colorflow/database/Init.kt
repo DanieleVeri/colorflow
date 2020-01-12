@@ -57,5 +57,11 @@ fun init(sqLiteDatabase: SQLiteDatabase) {
     values.put(TABLES.TRACK.COL_SRC, "[NCS] Oneeva - Platform 9")
     sqLiteDatabase.insert(TABLES.TRACK.TAB_NAME, null, values)
     values.clear()
+    values.put(TABLES.TRACK.COL_ID, "440")
+    values.put(TABLES.TRACK.COL_COST, 0)
+    values.put(TABLES.TRACK.COL_PURCHASED, 1)
+    values.put(TABLES.TRACK.COL_SRC, "440")
+    sqLiteDatabase.insert(TABLES.TRACK.TAB_NAME, null, values)
+    values.clear()
 }
 

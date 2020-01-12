@@ -2,11 +2,9 @@ package com.colorflow.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.GL30
+import com.badlogic.gdx.graphics.GL20
 import com.colorflow.state.GameState
 import com.colorflow.state.ScreenType
-import com.colorflow.music.IMusicAnalyzer
-import com.colorflow.music.IMusicManager
 import com.colorflow.music.Music
 import com.colorflow.state.Score
 import kotlin.concurrent.thread
@@ -24,7 +22,7 @@ class LoadingScreen(
                 (sin(t) / 2 + 0.5).toFloat(),
                 (sin(t) / 2 + 0.5).toFloat(),
                 (sin(t) / 2 + 0.5).toFloat(), 1f)
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
     }
 
     override fun show() {

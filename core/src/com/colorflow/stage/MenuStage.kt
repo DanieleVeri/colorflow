@@ -2,6 +2,9 @@ package com.colorflow.stage
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -27,6 +30,8 @@ class MenuStage (
     private var dy = 0.0
 
     init {
+        effect_layer.spectrum {}
+
         val title = Label("COLORFLOW", assets.get_skin("ui"), "h1")
         val record = Label("REC0RD: " + state.record, assets.get_skin("ui"), "h2")
         record.addAction(Actions.forever(laction { record.setText("REC0RD: " + state.record) }))
@@ -57,7 +62,6 @@ class MenuStage (
         table.add(shop_button).expandY()
         table.add(coins).expandY()
         addActor(table)
-        effect_layer.spectrum()
     }
 
     override fun act(delta: Float) {

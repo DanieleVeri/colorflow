@@ -1,12 +1,14 @@
 package com.colorflow.graphic.effects.shader
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.BufferUtils
 import com.badlogic.gdx.utils.Disposable
 import com.colorflow.graphic.Position
 
@@ -17,6 +19,7 @@ class ShaderEffect(protected val shader_program: ShaderProgram, val name: String
     protected var last: Float
 
     init {
+        Gdx.app.debug("shader $name", shader_program.log)
         time = 0f
         last = 0f
     }
@@ -30,7 +33,7 @@ class ShaderEffect(protected val shader_program: ShaderProgram, val name: String
     }
 
     fun apply(batch: Batch, current: Texture): Texture {
-        if(time >= last) {
+        if (time >= last) {
             fbo?.dispose()
             fbo = null
             return current
@@ -45,6 +48,7 @@ class ShaderEffect(protected val shader_program: ShaderProgram, val name: String
                 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(),
                 0, 0, Gdx.graphics.width, Gdx.graphics.height,
                 false, true)
+        batch.flush()
         fbo!!.end()
         batch.shader = null
         return fbo!!.colorBufferTexture

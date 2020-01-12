@@ -1,12 +1,7 @@
 package com.colorflow.music
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
 import com.badlogic.gdx.utils.Disposable
-import com.colorflow.graphic.laction
-import kotlinx.coroutines.*
 import java.util.HashMap
 import java.util.HashSet
 
@@ -17,6 +12,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
     private var played_time: Float? = null
     private var listeners: MutableSet<IEventListener> = HashSet()
     private val beat_map: HashMap<String, Array<BeatSample>> = HashMap()
+    private val fft_map: HashMap<String, Array<Float>> = HashMap()
 
     init {
         manager.on_completition_cb = {
@@ -67,6 +63,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
     override fun act(delta: Float) {
         if(played_time != null) {
             played_time = played_time!! + delta
+            // beat detection
             val sample = beat_map[current_track]!!.find {
                 it.ms/1000f >=  played_time!!-delta && it.ms/1000f < played_time!!}
             if(sample != null) {
@@ -74,6 +71,9 @@ class Music (protected val analyzer: IMusicAnalyzer,
                     it.on_beat(this, sample)
                 }
             }
+            // fft
+            val fft = analyzer.fft_slice(current_track, played_time!!)
+            listeners.forEach { it.on_fft(this, fft) }
         }
         super.act(delta)
     }
