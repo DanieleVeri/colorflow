@@ -1,5 +1,6 @@
 package com.colorflow.music
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Disposable
 import java.util.HashMap
@@ -12,7 +13,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
     private var played_time: Float? = null
     private var listeners: MutableSet<IEventListener> = HashSet()
     private val beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-    private val fft_map: HashMap<String, Array<Float>> = HashMap()
+    private val fft_map: HashMap<String, FloatArray> = HashMap()
 
     init {
         manager.on_completition_cb = {
@@ -71,7 +72,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
                     it.on_beat(this, sample)
                 }
             }
-            // fft
+            // spectrum
             val fft = analyzer.fft_slice(current_track, played_time!!)
             listeners.forEach { it.on_fft(this, fft) }
         }

@@ -30,7 +30,6 @@ class PlayScreen(
 
     override fun render(delta: Float) {
         //Gdx.app.debug(this::class.java.simpleName, "fps "+Gdx.graphics.framesPerSecond)
-
         if(state.current_game!!.gameover) {
             game_over()
             return

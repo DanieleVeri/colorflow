@@ -20,7 +20,9 @@ import com.colorflow.graphic.laction
 import com.colorflow.music.BeatSample
 import com.colorflow.music.IEventListener
 import com.colorflow.music.Music
+import java.util.*
 import java.util.Collections.min
+import kotlin.math.floor
 
 class PlayStage(viewport: Viewport,
                 protected val state: GameState,
@@ -47,14 +49,13 @@ class PlayStage(viewport: Viewport,
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         /* add actors */
         addActor(music)
-        addActor(coordinator)
+        //addActor(coordinator)
         addActor(ring)
         addAction(Actions.forever(laction { handle_collisions() }))
         /* effects */
         effect_layer.stop_all()
         effect_layer.spectrum { s -> s.setUniformi("iChannel0", 1) }
         effect_layer.twinkling()
-
     }
 
     override fun dispose() {
@@ -124,19 +125,20 @@ class PlayStage(viewport: Viewport,
         }))
     }
 
-    private val SIZE = 128
+    private val SIZE = 2048
     private val pixmap = Pixmap(SIZE, 1, Pixmap.Format.RGBA8888)
     private val text_fft = Texture(pixmap)
 
     override fun on_fft(music: Music, buffer: FloatArray) {
         val color = Color()
-        val half_buffer = buffer.take(buffer.size / 2)
-        val max = half_buffer.reduce{ x, y -> if (x > y) x else y }
-        val normalized = half_buffer.map { it / max }.toFloatArray()
+        val a = FloatArray(10)
         for (i in 0 until SIZE) {
-            color.set(normalized[i], 0f, 0f, 1f)
+            color.set(buffer[i], 0f, 0f, 1f)
+            if ( i<10)
+                a[i] = buffer[i]
             pixmap.drawPixel(i, 0, Color.rgba8888(color))
         }
+        Gdx.app.debug("fft", Arrays.toString(a))
         text_fft.draw(pixmap, 0, 0)
         Gdx.graphics.gL20.glActiveTexture(GL20.GL_TEXTURE1)
         text_fft.bind()
