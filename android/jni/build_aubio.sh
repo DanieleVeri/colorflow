@@ -3,7 +3,7 @@
 [ -z $PLATFORM ] && PLATFORM=android-21
 NDK_TOOLCHAINS=$PWD/toolchains
 
-[ -d aubio ] || git clone https://git.aubio.org/aubio/aubio/ 
+[ -d aubio ] || git clone https://github.com/DanieleVeri/aubio
 cd aubio
 [ -e ./waf ] || scripts/get_waf.sh
 cd -

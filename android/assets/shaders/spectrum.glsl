@@ -13,14 +13,14 @@ varying vec2 v_texCoords;
 
 void main()
 {
-    gl_FragColor = texture2D(iChannel0, v_texCoords);
-    return;
+    //gl_FragColor = texture2D(iChannel0, v_texCoords);
+    //return;
     vec2 uv = (v_texCoords - 0.5);
     uv.y /= resolution.x/resolution.y;
     float CIRCLES = 10.0;
     float cS = 0.5;
     float sm = 1.0 / resolution.y * 2.0; // smooth
-    float ps = 1.0 / resolution.y * sqrt(resolution.y) * 0.225; // circle thin
+    float ps = 1.0 / resolution.y * sqrt(resolution.y) * 0.6; // circle thin
     float d = length(uv);
     float a = atan(uv.y, uv.x);
     a = a < 0.0 ? PI + (PI - abs(a)) : a;

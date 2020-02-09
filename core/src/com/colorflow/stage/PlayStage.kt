@@ -49,7 +49,7 @@ class PlayStage(viewport: Viewport,
         ring = Ring(assets, state.ring_list.find { it.used }!!.src)
         /* add actors */
         addActor(music)
-        //addActor(coordinator)
+        addActor(coordinator)
         addActor(ring)
         addAction(Actions.forever(laction { handle_collisions() }))
         /* effects */
@@ -125,20 +125,16 @@ class PlayStage(viewport: Viewport,
         }))
     }
 
-    private val SIZE = 2048
+    private val SIZE = 1024
     private val pixmap = Pixmap(SIZE, 1, Pixmap.Format.RGBA8888)
     private val text_fft = Texture(pixmap)
 
     override fun on_fft(music: Music, buffer: FloatArray) {
         val color = Color()
-        val a = FloatArray(10)
         for (i in 0 until SIZE) {
             color.set(buffer[i], 0f, 0f, 1f)
-            if ( i<10)
-                a[i] = buffer[i]
             pixmap.drawPixel(i, 0, Color.rgba8888(color))
         }
-        Gdx.app.debug("fft", Arrays.toString(a))
         text_fft.draw(pixmap, 0, 0)
         Gdx.graphics.gL20.glActiveTexture(GL20.GL_TEXTURE1)
         text_fft.bind()

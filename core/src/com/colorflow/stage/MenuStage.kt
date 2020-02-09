@@ -1,10 +1,6 @@
 package com.colorflow.stage
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -14,7 +10,6 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.colorflow.state.ScreenType
 import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
-import com.colorflow.engine.ring.Ring
 import com.colorflow.graphic.ButtonListener
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.effects.EffectStage
@@ -45,16 +40,12 @@ class MenuStage (
         shop_button.addListener(ButtonListener(assets, shop_button) {
             state.set_screen(ScreenType.SHOP)
         })
-        val ring = Ring(assets, state.ring_list.find { it.used }!!.src)
-        ring.addAction(Actions.forever(Actions.rotateBy(1f)))
 
         val table = Table()
         table.width = Position.widthScreen
         table.height = Position.heightScreen
         table.top()
         table.add(title).colspan(2).expandY()
-        table.row()
-        table.add(ring).colspan(2).expand()
         table.row()
         table.add(play_button).expandY()
         table.add(record).expandY()

@@ -43,7 +43,7 @@ Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstrin
     aubio_source_do(source, in, &read);
     aubio_fft_do(fft, in, out);
     float max = 0;
-    jfloatArray samples = env->NewFloatArray(win_size);
+    jfloatArray samples = env->NewFloatArray(win_size/2);
     for (uint_t i=0; i<win_size / 2 && read>0; i++) {
         jfloat buf = cvec_norm_get_sample(out, i);
         if (max < buf)
