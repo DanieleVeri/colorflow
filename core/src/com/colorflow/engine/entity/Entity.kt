@@ -17,13 +17,12 @@ abstract class Entity (
     lateinit var coordinator: IMotionCoordinator
     var position: Position.Radial; protected set
     var bounds: Circle; protected set
-    protected var trail: ParticleEffect
+
     protected lateinit var texture: TextureRegion
 
     init {
         position = Position.Radial(0f, 0f)
         bounds = Circle(0f, 0f, 1f)
-        trail = ParticleEffect(assets.get_particles("trail"))
     }
 
     fun set() {
@@ -31,11 +30,9 @@ abstract class Entity (
                 position.y - texture.regionHeight / 2,
                 texture.regionWidth.toFloat(), texture.regionHeight.toFloat())
         bounds.setPosition(position.x, position.y)
-        trail.reset()
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
-        trail.draw(batch)
         batch!!.draw(texture, x, y, width / 2, height / 2, width, height, 1f, 1f, rotation)
     }
 
@@ -49,14 +46,6 @@ abstract class Entity (
                 position.x - texture.regionWidth / 2,
                 position.y - texture.regionHeight / 2))
 
-        /* Trail */
-        trail.setPosition(position.x, position.y)
-        val angle = position.angleRadial
-        trail.emitters.first().angle.setHigh(angle - 45, angle + 45)
-        trail.emitters.first().angle.setLow(angle - 45, angle + 45)
-        trail.flipY()
-        trail.update(delta)
-
         /* Processing actions */
         super.act(delta)
         if (!isVisible) {
@@ -68,10 +57,6 @@ abstract class Entity (
         isVisible = false
         cb(this)
         super.remove()
-    }
-
-    override fun dispose() {
-        trail.dispose()
     }
 
     abstract override fun reset()

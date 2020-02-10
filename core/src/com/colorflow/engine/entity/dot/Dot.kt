@@ -21,7 +21,6 @@ class Dot(assets: AssetProvider,
             Type.STD -> this.texture = assets.get_skin("game").atlas.findRegion("dot_std")
             Type.REVERSE -> this.texture = assets.get_skin("game").atlas.findRegion("dot_reverse")
         }
-        this.initTrail(color)
         this.position.x = position.x
         this.position.y = position.y
         this.bounds.setRadius(texture.regionWidth/2f)
@@ -54,14 +53,9 @@ class Dot(assets: AssetProvider,
         }
     }
 
-    override fun reset() {}
+    override fun dispose() {}
 
-    private fun initTrail(color: Color) {
-        val colors = this.trail.emitters.first().tint.colors
-        colors[0] = color.rgb.r
-        colors[1] = color.rgb.g
-        colors[2] = color.rgb.b
-    }
+    override fun reset() {}
 
     enum class Type {
         STD, REVERSE

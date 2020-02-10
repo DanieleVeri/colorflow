@@ -1,8 +1,8 @@
 #include "Spectrum.h"
 
 extern "C"
-JNIEXPORT jfloatArray JNICALL
-Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstring path, float time) {
+JNIEXPORT jobjectArray JNICALL
+Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstring path) {
     uint_t samplerate = 0;
     const uint_t win_size = 4096;
     const uint_t hop_size = win_size;
@@ -19,47 +19,33 @@ Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstrin
     cvec_t *out = new_cvec(win_size); // output position
     aubio_fft_t *fft = new_aubio_fft(win_size);
 
-    // seek at current time
-    auto inc = 1000000000u;
-    auto max_frame = 0u;
-    while (true) {
-        max_frame += inc;
-        if (aubio_source_seek(source, max_frame) != 0) {
-            if (inc == 1)
-                break;
-            max_frame -= inc;
-            inc /= 10;
-        }
-    }
-    auto frames_total = aubio_source_get_duration(source);
-    auto frame = static_cast<uint_t>(max_frame * (time * samplerate) / frames_total);
-    if (aubio_source_seek(source, frame) != 0) {
-        __android_log_print(ANDROID_LOG_ERROR, LIBNAME,
-                "seek fail, frame: %d / %d %f", frame, aubio_source_get_duration(source), time);
-        return nullptr;
-    }
+    jobjectArray jFloatArrayArray = env->NewObjectArray(10000, env->FindClass("[F"), nullptr);
 
-    // sampling
-    aubio_source_do(source, in, &read);
-    aubio_fft_do(fft, in, out);
-    float max = 0;
-    jfloatArray samples = env->NewFloatArray(win_size/2);
-    for (uint_t i=0; i<win_size / 2 && read>0; i++) {
-        jfloat buf = cvec_norm_get_sample(out, i);
-        if (max < buf)
-            max = buf;
-        env->SetFloatArrayRegion(samples, i, 1, &buf);
-    }
-
-    // normalization
-    if (max > 1e-6) {
-        for (uint_t i = 0; i < win_size / 2; i++) {
-            jfloat buf;
-            env->GetFloatArrayRegion(samples, i, 1, &buf);
-            buf /= max;
+    int j = 0;
+    do {
+        // sampling
+        aubio_source_do(source, in, &read);
+        aubio_fft_do(fft, in, out);
+        float max = 0;
+        jfloatArray samples = env->NewFloatArray(win_size / 2);
+        for (uint_t i = 0; i < win_size / 4 && read > 0; i++) {
+            jfloat buf = cvec_norm_get_sample(out, i);
+            if (max < buf)
+                max = buf;
             env->SetFloatArrayRegion(samples, i, 1, &buf);
         }
-    }
+        // normalization
+        if (max > 1e-6) {
+            for (uint_t i = 0; i < win_size / 4; i++) {
+                jfloat buf;
+                env->GetFloatArrayRegion(samples, i, 1, &buf);
+                buf /= max;
+                env->SetFloatArrayRegion(samples, i, 1, &buf);
+            }
+        }
+        env->SetObjectArrayElement(jFloatArrayArray, j++, samples);
+        env->DeleteLocalRef(samples);
+    }  while (read == win_size);
 
     del_aubio_fft(fft);
     del_fvec(in);
@@ -68,5 +54,5 @@ Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstrin
     aubio_cleanup();
     env->ReleaseStringUTFChars(path, source_path);
 
-    return samples;
+    return jFloatArrayArray;
 }

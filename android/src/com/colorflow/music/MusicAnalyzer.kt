@@ -9,13 +9,13 @@ class MusicAnalyzer(private val context: Context): IMusicAnalyzer {
         return detectBeat(get_music_file(context, track_id).path)
     }
 
-    override fun fft_slice(track_id: String, time: Float): FloatArray {
-        return fft(get_music_file(context, track_id).path, time)
+    override fun fft_slice(track_id: String): Array<FloatArray> {
+        return fft(get_music_file(context, track_id).path)
     }
 
     // NOTE: native functions must be camelCase
     external fun detectBeat(path: String): Array<BeatSample>
-    external fun fft(path: String, time: Float): FloatArray
+    external fun fft(path: String): Array<FloatArray>
 
     companion object {
         init {

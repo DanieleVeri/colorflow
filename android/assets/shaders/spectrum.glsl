@@ -17,7 +17,7 @@ void main()
     //return;
     vec2 uv = (v_texCoords - 0.5);
     uv.y /= resolution.x/resolution.y;
-    float CIRCLES = 10.0;
+    float CIRCLES = 7.0;
     float cS = 0.5;
     float sm = 1.0 / resolution.y * 2.0; // smooth
     float ps = 1.0 / resolution.y * sqrt(resolution.y) * 0.6; // circle thin

@@ -10,8 +10,8 @@ extern "C" {
 
 #define LIBNAME "libmusalyzer"
 
-JNIEXPORT jfloatArray JNICALL
-Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstring path, float time);
+JNIEXPORT jobjectArray JNICALL
+Java_com_colorflow_music_MusicAnalyzer_fft(JNIEnv *env, jobject instance, jstring path);
 
 }
 
