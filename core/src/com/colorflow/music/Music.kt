@@ -17,7 +17,6 @@ class Music (protected val analyzer: IMusicAnalyzer,
     private lateinit var current_track: String
     private var played_time: Float? = null
     private var listeners: MutableSet<IEventListener> = HashSet()
-    private var worker: SendChannel<WorkerMsg> = CoroutineScope(Dispatchers.Default).worker()
 
     init {
         manager.on_completition_cb = {
@@ -29,6 +28,11 @@ class Music (protected val analyzer: IMusicAnalyzer,
             Gdx.app.error(this::class.java.simpleName, "Music Manager error")
         }
     }
+    private val fft_map: HashMap<String, Array<FloatArray>> = HashMap()
+    private val beat_map: HashMap<String, Array<BeatSample>> = HashMap()
+
+
+    private var worker: SendChannel<WorkerMsg> = CoroutineScope(Dispatchers.Default).worker()
 
     protected fun <T>worker_do(block: suspend (CompletableDeferred<T>) -> WorkerMsg): T {
         return runBlocking {
@@ -47,9 +51,6 @@ class Music (protected val analyzer: IMusicAnalyzer,
                   val response: CompletableDeferred<BeatSample?>): WorkerMsg()
 
     protected fun CoroutineScope.worker() = actor<WorkerMsg> {
-        var fft_map: Array<FloatArray>? = null
-        var beat_map: HashMap<String, Array<BeatSample>> = HashMap()
-
         for (msg in channel) {
             when (msg) {
                 is Analyze -> {
@@ -60,14 +61,15 @@ class Music (protected val analyzer: IMusicAnalyzer,
                             beat_map[current_track] = analyzer.analyze_beat(current_track)
                     },
                     scope.async {
-                        fft_map = analyzer.fft_slice(current_track)
+                        if (fft_map[current_track] == null)
+                            fft_map[current_track] = analyzer.fft_slice(current_track)
                     })
                     jobs.awaitAll()
                     msg.response.complete(Unit)
                 }
 
                 is GetFFT -> {
-                    val slice = fft_map!![floor(played_time!!*44100.0/4096.0).toInt()]
+                    val slice = fft_map[current_track]!![floor(played_time!!*44100.0/4096.0).toInt()]
                     msg.response.complete(slice)
                 }
 
@@ -94,7 +96,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
 
         current_track = track_id
         manager.load(current_track)
-        worker_do<Unit>{ Analyze(it) }
+        worker_do<Unit>{Analyze(it)}
     }
 
     fun play() {
@@ -117,21 +119,22 @@ class Music (protected val analyzer: IMusicAnalyzer,
         if(played_time != null) {
             played_time = played_time!! + delta
             // beat detection
-            val sample = worker_do<BeatSample?> { GetBeat(delta, it) }
+            val sample = beat_map[current_track]!!.find {
+                it.ms/1000f >=  played_time!!-delta && it.ms/1000f < played_time!!}
             if(sample != null) {
                 listeners.forEach {
                     it.on_beat(this, sample)
                 }
             }
             // spectrum
-            val fft_slice = worker_do<FloatArray> { GetFFT(it) }
-            listeners.forEach { it.on_fft(this, fft_slice) }
+            val slice = fft_map[current_track]!![floor(played_time!!*44100.0/4096.0).toInt()]
+            listeners.forEach { it.on_fft(this, slice) }
         }
         super.act(delta)
     }
 
     override fun dispose() {
         manager.release()
-        worker.close()
+        //worker.close()
     }
 }

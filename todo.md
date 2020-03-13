@@ -1,14 +1,14 @@
 ## COLORFLOW: Todo list
 
 ### functional
+- [S] Scale assets
 - [S] Ring -> shader
-- [S] Headphones reccomended + epilepsy banner in loading screen
-- [S] Creative Commons license link
-- [S] Asset design (NEON-like colors)
-- [S] Particle effects restyle
-- [S] Logo: note like
+- [S] Dot arrival on beat
+- [S] Asset design
 - [S] Score multiplier
 - [S] More ads
+- [B] Soundcloud api
+- [B] Download and analysis while showing ads
 - [C] Track analysis using `oneset`, `pitch`, `note` detection
 - [C] Share score for reward
 - [C] Slot machine (watch ad for a run)

@@ -36,6 +36,8 @@ class GameOverStage (
             coins.setText("COINS: " + state.current_game!!.score.coins)
         }))
         val title = Label("GAME OVER", assets.get_skin("ui"), "h1")
+        val ads_text = Label("x2 coins ->", assets.get_skin("ui"), "h3")
+
         val restart_button = ImageButton(assets.get_skin("ui"), "restart")
         ad_button = ImageButton(assets.get_skin("ui"), "ads")
         val home_button = ImageButton(assets.get_skin("ui"), "back")
@@ -59,6 +61,7 @@ class GameOverStage (
         table.add(score).expandX().left()
         table.add(coins).expandX().right()
         table.row()
+        table.add(ads_text)
         table.add(ad_button).colspan(2).expand()
         table.row()
         table.add(restart_button).expand()

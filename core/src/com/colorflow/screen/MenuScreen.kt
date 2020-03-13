@@ -13,4 +13,9 @@ class MenuScreen(
         multiplexer.addProcessor(stage)
     }
 
+    override fun show() {
+        stage.start_bg_effect()
+        super.show()
+    }
+
 }

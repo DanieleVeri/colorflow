@@ -31,6 +31,7 @@ internal class EffectManager (assets: AssetProvider): Disposable {
         effect_list.add(ShaderEffect(assets.get_shader("glow"), "glow"))
 
         bgeffect_list.add(ShaderEffect(assets.get_shader("spectrum"), "spectrum"))
+        bgeffect_list.add(ShaderEffect(assets.get_shader("fractal"), "fractal"))
     }
 
     fun get_effect(name: String): ShaderEffect {

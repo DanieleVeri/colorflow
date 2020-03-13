@@ -16,6 +16,8 @@ import com.colorflow.AssetProvider
 import com.colorflow.state.GameState
 import com.colorflow.graphic.Position
 import com.colorflow.graphic.ButtonListener
+import com.colorflow.graphic.effects.EffectLayer
+import com.colorflow.graphic.effects.EffectStage
 import com.colorflow.graphic.laction
 
 class HUDStage(viewport: Viewport,

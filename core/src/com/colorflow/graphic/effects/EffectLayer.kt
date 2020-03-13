@@ -33,6 +33,10 @@ class EffectLayer: Group() {
         manager.get_bg_effect("spectrum").start(Float.POSITIVE_INFINITY, cb)
     }
 
+    fun fractal(cb: (ShaderProgram) -> Unit) {
+        manager.get_bg_effect("fractal").start(Float.POSITIVE_INFINITY, cb)
+    }
+
     fun explosion(color: Color, position: Position) {
         val obj = manager.get_explosion_particle()
         addActor(obj)

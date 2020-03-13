@@ -57,6 +57,7 @@ class MainGame(
 
             Gdx.app.debug("LoaderThread", "loading assets")
             assets = AssetProvider()
+            Thread.sleep(3000)
             Gdx.app.postRunnable {
                 assets.finish_loading()
                 EffectLayer.init(assets)

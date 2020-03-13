@@ -51,9 +51,9 @@ class ShopStage (
 
         state.ring_list.forEach {
             val icon = Image(assets.get_skin("game").getRegion(it.src))
-            val id_label = Label(it.id, assets.get_skin("ui"), "h3")
+            val id_label = Label("coming soon"/*it.id*/, assets.get_skin("ui"), "h3")
             val purchase_table = Table()
-            val cost_label = Label(it.cost.toString(), assets.get_skin("ui"), "h2")
+            val cost_label = Label("???"/*it.cost.toString()*/, assets.get_skin("ui"), "h2")
             val buy_button = ImageButton(assets.get_skin("ui"), "buy")
             buy_button.addListener(ButtonListener(assets, buy_button) {
                 assets.get_sound("cash").play(1f)
@@ -76,13 +76,15 @@ class ShopStage (
             ring_table.row()
 
             addAction(Actions.forever(laction {
+                /*
                 if(it.used)
                     icon.addAction(Actions.scaleTo(1.2f, 1.2f, 0.2f))
                 else
                     icon.addAction(Actions.scaleTo(1.0f, 1.0f, 0.2f))
+                 */
                 select_button.isVisible = !it.used
                 cell.setActor(if(!it.purchased) purchase_table else select_button)
-                buy_button.isDisabled = state.coins < it.cost || it.purchased
+                buy_button.isDisabled = true/*state.coins < it.cost || it.purchased*/
             }))
         }
 
@@ -112,8 +114,8 @@ class ShopStage (
         gold_table.add(gold_bonus_button)
         gold_table.row()
         gold_table.add(gold_label)
-
-        bonus_table.add(bomb_table).expandX().padLeft(40f)
+        bonus_table.add(bomb_table).expandX().padLeft(40f).padBottom(80f)
+        bonus_table.row()
         bonus_table.add(gold_table).expandX()
         addAction(Actions.forever(laction {
             val bomb_cost = (state.bomb_chance * BONUS_COST).toInt()
@@ -131,7 +133,7 @@ class ShopStage (
     }
 
     companion object {
-        const val BONUS_COST = 10000
+        const val BONUS_COST = 1000
         const val BONUS_CHANCE_INC = 0.05f
     }
 

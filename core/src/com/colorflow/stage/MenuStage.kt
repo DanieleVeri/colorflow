@@ -25,8 +25,6 @@ class MenuStage (
     private var dy = 0.0
 
     init {
-        effect_layer.spectrum {}
-
         val title = Label("COLORFLOW", assets.get_skin("ui"), "h1")
         val record = Label("REC0RD: " + state.record, assets.get_skin("ui"), "h2")
         record.addAction(Actions.forever(laction { record.setText("REC0RD: " + state.record) }))
@@ -65,6 +63,11 @@ class MenuStage (
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
         effect_layer.explosion(Color.WHITE, Position.Pixel(screenX.toFloat(), Position.heightScreen - screenY.toFloat()))
         return super.touchDragged(screenX, screenY, pointer)
+    }
+
+    fun start_bg_effect() {
+        effect_layer.stop_all()
+        effect_layer.fractal {  }
     }
 
 }
