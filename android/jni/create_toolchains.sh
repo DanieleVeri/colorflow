@@ -5,7 +5,7 @@
 
 [ -z $PLATFORM ] && PLATFORM=android-21
 
-NDK_PATH="/home/dan/Programs/android-ndk-r18b"
+NDK_PATH="/home/dan/Android/Sdk/ndk/18.1.5063045"
 NDK_TOOLCHAINS=$PWD/toolchains
 
 mkdir -p toolchains
