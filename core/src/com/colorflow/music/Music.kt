@@ -57,8 +57,12 @@ class Music (protected val analyzer: IMusicAnalyzer,
                     val scope = CoroutineScope(Dispatchers.Default)
                     val jobs = listOf(
                     scope.async {
-                        if (beat_map[current_track] == null)
+                        if (beat_map[current_track] == null) {
                             beat_map[current_track] = analyzer.analyze_beat(current_track)
+                            val values = beat_map[current_track]?.joinToString(){it.confidence.toString()}
+                            Gdx.app.debug("Beat detected", values)
+                            Gdx.app.debug("Beat number", beat_map[current_track]?.size.toString())
+                        }
                     },
                     scope.async {
                         if (fft_map[current_track] == null)
@@ -122,6 +126,7 @@ class Music (protected val analyzer: IMusicAnalyzer,
             val sample = beat_map[current_track]!!.find {
                 it.ms/1000f >=  played_time!!-delta && it.ms/1000f < played_time!!}
             if(sample != null) {
+                Gdx.app.debug("Current beat confidence", sample.confidence.toString())
                 listeners.forEach {
                     it.on_beat(this, sample)
                 }

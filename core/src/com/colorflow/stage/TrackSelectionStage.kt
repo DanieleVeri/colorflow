@@ -22,7 +22,7 @@ class TrackSelectionStage (
         protected val ad: AdManager): EffectStage(viewport) {
 
     init {
-        val title = Label("Tracks", assets.get_skin("ui"), "h1")
+        val title = Label("Tracks", assets.get_skin("ui"), "h2")
         val home_button = ImageButton(assets.get_skin("ui"), "back")
         home_button.addListener(ButtonListener(assets, home_button) {
             state.set_screen(ScreenType.MENU)

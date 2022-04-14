@@ -22,13 +22,15 @@ extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance, jstring path) {
     JNI_BeatSample *jniBeatSample = loadJniBeatSample(env);
-    const int sample_num_max = 800; // ~ 4min song at 180bpm
+    const int sample_num_max = 8000;
     BeatSample fill[sample_num_max];
 
     int counter = 0;
     uint_t samplerate = 0;
-    const uint_t win_size = 1024;
-    const uint_t hop_size = win_size / 4;
+    const uint_t win_size = 2048;
+    const uint_t hop_size = 1024;
+    const int silenceDb_threshold = -15;
+    const float confidence_threshold = 0.01f;
     uint_t n_frames = 0, read = 0;
 
     const char_t *source_path = env->GetStringUTFChars(path, 0);
@@ -37,7 +39,6 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
         __android_log_print(ANDROID_LOG_ERROR, LIBNAME, "error loading music file");
         return nullptr;
     }
-
     samplerate = aubio_source_get_samplerate(source);
     fvec_t *in = new_fvec(hop_size); // input audio buffer
     fvec_t *out = new_fvec(1); // output position
@@ -46,18 +47,19 @@ Java_com_colorflow_music_MusicAnalyzer_detectBeat(JNIEnv *env, jobject instance,
     do {
         aubio_source_do(source, in, &read);
         aubio_tempo_do(beat_tracking_obj, in, out);
-        if (out->data[0] != 0) {
-/*
+        uint_t is_silence = aubio_silence_detection(in, silenceDb_threshold);
+        if (out->data[0] != 0 && !is_silence) {
+            /*
             __android_log_print(ANDROID_LOG_INFO, LIBNAME,
                 "beat at %.3fms, %.3fs, frame %d, %.2fbpm with confidence %.2f\n",
                 aubio_tempo_get_last_ms(beat_tracking_obj), aubio_tempo_get_last_s(beat_tracking_obj),
                 aubio_tempo_get_last(beat_tracking_obj), aubio_tempo_get_bpm(beat_tracking_obj),
                 aubio_tempo_get_confidence(beat_tracking_obj));
-*/
+            */
             float conf = aubio_tempo_get_confidence(beat_tracking_obj);
             float ms = aubio_tempo_get_last_ms(beat_tracking_obj);
             float bpm = aubio_tempo_get_bpm(beat_tracking_obj);
-            if (conf > .01f) {
+            if (conf > confidence_threshold) {
                 fill[counter].ms = ms;
                 fill[counter].confidence = conf;
                 fill[counter].bpm = bpm;

@@ -17,7 +17,7 @@ class EntityCoordinator(protected val dot_pool: DotPool,
                         protected val bonus_pool: BonusPool): Group(), IMotionCoordinator {
 
     companion object {
-        const val MAX_WAVE_RATE = 0.5f
+        const val MAX_WAVE_RATE = 0.3f
         const val PARAM_UPDATE_RATE = 4f
         val SPAWN_DIST = (Math.sqrt(Math.pow(Position.heightScreen.toDouble(), 2.0) + Math.pow(Position.widthScreen.toDouble(), 2.0)) / 2).toFloat()
     }
@@ -28,7 +28,7 @@ class EntityCoordinator(protected val dot_pool: DotPool,
     protected var last_param_updated = 0f
     protected var time = 0f
 
-    override var dot_velocity = 3f
+    override var dot_velocity = 3.5f
     override var bonus_velocity = 1f
     override var path_type = IMotionCoordinator.PathType.RADIAL
 

@@ -35,7 +35,7 @@ class GameOverStage (
         score.addAction(Actions.forever(laction {
             coins.setText("COINS: " + state.current_game!!.score.coins)
         }))
-        val title = Label("GAME OVER", assets.get_skin("ui"), "h1")
+        val title = Label("GAME OVER", assets.get_skin("ui"), "h2")
         val ads_text = Label("x2 coins ->", assets.get_skin("ui"), "h3")
 
         val restart_button = ImageButton(assets.get_skin("ui"), "restart")

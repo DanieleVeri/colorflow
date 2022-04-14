@@ -4,6 +4,7 @@ precision highp float;
 
 #define PI 3.14159265359
 #define PI2 6.2831852
+#define CIRCLES 4.0
 
 uniform sampler2D sceneTex;
 uniform vec2 resolution;
@@ -13,15 +14,12 @@ varying vec2 v_texCoords;
 
 void main()
 {
-    //gl_FragColor = texture2D(iChannel0, v_texCoords);
-    //return;
     vec2 uv = (v_texCoords - 0.5);
     uv.y /= resolution.x/resolution.y;
-    float CIRCLES = 5.0;
     float cS = 0.5;
     float sm = 1.0 / resolution.y * 2.0; // smooth
-    float ps = 1.0 / resolution.y * sqrt(resolution.y) * 0.3; // circle thin
-    float d = length(uv);
+    float ps = 1.0 / resolution.y * sqrt(resolution.y) * 3.0; // circle thin
+    float d = length(uv)*0.5;
     float a = atan(uv.y, uv.x);
     a = a < 0.0 ? PI + (PI - abs(a)) : a;
     float lPos = a /PI2;

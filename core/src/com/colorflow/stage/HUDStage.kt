@@ -61,7 +61,7 @@ class HUDStage(viewport: Viewport,
         pause.width = Position.widthScreen
         pause.height = Position.heightScreen
         pause.bottom()
-        pause.add(Label("PAUSE", assets.get_skin("ui"), "h1")).colspan(2).expandX()
+        pause.add(Label("PAUSE", assets.get_skin("ui"), "h2")).colspan(2).expandX()
         pause.row()
         pause.add(play_button).expand()
         pause.add(Label("RESUME", assets.get_skin("ui"), "h2"))

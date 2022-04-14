@@ -22,7 +22,7 @@ class ShopStage (
         protected val ad: AdManager): EffectStage(viewport) {
 
     init {
-        val title = Label("Upgrade", assets.get_skin("ui"), "h1")
+        val title = Label("Upgrade", assets.get_skin("ui"), "h2")
         val home_button = ImageButton(assets.get_skin("ui"), "back")
         home_button.addListener(ButtonListener(assets, home_button) {
             state.set_screen(ScreenType.MENU)
@@ -30,8 +30,6 @@ class ShopStage (
         val coin_image = Image(assets.get_skin("ui").getRegion("coin"))
         val coin_label = Label("", assets.get_skin("ui"), "h3")
         coin_label.addAction(Actions.forever(laction { coin_label.setText("${state.coins}") }))
-        val ring_table = Table()
-        val ring_scroll = ScrollPane(ring_table)
         val bonus_table = Table()
         val bonus_scroll = ScrollPane(bonus_table)
         val root_table = Table()
@@ -41,14 +39,13 @@ class ShopStage (
         root_table.add(home_button).left()
         root_table.add(title).expandX()
         root_table.row()
-        root_table.add(ring_scroll).expand().fill().colspan(2)
-        root_table.row()
         root_table.add(bonus_scroll).expand().fill().colspan(2)
         root_table.row()
         root_table.add(coin_image)
         root_table.add(coin_label).left()
         addActor(root_table)
 
+        /*
         state.ring_list.forEach {
             val icon = Image(assets.get_skin("game").getRegion(it.src))
             val id_label = Label("coming soon"/*it.id*/, assets.get_skin("ui"), "h3")
@@ -87,6 +84,7 @@ class ShopStage (
                 buy_button.isDisabled = true/*state.coins < it.cost || it.purchased*/
             }))
         }
+        */
 
         /* Bonus BOMB */
         val bomb_table = Table()
