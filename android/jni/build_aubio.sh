@@ -35,6 +35,7 @@ function build {
 build arm64 arm64-v8a
 build arm armeabi-v7a
 build x86 x86
+build x86_64 x86_64
 
 rm -rf "$PWD/musalyzer/aubio/"
 mv "$PWD/aubio/out/armeabi-v7a/usr/local/include/aubio" "$PWD/musalyzer/aubio/"

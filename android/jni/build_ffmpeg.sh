@@ -99,3 +99,4 @@ function build_arm {
 build_arm arm64 arm64-v8a armv8-a
 build_arm arm armeabi-v7a armv7-a
 build_x86 x86 i386
+build_x86 x86_64
